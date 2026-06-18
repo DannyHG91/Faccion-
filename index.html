@@ -5,32 +5,62 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Santuario de Facciones</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #121214; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; margin: 0; }
-        h1 { margin-bottom: 30px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); }
-        .grid { display: flex; gap: 25px; flex-wrap: wrap; justify-content: center; }
-        .faction-card { background: #1f1f23; border: 2px solid #2f2f35; border-radius: 12px; padding: 40px 25px; width: 220px; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
-        /* Efectos visuales de poder para cada tarjeta */
+        body { font-family: 'Arial', sans-serif; background: #121214; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px 0; box-sizing: border-box; }
+        h1 { margin-bottom: 10px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); user-select: none; }
+        
+        /* Contenedor Superior para marcar la prioridad del Líder */
+        .priority-container { margin-bottom: 40px; display: flex; justify-content: center; width: 100%; }
+        
+        /* Contenedor Inferior para las Facciones Comunes */
+        .grid { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1100px; padding: 0 20px; }
+        
+        .faction-card { background: #1f1f23; border: 2px solid #2f2f35; border-radius: 12px; padding: 40px 20px; width: 200px; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
+        
+        /* Efectos visuales para las tarjetas de reclutas */
         .fuego:hover { border-color: #ff4d4d; box-shadow: 0 0 20px rgba(255,77,77,0.4); transform: translateY(-5px); }
         .agua:hover { border-color: #3399ff; box-shadow: 0 0 20px rgba(51,153,255,0.4); transform: translateY(-5px); }
         .tierra:hover { border-color: #996633; box-shadow: 0 0 20px rgba(153,102,51,0.4); transform: translateY(-5px); }
-        h2 { margin: 15px 0 10px 0; }
+        
+        /* 🦅 CASILLA SUPERIOR EXCLUSIVA DEL ALTO MANDO */
+        .altomando { background: #151922; border: 2px solid #3a4750; width: 250px; padding: 30px 20px; }
+        .altomando:hover { border-color: #c5a059; box-shadow: 0 0 25px rgba(197,160,89,0.6); transform: translateY(-5px); }
+        
+        h2 { margin: 15px 0 10px 0; font-size: 22px; }
+        .altomando h2 { color: #c5a059; font-size: 24px; } /* Texto dorado y más grande para el líder */
         p { color: #aaa; font-size: 14px; margin: 0;}
     </style>
 </head>
 <body>
 
-    <h1>Selecciona tu Facción</h1>
+    <h1>Santuario de Facciones</h1>
+    <p style="color: #666; margin-bottom: 30px;">Estructura Jerárquica del Sistema</p>
+
+    <!-- 👑 SECCIÓN SUPERIOR: PRIORIDAD ALTO MANDO -->
+    <div class="priority-container">
+        <div class="faction-card altomando" onclick="irAlAltoMando()">
+            <div style="font-size: 55px;">🦅</div>
+            <h2>Alto Mando</h2>
+            <p>Acceso exclusivo Comandantes</p>
+        </div>
+    </div>
+
+    <!-- 🛡️ SECCIÓN INFERIOR: ACCESOS DE MIEMBROS -->
     <div class="grid">
+        <!-- Casilla Fuego -->
         <div class="faction-card fuego" onclick="irALogin('Fuego')">
             <div style="font-size: 50px;">🔥</div>
             <h2>Fuego</h2>
             <p>Ingresar al volcán</p>
         </div>
+
+        <!-- Casilla Agua -->
         <div class="faction-card agua" onclick="irALogin('Agua')">
             <div style="font-size: 50px;">💧</div>
             <h2>Agua</h2>
             <p>Ingresar al océano</p>
         </div>
+
+        <!-- Casilla Tierra -->
         <div class="faction-card tierra" onclick="irALogin('Tierra')">
             <div style="font-size: 50px;">🪨</div>
             <h2>Tierra</h2>
@@ -39,8 +69,13 @@
     </div>
 
     <script {nonce}>
+        // Envía a los líderes a su portal independiente superior
+        function irAlAltoMando() {
+            window.location.href = '/altomando/login';
+        }
+
+        // Envía a los reclutas al login de su respectivo bando inferior
         function irALogin(nombreFaction) {
-            // Te envía dinámicamente a la ruta de logueo de esa facción
             window.location.href = `/${nombreFaction.toLowerCase()}/login`;
         }
     </script>
