@@ -3,58 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pase de Facción</title>
+    <title>TERMINAL DE AUTENTICACIÓN</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121214; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1f1f23; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 340px; text-align: center; border-top: 5px solid #fff; }
-        input, button { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #333; border-radius: 6px; box-sizing: border-box; background: #2a2a30; color: white; text-align: center; font-size: 16px; font-family: monospace; }
-        input:focus { border-color: #007bff; outline: none; }
-        button { background: #007bff; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
-        button:hover { background: #0056b3; }
-        .btn-volver { background: transparent; border: 1px solid #444; color: #aaa; font-size: 14px; margin-top: 5px; font-family: Arial; }
+        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .bunker-card { background: #0c1015; padding: 40px 30px; border: 1px solid #1f2d3d; width: 340px; text-align: center; border-top: 4px solid #fff; position: relative; }
+        .bunker-card::before { content: ""; position: absolute; bottom: -1px; right: -1px; width: 12px; height: 12px; border-bottom: 2px solid #1f2d3d; border-right: 2px solid #1f2d3d; }
+        
+        input, button { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #1f2d3d; border-radius: 0px; box-sizing: border-box; background: #06090c; color: #fff; text-align: center; font-size: 16px; font-family: monospace; }
+        input:focus { border-color: #39ff14; box-shadow: 0 0 8px rgba(57,255,20,0.3); outline: none; }
+        
+        button { background: #1f2d3d; color: #fff; cursor: pointer; font-weight: bold; border: 1px solid #2d3f55; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { background: #2d3f55; border-color: #39ff14; color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }
+        .btn-volver { background: transparent; border: 1px solid #121921; color: #556b83; font-size: 13px; margin-top: 5px; }
+        .btn-volver:hover { border-color: #ff3333; color: #ff3333; box-shadow: none; }
+        p { color: #657b83; font-size: 12px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="card" id="loginCard">
-        <div id="emblema" style="font-size: 45px;">🔮</div>
-        <h2 id="titulo">Portal de Acceso</h2>
-        <p style="color: #888; font-size: 13px;">Introduce tu Token de acceso asignado</p>
+    <div class="bunker-card" id="bunkerCard">
+        <div id="emblema" style="font-size: 40px;">⚠️</div>
+        <h2 id="titulo">TERMINAL SECRETA</h2>
+        <p>INGRESE EL CÓDIGO CRIPTOGRÁFICO ASIGNADO</p>
         
-        <!-- CORRECCIÓN: Un solo campo de texto para el código de pase -->
-        <input type="text" id="accessToken" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
-        <button onclick="validarToken()">Validar Pase</button>
-        <button onclick="window.location.href='/'" class="btn-volver">Volver al Menú</button>
+        <input type="text" id="accessToken" placeholder="[ INF-XXXX-XXXX ]" autocomplete="off">
+        <button onclick="validarToken()">VERIFICAR CREDENCIAL</button>
+        <button onclick="window.location.href='/'" class="btn-volver">< ABORTAR PROCESO</button>
     </div>
 
     <script {nonce}>
         const urlPartes = window.location.pathname.split('/');
-        const faccionActual = urlPartes[1].toLowerCase();
+        const faccionActual = urlPartes.toLowerCase();
 
-        const card = document.getElementById("loginCard");
+        const card = document.getElementById("bunkerCard");
         const emblema = document.getElementById("emblema");
         const titulo = document.getElementById("titulo");
 
-        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff4d4d'; emblema.innerText = '🔥'; titulo.innerText = 'Acceso Fuego'; } 
-        else if (faccionActual === 'agua') { card.style.borderTopColor = '#3399ff'; emblema.innerText = '💧'; titulo.innerText = 'Acceso Agua'; } 
-        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#996633'; emblema.innerText = '🪨'; titulo.innerText = 'Acceso Tierra'; }
+        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff3333'; emblema.innerText = '🔥'; titulo.innerText = 'NÚCLEO FUEGO'; card.style.boxShadow = "0 0 20px rgba(255,51,51,0.15)"; } 
+        else if (faccionActual === 'agua') { card.style.borderTopColor = '#00ffff'; emblema.innerText = '💧'; titulo.innerText = 'NÚCLEO AGUA'; card.style.boxShadow = "0 0 20px rgba(0,255,255,0.15)"; } 
+        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#ffaa00'; emblema.innerText = '🪨'; titulo.innerText = 'NÚCLEO TIERRA'; card.style.boxShadow = "0 0 20px rgba(255,170,0,0.15)"; }
 
         async function validarToken() {
             const token = document.getElementById("accessToken").value.trim();
-
             const response = await fetch('/api/login-token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token, factionUrl: faccionActual })
             });
-
             const resultado = await response.json();
-
-            if (resultado.success) {
-                window.location.href = resultado.redirect;
-            } else {
-                alert(resultado.message);
-            }
+            if (resultado.success) { window.location.href = resultado.redirect; } 
+            else { alert("[ALERTA DE SEGURIDAD] " + resultado.message); }
         }
     </script>
 </body>
