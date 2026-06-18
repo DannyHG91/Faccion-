@@ -31,8 +31,6 @@
             overflow: hidden;
             touch-action: manipulation;
             position: relative;
-            
-            /* Rejilla fina táctica en tono oro tenue en el fondo */
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
@@ -140,7 +138,7 @@
             font-weight: 600;
         }
 
-        /* BOTÓN MODERNO DE GENERACIÓN DE CLAVES */
+        /* BOTÓN MODERNO DE GENERACIÓN */
         .btn-generate {
             display: block;
             width: 100%;
@@ -155,7 +153,6 @@
             cursor: pointer;
             box-sizing: border-box;
             border-radius: 3px;
-            position: relative;
             transition: all 0.2s ease;
             -webkit-tap-highlight-color: transparent;
         }
@@ -166,16 +163,25 @@
             transform: scale(0.99);
         }
 
-        /* VISUALIZADOR DE COMPROBACIÓN CRIPTOGRÁFICA */
+        /* VISUALIZADOR DE CRISTAL CON COPIA RÁPIDA */
         .token-display-box {
             display: none;
             margin-top: 25px;
-            padding: 20px;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px dashed rgba(220, 174, 59, 0.3);
+            padding: 18px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(220, 174, 59, 0.25);
             border-radius: 3px;
             text-align: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.15s ease;
+            -webkit-tap-highlight-color: transparent;
             animation: pane-appear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .token-display-box:active {
+            background: rgba(220, 174, 59, 0.04);
+            border-color: var(--gold-prestige);
         }
 
         @keyframes pane-appear {
@@ -184,43 +190,63 @@
         }
 
         .token-label {
-            font-size: 10px;
+            font-size: 9px;
             font-family: monospace;
             color: var(--sub-slate);
             letter-spacing: 2px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             text-transform: uppercase;
         }
 
         .token-string {
-            font-size: 20px;
+            font-size: 19px;
             font-family: monospace;
             color: var(--pure-light);
             font-weight: 700;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
-            -webkit-user-select: all;
-            user-select: all; /* Facilita copiar el código con un toque en móvil */
+            letter-spacing: 2px;
         }
 
-        /* CONTROLES SECUNDARIOS DE SALIDA */
+        /* Indicador de Portapapeles Flotante */
+        .copy-toast {
+            font-size: 9px;
+            font-family: monospace;
+            color: var(--laser-cyan);
+            letter-spacing: 1px;
+            margin-top: 5px;
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        /* BOTÓN DE DESCONEXIÓN TÁCTICA */
         .logout-zone {
             margin-top: 30px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 15px;
+            padding-top: 20px;
         }
 
         .btn-logout {
-            display: inline-block;
+            display: block;
+            width: 100%;
+            padding: 14px;
+            background: rgba(255, 74, 74, 0.02);
+            border: 1px dashed rgba(255, 74, 74, 0.3);
+            border-radius: 3px;
+            color: var(--alert-red);
+            text-align: center;
+            text-decoration: none;
             font-size: 11px;
             font-family: monospace;
-            color: var(--alert-red);
-            text-decoration: none;
-            letter-spacing: 1.5px;
-            transition: color 0.2s ease;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
+
         .btn-logout:active {
-            opacity: 0.6;
+            background: rgba(255, 74, 74, 0.12);
+            border-color: var(--alert-red);
+            box-shadow: 0 0 15px rgba(255, 74, 74, 0.15);
         }
     </style>
 </head>
@@ -246,7 +272,7 @@
 
         <!-- Cabecera de Alto Rango -->
         <div class="header-shield">
-            <div class="sys-badge">✦ HIGH COMMAND MATRIX ✦</div>
+            <div class="sys-badge">✦ COMANDO GENERAL DE MESA ✦</div>
             <h1>SISTEMA DE CONTROL</h1>
             <div class="faction-title" id="factionDisplay">FACCIÓN: CARGANDO...</div>
         </div>
@@ -254,15 +280,16 @@
         <!-- Accionador Crítico de Tokens -->
         <button class="btn-generate" id="btnGenerar">GENERAR TOKEN ENCRIPTADO</button>
 
-        <!-- Visualizador de Código Criptográfico -->
-        <div class="token-display-box" id="tokenBox">
-            <div class="token-label">Código Alfa de Reclutamiento</div>
+        <!-- Visualizador de Código Criptográfico con Copia Rápida -->
+        <div class="token-display-box" id="tokenBox" title="Toque para copiar el código">
+            <div class="token-label">Código Alfa (Toque para copiar)</div>
             <div class="token-string" id="tokenTexto">CBR-XXXX-XXXX</div>
+            <div class="copy-toast" id="copyToast">[ TOQUE PARA COPIAR RÁPIDO ]</div>
         </div>
 
-        <!-- Zona de Cierre de Sesión del Comando -->
+        <!-- Zona de Desconexión del Comando -->
         <div class="logout-zone">
-            <a href="/logout" class="btn-logout">[ DISCONNECT COM_LINK ]</a>
+            <a href="/logout" class="btn-logout" id="btnDisconnect">[ TERMINAR TRANSMISIÓN / DESCONECTAR ]</a>
         </div>
     </div>
 
@@ -279,11 +306,9 @@
             }
         }
 
-        // Tono: Pulso doble de alta frecuencia refinado para acciones del Alto Mando
+        // Tono: Pulso doble agudo del Alto Mando
         function playCommandSound() {
             initAudio();
-
-            // Primer pulso agudo
             let osc1 = audioCtx.createOscillator();
             let gain1 = audioCtx.createGain();
             osc1.type = 'sine';
@@ -295,7 +320,6 @@
             osc1.start();
             osc1.stop(audioCtx.currentTime + 0.04);
 
-            // Segundo pulso de respuesta inmediata
             setTimeout(() => {
                 let osc2 = audioCtx.createOscillator();
                 let gain2 = audioCtx.createGain();
@@ -308,6 +332,22 @@
                 osc2.start();
                 osc2.stop(audioCtx.currentTime + 0.04);
             }, 40);
+        }
+
+        // Tono: Pulso descendente de desconexión o fallo
+        function playDisconnectSound() {
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(300, audioCtx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.12);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.12);
         }
 
         // Cargar los datos de la facción del Líder logueado desde la API
@@ -328,18 +368,58 @@
         // Ejecutar llamada a la API interna para crear y persistir el Token
         document.getElementById('btnGenerar').addEventListener('click', () => {
             playCommandSound();
-
             fetch('/api/generar-token', { method: 'POST' })
                 .then(res => res.json())
                 .then(data => {
                     if(data.token) {
                         document.getElementById('tokenTexto').innerText = data.token;
+                        document.getElementById('copyToast').innerText = "[ TOQUE PARA COPIAR RÁPIDO ]";
+                        document.getElementById('copyToast').style.color = "var(--laser-cyan)";
                         document.getElementById('tokenBox').style.display = 'block';
                     }
                 })
                 .catch(() => {
                     alert("Falla de transmisión crítica con el almacenamiento.");
                 });
+        });
+
+        // SISTEMA DE COPIA RÁPIDA AL PORTAPAPELES
+        document.getElementById('tokenBox').addEventListener('click', () => {
+            const tokenTexto = document.getElementById('tokenTexto').innerText;
+            initAudio();
+            
+            // Sonido de confirmación de copia rápida (pulso ultra rápido de éxito)
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1700, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.03);
+
+            // API de portapapeles nativa compatible con móviles modernos
+            navigator.clipboard.writeText(tokenTexto).then(() => {
+                const toast = document.getElementById('copyToast');
+                toast.innerText = "✓ COPIADO AL PORTAPAPELES TÁCTICO";
+                toast.style.color = "#00ff66"; // Cambia temporalmente a verde éxito
+            }).catch(() => {
+                document.getElementById('copyToast').innerText = "ERROR AL COPIAR EL CÓDIGO";
+            });
+        });
+
+        // SISTEMA DE DESCONEXIÓN CON RETRASO CONTROLADO PARA AUDIO
+        document.getElementById('btnDisconnect').addEventListener('click', function(e) {
+            e.preventDefault();
+            const destinationUrl = this.getAttribute('href');
+            playDisconnectSound();
+            
+            // Retardo controlado para que el navegador de Android/iOS procese la bocina antes de saltar
+            setTimeout(() => {
+                window.location.href = destinationUrl;
+            }, 120);
         });
     </script>
 </body>
