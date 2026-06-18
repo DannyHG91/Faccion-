@@ -2,81 +2,345 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SISTEMA MAESTRO DE EMISIÓN DE PASES</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[ COBRA HIGH COMMAND - TOKEN MANAGEMENT ]</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .command-card { background: #0c1015; padding: 40px; border: 1px solid #1f2d3d; width: 420px; text-align: center; border-left: 4px solid #45f3ff; }
+        /* Variables Operativas del Alto Mando: Oro de Prestigio Preponderante */
+        :root {
+            --stealth-dark: #020407;
+            --glass-core: rgba(14, 21, 31, 0.75);
+            --gold-prestige: #dcae3b;
+            --gold-glow: rgba(220, 174, 59, 0.25);
+            --laser-cyan: #00d9ff;
+            --sub-slate: #56687a;
+            --pure-light: #f1f5f9;
+            --alert-red: #ff4a4a;
+            --grid-line: rgba(220, 174, 59, 0.015);
+        }
+
+        body {
+            background-color: var(--stealth-dark);
+            color: var(--pure-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+            position: relative;
+            
+            /* Rejilla fina táctica en tono oro tenue en el fondo */
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+        }
+
+        /* FONDO ANIMADO: Radar cuántico en tono áureo */
+        .radar-wave-hub {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            border: 1px solid rgba(220, 174, 59, 0.04);
+            border-radius: 50%;
+            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            opacity: 0;
+        }
+        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
+        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
+        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
+
+        @keyframes node-pulse {
+            0% { transform: scale(0.6); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: scale(3.2); opacity: 0; border-color: rgba(220, 174, 59, 0.01); }
+        }
+        /* CONSOLA CENTRAL DEL COMANDANTE EN JEFE */
+        .mainframe-container {
+            background: var(--glass-core);
+            border: 1px solid rgba(220, 174, 59, 0.2);
+            padding: 40px 30px;
+            width: 92%;
+            max-width: 440px;
+            box-sizing: border-box;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.85);
+            position: relative;
+            z-index: 5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* LÁSER PERIMETRAL DE ORO COMPLEMENTARIO */
+        .laser-border {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--gold-prestige), transparent);
+            z-index: 6;
+        }
+        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
+        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
         
-        button { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #2d3f55; border-radius: 0px; cursor: pointer; font-weight: bold; background: #14221b; color: #39ff14; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
-        button:hover { background: #1c3527; border-color: #39ff14; box-shadow: 0 0 12px rgba(57,255,20,0.3); }
-        
-        .credenciales { background: #06090c; padding: 18px; border: 1px dashed #39ff14; margin-top: 20px; text-align: center; }
-        .token-text { font-family: monospace; font-size: 20px; color: #39ff14; font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 12px; text-shadow: 0 0 5px #39ff14; }
-        
-        .btn-copy { background: #0c1a24; border-color: #45f3ff; color: #45f3ff; font-size: 13px; width: auto; display: inline-block; padding-left: 25px; padding-right: 25px; }
-        .btn-copy:hover { background: #132b3c; border-color: #45f3ff; box-shadow: 0 0 10px rgba(69,243,255,0.3); color: #45f3ff;}
-        .btn-copied { background: #222 !important; border-color: #555 !important; color: #888 !important; box-shadow: none !important;}
-        
-        .hidden { display: none !important; }
-        .logout { background: #240c0c; border-color: #ff3333; color: #ff3333; margin-top: 25px; }
-        .logout:hover { background: #3c1313; border-color: #ff3333; box-shadow: 0 0 10px rgba(255,51,51,0.3); }
-        p { color: #657b83; font-size: 13px; text-transform: uppercase; }
+        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+        /* Ángulos Estructurales de Oro Militar */
+        .corner-bracket {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(220, 174, 59, 0.4);
+            z-index: 7;
+        }
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* CABECERA DE ALTO RANGO */
+        .header-shield {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(220, 174, 59, 0.15);
+            padding-bottom: 15px;
+        }
+
+        .sys-badge {
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--gold-prestige);
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 6px 0 0 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--pure-light);
+        }
+
+        .faction-title {
+            font-size: 13px;
+            color: var(--laser-cyan);
+            letter-spacing: 1.5px;
+            font-family: monospace;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+
+        /* BOTÓN MODERNO DE GENERACIÓN DE CLAVES */
+        .btn-generate {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(220, 174, 59, 0.03), rgba(220, 174, 59, 0.08));
+            border: 1px solid var(--gold-prestige);
+            color: var(--gold-prestige);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-sizing: border-box;
+            border-radius: 3px;
+            position: relative;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-generate:active {
+            background: rgba(220, 174, 59, 0.15);
+            box-shadow: 0 0 25px var(--gold-glow);
+            transform: scale(0.99);
+        }
+
+        /* VISUALIZADOR DE COMPROBACIÓN CRIPTOGRÁFICA */
+        .token-display-box {
+            display: none;
+            margin-top: 25px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px dashed rgba(220, 174, 59, 0.3);
+            border-radius: 3px;
+            text-align: center;
+            animation: pane-appear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pane-appear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .token-label {
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+        }
+
+        .token-string {
+            font-size: 20px;
+            font-family: monospace;
+            color: var(--pure-light);
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+            -webkit-user-select: all;
+            user-select: all; /* Facilita copiar el código con un toque en móvil */
+        }
+
+        /* CONTROLES SECUNDARIOS DE SALIDA */
+        .logout-zone {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            padding-top: 15px;
+        }
+
+        .btn-logout {
+            display: inline-block;
+            font-size: 11px;
+            font-family: monospace;
+            color: var(--alert-red);
+            text-decoration: none;
+            letter-spacing: 1.5px;
+            transition: color 0.2s ease;
+        }
+        .btn-logout:active {
+            opacity: 0.6;
+        }
     </style>
 </head>
 <body>
 
-    <div class="command-card">
-        <h2 style="letter-spacing: 1px; margin-top:0;">[ CONSOLA DE RECRUTAMIENTO ]</h2>
-        <p>COMANDANTE EN JEFE / DIVISIÓN: <strong id="lblFaction" style="color: #45f3ff; text-shadow: 0 0 5px #45f3ff;">...</strong></p>
-        
-        <button onclick="generarTokenAcceso()">GENERAR NUEVO PASE DE ACCESO</button>
-
-        <div id="resultado" class="hidden">
-            <div class="credenciales">
-                <span style="color: #657b83; font-size: 11px; font-weight: bold; display:block; margin-bottom:5px;">CÓDIGO DE INVITACIÓN ENCRIPTADO</span>
-                <span id="resToken" class="token-text"></span>
-                <button id="btnCopy" class="btn-copy" onclick="copiarToken()">📋 TRANSMITIR AL PORTAPAPELES</button>
-            </div>
-            <p style="color: #44555f; font-size: 11px; margin-top: 10px;"><small>EXPIDA ESTA DIRECTIVA AL PERSONAL DE CAMPO AUTORIZADO.</small></p>
-        </div>
-        
-        <hr style="border-color: #1f2d3d; margin-top: 30px;">
-        <button onclick="window.location.href='/logout'" class="logout">DESCONECTAR TERMINAL</button>
+    <!-- Capas de la interfaz táctica del Alto Mando -->
+    <div class="radar-wave-hub">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
     </div>
 
-    <script {nonce}>
-        let tokenActual = "";
-        async function cargarInfoLider() {
-            const res = await fetch('/api/info-lider');
-            if(res.ok) {
-                const datos = await res.json();
-                document.getElementById("lblFaction").innerText = datos.faction.toUpperCase();
-            } else { window.location.href = '/'; }
+    <div class="mainframe-container">
+        <!-- Haz de luz perimetral en oro -->
+        <div class="laser-border lb-top"></div>
+        <div class="laser-border lb-bottom"></div>
+
+        <!-- Ángulos estructurales fijados -->
+        <div class="corner-bracket tl"></div>
+        <div class="corner-bracket tr"></div>
+        <div class="corner-bracket bl"></div>
+        <div class="corner-bracket br"></div>
+
+        <!-- Cabecera de Alto Rango -->
+        <div class="header-shield">
+            <div class="sys-badge">✦ HIGH COMMAND MATRIX ✦</div>
+            <h1>SISTEMA DE CONTROL</h1>
+            <div class="faction-title" id="factionDisplay">FACCIÓN: CARGANDO...</div>
+        </div>
+        
+        <!-- Accionador Crítico de Tokens -->
+        <button class="btn-generate" id="btnGenerar">GENERAR TOKEN ENCRIPTADO</button>
+
+        <!-- Visualizador de Código Criptográfico -->
+        <div class="token-display-box" id="tokenBox">
+            <div class="token-label">Código Alfa de Reclutamiento</div>
+            <div class="token-string" id="tokenTexto">CBR-XXXX-XXXX</div>
+        </div>
+
+        <!-- Zona de Cierre de Sesión del Comando -->
+        <div class="logout-zone">
+            <a href="/logout" class="btn-logout">[ DISCONNECT COM_LINK ]</a>
+        </div>
+    </div>
+
+    <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
+    <script>
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
         }
 
-        async function generarTokenAcceso() {
-            const btn = document.getElementById("btnCopy");
-            btn.innerText = "📋 TRANSMITIR AL PORTAPAPELES";
-            btn.classList.remove("btn-copied");
+        // Tono: Pulso doble de alta frecuencia refinado para acciones del Alto Mando
+        function playCommandSound() {
+            initAudio();
 
-            const response = await fetch('/api/generar-token', { method: 'POST' });
-            const datos = await response.json();
+            // Primer pulso agudo
+            let osc1 = audioCtx.createOscillator();
+            let gain1 = audioCtx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(1500, audioCtx.currentTime);
+            gain1.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start();
+            osc1.stop(audioCtx.currentTime + 0.04);
 
-            tokenActual = datos.token;
-            document.getElementById("resToken").innerText = datos.token;
-            document.getElementById("resultado").classList.remove("hidden");
+            // Segundo pulso de respuesta inmediata
+            setTimeout(() => {
+                let osc2 = audioCtx.createOscillator();
+                let gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1900, audioCtx.currentTime);
+                gain2.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start();
+                osc2.stop(audioCtx.currentTime + 0.04);
+            }, 40);
         }
 
-        function copiarToken() {
-            if (!tokenActual) return;
-            navigator.clipboard.writeText(tokenActual).then(() => {
-                const btn = document.getElementById("btnCopy");
-                btn.innerText = "⚡ TRANSMISIÓN EXITOSA";
-                btn.classList.add("btn-copied");
+        // Cargar los datos de la facción del Líder logueado desde la API
+        fetch('/api/info-lider')
+            .then(res => res.json())
+            .then(data => {
+                if(data.faction) {
+                    document.getElementById('factionDisplay').innerText = `FACCIÓN ASIGNADA: ${data.faction.toUpperCase()}`;
+                }
+            })
+            .catch(() => {
+                document.getElementById('factionDisplay').innerText = `ERROR DE ENLACE DE DATOS`;
             });
-        }
-        cargarInfoLider();
+
+        // Escucha táctil obligatoria en dispositivos móviles para permisos de audio
+        document.body.addEventListener('touchstart', initAudio, {passive: true});
+
+        // Ejecutar llamada a la API interna para crear y persistir el Token
+        document.getElementById('btnGenerar').addEventListener('click', () => {
+            playCommandSound();
+
+            fetch('/api/generar-token', { method: 'POST' })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.token) {
+                        document.getElementById('tokenTexto').innerText = data.token;
+                        document.getElementById('tokenBox').style.display = 'block';
+                    }
+                })
+                .catch(() => {
+                    alert("Falla de transmisión crítica con el almacenamiento.");
+                });
+        });
     </script>
 </body>
 </html>
