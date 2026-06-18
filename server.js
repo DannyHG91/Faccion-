@@ -137,7 +137,7 @@ app.get('/acceso-facciosos', (req, res) => {
     const divisionMiembro = req.session.faction.toLowerCase(); // 'fuego', 'agua' o 'tierra'
 
     // Servimos directamente el archivo HTML correspondiente desde el disco del servidor
-    res.sendFile(path.join(__dirname, `contenido_fuego.html`));
+    res.sendFile(path.join(__dirname, `contenido_${fuego}.html`));
 });
 
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
