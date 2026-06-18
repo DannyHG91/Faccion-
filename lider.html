@@ -3,63 +3,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Control del Líder</title>
+    <title>SISTEMA MAESTRO DE EMISIÓN DE PASES</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #121214; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1f1f23; padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 400px; text-align: center; border: 1px solid #333; }
-        button { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background: #28a745; color: white; font-size: 16px; transition: background 0.2s; }
-        button:hover { background: #218838; }
-        .credenciales { background: #2a2a30; padding: 15px; border-radius: 6px; text-align: center; border: 1px dashed #28a745; margin-top: 15px; position: relative; }
-        .token-text { font-family: monospace; font-size: 22px; color: #28a745; font-weight: bold; letter-spacing: 1px; display: block; margin-bottom: 10px; }
+        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .command-card { background: #0c1015; padding: 40px; border: 1px solid #1f2d3d; width: 420px; text-align: center; border-left: 4px solid #45f3ff; }
         
-        /* 📋 BOTÓN DE COPIA RÁPIDA */
-        .btn-copy { background: #007bff; font-size: 14px; padding: 8px; margin: 5px 0 0 0; width: auto; display: inline-block; padding-left: 20px; padding-right: 20px; }
-        .btn-copy:hover { background: #0056b3; }
-        .btn-copied { background: #6c757d !important; } /* Color gris cuando ya se copió */
+        button { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #2d3f55; border-radius: 0px; cursor: pointer; font-weight: bold; background: #14221b; color: #39ff14; font-size: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        button:hover { background: #1c3527; border-color: #39ff14; box-shadow: 0 0 12px rgba(57,255,20,0.3); }
+        
+        .credenciales { background: #06090c; padding: 18px; border: 1px dashed #39ff14; margin-top: 20px; text-align: center; }
+        .token-text { font-family: monospace; font-size: 20px; color: #39ff14; font-weight: bold; letter-spacing: 2px; display: block; margin-bottom: 12px; text-shadow: 0 0 5px #39ff14; }
+        
+        .btn-copy { background: #0c1a24; border-color: #45f3ff; color: #45f3ff; font-size: 13px; width: auto; display: inline-block; padding-left: 25px; padding-right: 25px; }
+        .btn-copy:hover { background: #132b3c; border-color: #45f3ff; box-shadow: 0 0 10px rgba(69,243,255,0.3); color: #45f3ff;}
+        .btn-copied { background: #222 !important; border-color: #555 !important; color: #888 !important; box-shadow: none !important;}
         
         .hidden { display: none !important; }
-        .logout { background: #dc3545; margin-top: 20px; }
-        .logout:hover { background: #bd2130; }
+        .logout { background: #240c0c; border-color: #ff3333; color: #ff3333; margin-top: 25px; }
+        .logout:hover { background: #3c1313; border-color: #ff3333; box-shadow: 0 0 10px rgba(255,51,51,0.3); }
+        p { color: #657b83; font-size: 13px; text-transform: uppercase; }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>Panel de Control</h2>
-        <p>Comandante de la Facción: <strong id="lblFaction" style="color: #007bff;">...</strong></p>
+    <div class="command-card">
+        <h2 style="letter-spacing: 1px; margin-top:0;">[ CONSOLA DE RECRUTAMIENTO ]</h2>
+        <p>COMANDANTE EN JEFE / DIVISIÓN: <strong id="lblFaction" style="color: #45f3ff; text-shadow: 0 0 5px #45f3ff;">...</strong></p>
         
-        <button onclick="generarTokenAcceso()">Generar Código de Pase Único</button>
+        <button onclick="generarTokenAcceso()">GENERAR NUEVO PASE DE ACCESO</button>
 
         <div id="resultado" class="hidden">
             <div class="credenciales">
-                <span style="color: #aaa; font-size: 13px;">TOKEN DE ACCESO:</span>
+                <span style="color: #657b83; font-size: 11px; font-weight: bold; display:block; margin-bottom:5px;">CÓDIGO DE INVITACIÓN ENCRIPTADO</span>
                 <span id="resToken" class="token-text"></span>
-                
-                <!-- NEW: Botón de Copia Rápida -->
-                <button id="btnCopy" class="btn-copy" onclick="copiarToken()">📋 Copiar Código</button>
+                <button id="btnCopy" class="btn-copy" onclick="copiarToken()">📋 TRANSMITIR AL PORTAPAPELES</button>
             </div>
-            <p style="color: #888; font-size: 13px;"><small>Copia este código y entrégaselo a tu recluta para acceso inmediato.</small></p>
+            <p style="color: #44555f; font-size: 11px; margin-top: 10px;"><small>EXPIDA ESTA DIRECTIVA AL PERSONAL DE CAMPO AUTORIZADO.</small></p>
         </div>
         
-        <hr style="border-color: #333; margin-top: 25px;">
-        <button onclick="window.location.href='/logout'" class="logout">Cerrar Sesión</button>
+        <hr style="border-color: #1f2d3d; margin-top: 30px;">
+        <button onclick="window.location.href='/logout'" class="logout">DESCONECTAR TERMINAL</button>
     </div>
 
     <script {nonce}>
         let tokenActual = "";
-
         async function cargarInfoLider() {
             const res = await fetch('/api/info-lider');
             if(res.ok) {
                 const datos = await res.json();
-                document.getElementById("lblFaction").innerText = datos.faction;
+                document.getElementById("lblFaction").innerText = datos.faction.toUpperCase();
             } else { window.location.href = '/'; }
         }
 
         async function generarTokenAcceso() {
-            // Restaurar estado del botón de copia si se genera uno nuevo
             const btn = document.getElementById("btnCopy");
-            btn.innerText = "📋 Copiar Código";
+            btn.innerText = "📋 TRANSMITIR AL PORTAPAPELES";
             btn.classList.remove("btn-copied");
 
             const response = await fetch('/api/generar-token', { method: 'POST' });
@@ -70,20 +68,14 @@
             document.getElementById("resultado").classList.remove("hidden");
         }
 
-        // ⚡ FUNCIÓN DE COPIADO AUTOMÁTICO EN PORTAPAPELES
         function copiarToken() {
             if (!tokenActual) return;
-            
-            // Usar la API nativa de navegación para copiar texto de forma limpia
             navigator.clipboard.writeText(tokenActual).then(() => {
                 const btn = document.getElementById("btnCopy");
-                btn.innerText = "✅ ¡Copiado!";
+                btn.innerText = "⚡ TRANSMISIÓN EXITOSA";
                 btn.classList.add("btn-copied");
-            }).catch(err => {
-                alert("No se pudo copiar automáticamente. Por favor selecciónalo manualmente.");
             });
         }
-
         cargarInfoLider();
     </script>
 </body>
