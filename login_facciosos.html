@@ -6,53 +6,60 @@
     <title>TERMINAL DE AUTENTICACIÓN</title>
     <style>
         body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .bunker-card { background: #0c1015; padding: 40px 30px; border: 1px solid #1f2d3d; width: 340px; text-align: center; border-top: 4px solid #fff; position: relative; }
+        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.02)); z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none; }
+        .bunker-card { background: #0c1015; padding: 40px 30px; border: 1px solid #1f2d3d; width: 340px; text-align: center; border-top: 4px solid #fff; position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
         .bunker-card::before { content: ""; position: absolute; bottom: -1px; right: -1px; width: 12px; height: 12px; border-bottom: 2px solid #1f2d3d; border-right: 2px solid #1f2d3d; }
-        
         input, button { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #1f2d3d; border-radius: 0px; box-sizing: border-box; background: #06090c; color: #fff; text-align: center; font-size: 16px; font-family: monospace; }
         input:focus { border-color: #39ff14; box-shadow: 0 0 8px rgba(57,255,20,0.3); outline: none; }
-        
-        button { background: #1f2d3d; color: #fff; cursor: pointer; font-weight: bold; border: 1px solid #2d3f55; text-transform: uppercase; letter-spacing: 1px; }
+        button { background: #1f2d3d; color: #fff; cursor: pointer; font-weight: bold; border: 1px solid #2d3f55; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
         button:hover { background: #2d3f55; border-color: #39ff14; color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }
         .btn-volver { background: transparent; border: 1px solid #121921; color: #556b83; font-size: 13px; margin-top: 5px; }
-        .btn-volver:hover { border-color: #ff3333; color: #ff3333; box-shadow: none; }
-        p { color: #657b83; font-size: 12px; text-transform: uppercase; }
+        .btn-volver:hover { border-color: #ff3333; color: #ff3333; }
+        p { color: #657b83; font-size: 12px; text-transform: uppercase; margin: 5px 0 15px 0; }
     </style>
 </head>
 <body>
 
     <div class="bunker-card" id="bunkerCard">
         <div id="emblema" style="font-size: 40px;">⚠️</div>
-        <h2 id="titulo">TERMINAL SECRETA</h2>
-        <p>INGRESE EL CÓDIGO CRIPTOGRÁFICO ASIGNADO</p>
+        <h2 id="titulo" style="margin: 10px 0 5px 0; text-transform: uppercase;">TERMINAL SECRETA</h2>
         
-        <input type="text" id="accessToken" placeholder="[ INF-XXXX-XXXX ]" autocomplete="off">
+        <p>INGRESE EL CÓDIGO CRIPTOGRÁFICO ASIGNADO</p>
+        <input type="text" id="accessToken" placeholder="[ XXXX-XXXX-XXXX ]" autocomplete="off">
         <button onclick="validarToken()">VERIFICAR CREDENCIAL</button>
         <button onclick="window.location.href='/'" class="btn-volver">< ABORTAR PROCESO</button>
     </div>
 
     <script {nonce}>
         const urlPartes = window.location.pathname.split('/');
-        const faccionActual = urlPartes.toLowerCase();
+        const faccionActual = urlPartes ? urlPartes.toLowerCase() : '';
 
         const card = document.getElementById("bunkerCard");
         const emblema = document.getElementById("emblema");
         const titulo = document.getElementById("titulo");
 
-        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff3333'; emblema.innerText = '🔥'; titulo.innerText = 'NÚCLEO FUEGO'; card.style.boxShadow = "0 0 20px rgba(255,51,51,0.15)"; } 
-        else if (faccionActual === 'agua') { card.style.borderTopColor = '#00ffff'; emblema.innerText = '💧'; titulo.innerText = 'NÚCLEO AGUA'; card.style.boxShadow = "0 0 20px rgba(0,255,255,0.15)"; } 
-        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#ffaa00'; emblema.innerText = '🪨'; titulo.innerText = 'NÚCLEO TIERRA'; card.style.boxShadow = "0 0 20px rgba(255,170,0,0.15)"; }
+        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff3333'; emblema.innerText = '🔥'; titulo.innerText = 'NÚCLEO FUEGO'; } 
+        else if (faccionActual === 'agua') { card.style.borderTopColor = '#00ffff'; emblema.innerText = '💧'; titulo.innerText = 'NÚCLEO AGUA'; } 
+        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#ffaa00'; emblema.innerText = '🪨'; titulo.innerText = 'NÚCLEO TIERRA'; }
 
         async function validarToken() {
             const token = document.getElementById("accessToken").value.trim();
+            if(!token) return alert("[ERROR] CASILLA VACÍA.");
+
             const response = await fetch('/api/login-token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ token, factionUrl: faccionActual })
             });
+
             const resultado = await response.json();
-            if (resultado.success) { window.location.href = resultado.redirect; } 
-            else { alert("[ALERTA DE SEGURIDAD] " + resultado.message); }
+
+            if (resultado.success) {
+                // REDIRECCIÓN ELECTRÓNICA DIRECTA: Carga el archivo local asignado
+                window.location.href = resultado.redirect;
+            } else {
+                alert("[ALERTA DE INTRUSO]: " + resultado.message);
+            }
         }
     </script>
 </body>
