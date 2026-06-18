@@ -2,66 +2,358 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TERMINAL DE AUTENTICACIÓN</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[ COBRA SECURITY GATEWAY - RECRUIT VERIFICATION ]</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #fff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.02)); z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none; }
-        .bunker-card { background: #0c1015; padding: 40px 30px; border: 1px solid #1f2d3d; width: 340px; text-align: center; border-top: 4px solid #fff; position: relative; box-shadow: inset 0 0 20px rgba(0,0,0,0.8); }
-        .bunker-card::before { content: ""; position: absolute; bottom: -1px; right: -1px; width: 12px; height: 12px; border-bottom: 2px solid #1f2d3d; border-right: 2px solid #1f2d3d; }
-        input, button { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #1f2d3d; border-radius: 0px; box-sizing: border-box; background: #06090c; color: #fff; text-align: center; font-size: 16px; font-family: monospace; }
-        input:focus { border-color: #39ff14; box-shadow: 0 0 8px rgba(57,255,20,0.3); outline: none; }
-        button { background: #1f2d3d; color: #fff; cursor: pointer; font-weight: bold; border: 1px solid #2d3f55; text-transform: uppercase; letter-spacing: 1px; transition: all 0.2s; }
-        button:hover { background: #2d3f55; border-color: #39ff14; color: #39ff14; box-shadow: 0 0 10px rgba(57,255,20,0.2); }
-        .btn-volver { background: transparent; border: 1px solid #121921; color: #556b83; font-size: 13px; margin-top: 5px; }
-        .btn-volver:hover { border-color: #ff3333; color: #ff3333; }
-        p { color: #657b83; font-size: 12px; text-transform: uppercase; margin: 5px 0 15px 0; }
+        /* Variables de Sistema de Nueva Generación */
+        :root {
+            --stealth-dark: #020407;
+            --glass-core: rgba(7, 13, 22, 0.72);
+            --laser-cyan: #00d9ff;
+            --sub-slate: #56687a;
+            --pure-light: #f1f5f9;
+            --alert-red: #ff4a4a;
+            --grid-line: rgba(0, 217, 255, 0.015);
+        }
+
+        body {
+            background-color: var(--stealth-dark);
+            color: var(--pure-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+            position: relative;
+        }
+
+        /* FONDO ANIMADO 1: Cuadrícula satelital */
+        .dynamic-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* FONDO ANIMADO 2: Radar cuántico */
+        .radar-wave-hub {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            border: 1px solid rgba(0, 217, 255, 0.04);
+            border-radius: 50%;
+            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            opacity: 0;
+        }
+        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
+        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
+        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
+
+        @keyframes node-pulse {
+            0% { transform: scale(0.6); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: scale(3.2); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
+        }
+        /* CONSOLA CENTRAL DE VERIFICACIÓN */
+        .mainframe-container {
+            background: var(--glass-core);
+            border: 1px solid rgba(0, 217, 255, 0.12);
+            padding: 40px 30px;
+            width: 92%;
+            max-width: 440px;
+            box-sizing: border-box;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* CORREDOR LÁSER PERIMETRAL ANIMADO */
+        .laser-border {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--laser-cyan), transparent);
+            z-index: 6;
+        }
+        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4s infinite linear; }
+        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4s infinite linear; }
+        
+        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+        /* Esquinas de Titanio */
+        .corner-bracket {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            z-index: 7;
+        }
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* CABECERA OPERATIVA */
+        .header-shield {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .live-data-stream {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            letter-spacing: 1.5px;
+        }
+
+        h1 {
+            font-size: 22px;
+            font-weight: 800;
+            margin: 8px 0 0 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--pure-light);
+        }
+
+        .faction-badge {
+            display: inline-block;
+            margin-top: 5px;
+            font-size: 11px;
+            font-family: monospace;
+            color: var(--laser-cyan);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        /* CAMPO DE ENTRADA (INPUT) DEL TOKEN */
+        .token-group {
+            margin: 25px 0 15px 0;
+            text-align: left;
+        }
+
+        .token-group label {
+            display: block;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+        }
+
+        .token-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            color: var(--pure-light);
+            font-size: 15px;
+            font-family: monospace;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+            outline: none;
+            text-align: center;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+        }
+
+        .token-input:focus {
+            border-color: var(--laser-cyan);
+            background: rgba(0, 217, 255, 0.02);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.15);
+        }
+
+        /* BOTÓN DE AUTORIZACIÓN CRIPTOGRÁFICA */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.01);
+            color: var(--pure-light);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-sizing: border-box;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-submit:active {
+            background: rgba(0, 217, 255, 0.08);
+            border-color: var(--laser-cyan);
+            color: var(--laser-cyan);
+            box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+        }
+
+        /* CUADRO DE NOTIFICACIÓN DE ERROR */
+        .alert-box {
+            display: none;
+            margin-top: 15px;
+            background: rgba(255, 74, 74, 0.04);
+            border: 1px solid var(--alert-red);
+            border-left: 3px solid var(--alert-red);
+            color: var(--alert-red);
+            font-size: 11px;
+            font-family: monospace;
+            padding: 12px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            text-decoration: none;
+            margin-top: 20px;
+            letter-spacing: 1px;
+        }
+        .btn-back:active { color: var(--laser-cyan); }
     </style>
 </head>
 <body>
 
-    <div class="bunker-card" id="bunkerCard">
-        <div id="emblema" style="font-size: 40px;">⚠️</div>
-        <h2 id="titulo" style="margin: 10px 0 5px 0; text-transform: uppercase;">TERMINAL SECRETA</h2>
-        <p>INGRESE EL CÓDIGO CRIPTOGRÁFICO ASIGNADO</p>
-        
-        <input type="text" id="accessToken" placeholder="[ XXXX-XXXX-XXXX ]" autocomplete="off">
-        <button onclick="validarToken()">VERIFICAR CREDENCIAL</button>
-        <button onclick="window.location.href='/'" class="btn-volver">< ABORTAR PROCESO</button>
+    <!-- Capas animadas del búnker de reclutamiento -->
+    <div class="dynamic-bg"></div>
+    <div class="radar-wave-hub">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
     </div>
 
-    <script {nonce}>
-        // 🛡️ CORRECCIÓN DE EXTRACCIÓN: Lee adecuadamente el nodo de la URL del navegador
-        const urlPartes = window.location.pathname.split('/');
-        const faccionActual = (urlPartes && urlPartes[1]) ? urlPartes[1].toLowerCase() : '';
+    <div class="mainframe-container">
+        <!-- Haz de luz perimetral -->
+        <div class="laser-border lb-top"></div>
+        <div class="laser-border lb-bottom"></div>
 
-        const card = document.getElementById("bunkerCard");
-        const emblema = document.getElementById("emblema");
-        const titulo = document.getElementById("titulo");
+        <!-- Ángulos estructurales -->
+        <div class="corner-bracket tl"></div>
+        <div class="corner-bracket tr"></div>
+        <div class="corner-bracket bl"></div>
+        <div class="corner-bracket br"></div>
 
-        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff3333'; emblema.innerText = '🔥'; titulo.innerText = 'NÚCLEO FUEGO'; } 
-        else if (faccionActual === 'agua') { card.style.borderTopColor = '#00ffff'; emblema.innerText = '💧'; titulo.innerText = 'NÚCLEO AGUA'; } 
-        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#ffaa00'; emblema.innerText = '🪨'; titulo.innerText = 'NÚCLEO TIERRA'; }
+        <!-- Cabecera Operativa -->
+        <div class="header-shield">
+            <div class="live-data-stream">
+                <span>GATEWAY // SECURE_AUTH</span>
+                <span>STATUS: WAITING</span>
+            </div>
+            <h1>VERIFICACIÓN DE RECLUTA</h1>
+            <div class="faction-badge" id="factionDisplay">DIVISIÓN: DETECTANDO...</div>
+        </div>
+        
+        <!-- Formulario Táctico de Acceso -->
+        <form id="tokenForm">
+            <div class="token-group">
+                <label for="tokenInput">INGRESE EL TOKEN ASIGNADO POR EL LÍDER</label>
+                <input type="text" class="token-input" id="tokenInput" placeholder="EJ: FUEGO-XXXX-XXXX" autocomplete="off" required>
+            </div>
 
-        async function validarToken() {
-            const token = document.getElementById("accessToken").value.trim();
-            if(!token) return alert("[ERROR] CASILLA VACÍA.");
+            <button type="submit" class="btn-submit" id="btnSubmit">VALIDAR CÓDIGO</button>
+        </form>
 
-            const response = await fetch('/api/login-token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, factionUrl: faccionActual })
-            });
+        <!-- Mensajes de Error de Mainframe Militar -->
+        <div id="errorMessage" class="alert-box"></div>
 
-            const resultado = await response.json();
+        <a href="/" class="btn-back">← ABORTAR VERIFICACIÓN / VOLVER AL PANEL</a>
+    </div>
 
-            if (resultado.success) {
-                // Redirige al despachador blindado del servidor
-                window.location.href = resultado.redirect;
-            } else {
-                alert("[ALERTA DE INTRUSO]: " + resultado.message);
+    <!-- CONTROLADOR JAVASCRIPT MODERNO Y SINTETIZADOR DE AUDIO -->
+    <script>
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
+
+        // Tono de terminal para clics en botones
+        function playClickSound() {
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1100, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.05);
+        }
+
+        // Extraer la división de la URL (Ejemplo: /fuego/login -> fuego)
+        const partesUrl = window.location.pathname.split('/');
+        const factionUrl = partesUrl[1] || 'fuego'; 
+        document.getElementById('factionDisplay').innerText = `DIVISIÓN: ${factionUrl.toUpperCase()}`;
+
+        // Escucha del toque en móviles para activar permisos de audio
+        document.body.addEventListener('touchstart', initAudio, {passive: true});
+
+        // Procesamiento del formulario y envío seguro al backend Express
+        document.getElementById('tokenForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            playClickSound();
+
+            const tokenValue = document.getElementById('tokenInput').value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.display = "none";
+            errorDiv.innerText = "";
+
+            // Pequeño retraso controlado para permitir la ejecución del sonido táctil
+            setTimeout(() => {
+                fetch('/api/login-token', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ token: tokenValue, factionUrl: factionUrl })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.success) {
+                        window.location.href = data.redirect;
+                    } else {
+                        errorDiv.innerText = `⚠️ [ERROR]: ${data.message}`;
+                        errorDiv.style.display = "block";
+                    }
+                })
+                .catch(() => {
+                    errorDiv.innerText = "🚨 [FALLA CENTRAL]: Sin conexión con el mainframe militar.";
+                    errorDiv.style.display = "block";
+                });
+            }, 60);
+        });
     </script>
 </body>
 </html>
