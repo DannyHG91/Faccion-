@@ -133,8 +133,9 @@
 
     /* AVISO NOTIFICACIÓN FLOTANTE */
     .notificacion-tactica {
-        position: fixed;
-        top: 20px;
+        text-align: center;
+        position: relative;
+        top: 10px;
         left: 50%;
         transform: translateX(-50%) translateY(-100px);
         background: rgba(11, 17, 13, 0.95);
@@ -214,12 +215,27 @@
             clip-path: polygon(0% 0%, 94% 0%, 100% 15%, 100% 100%, 6% 100%, 0% 85%);
         }
     }
+    
+    /* Bloquea el resaltado y la selección nativa en toda la interfaz */
+* {
+    -webkit-tap-highlight-color: transparent; /* Elimina el cuadro azul/negro al presionar botones en Android */
+    user-select: none;                       /* Impide que el usuario mantenga presionado y resalte el texto */
+    -webkit-user-select: none;               /* Compatibilidad con navegadores basados en Safari/Chrome */
+}
+
+/* PERMISO EXCLUSIVO: Solo permitimos seleccionar el Token generado para que el botón de copia funcione */
+.token-text, #resToken {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
+    
     </style>
 </head>
 <body>
 
     <!-- Elemento para la notificación flotante -->
-    <div id="notificacion" class="notificacion-tactica">Comando Copiado Exitosamente</div>
+    <div id="notificacion" class="notificacion-tactica">Copiado Exitosamente</div>
 
     <div class="portada-container">
         <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
