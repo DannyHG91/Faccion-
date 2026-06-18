@@ -2,83 +2,295 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RED CENTRAL DE RECLUTAMIENTO MILITAR</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[ EJERCITO DE MESA ]</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #39ff14; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
-        
-        /* Efecto de línea de radar antiguo */
-        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none; }
-        
-        h1 { margin-bottom: 5px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px #39ff14; text-align: center; }
-        .sub-header { color: #888; font-size: 12px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 3px; text-align: center; }
-        
-        .priority-container { margin-bottom: 50px; display: flex; justify-content: center; width: 100%; }
-        .grid { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
-        
-        /* Tarjeta base militar */
-        .tactical-card { background: #0c1015; border: 1px solid #1f2d3d; border-radius: 0px; padding: 35px 20px; width: 220px; text-align: center; cursor: pointer; transition: all 0.25s ease-in-out; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
-        .tactical-card::before { content: ""; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid #1f2d3d; border-left: 2px solid #1f2d3d; }
-        
-        /* Enfoque visual por bando */
-        .fuego:hover { border-color: #ff3333; box-shadow: 0 0 15px rgba(255,51,51,0.3); transform: scale(1.02); }
-        .fuego:hover h2 { color: #ff3333; text-shadow: 0 0 8px #ff3333; }
-        
-        .agua:hover { border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.3); transform: scale(1.02); }
-        .agua:hover h2 { color: #00ffff; text-shadow: 0 0 8px #00ffff; }
-        
-        .tierra:hover { border-color: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.3); transform: scale(1.02); }
-        .tierra:hover h2 { color: #ffaa00; text-shadow: 0 0 8px #ffaa00; }
-        
-        /* 🦅 DISEÑO DE COMANDANCIA SUPERIOR */
-        .altomando { background: #0e171e; border: 1px solid #45f3ff; width: 300px; padding: 25px; }
-        .altomando::before { border-top-color: #45f3ff; border-left-color: #45f3ff; }
-        .altomando h2 { color: #45f3ff !important; text-shadow: 0 0 10px #45f3ff; font-size: 24px; }
-        .altomando:hover { box-shadow: 0 0 25px rgba(69,243,255,0.4); border-color: #45f3ff; transform: translateY(-3px); }
-        
-        h2 { margin: 15px 0 8px 0; font-size: 20px; color: #fff; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
-        p { color: #657b83; font-size: 12px; margin: 0; text-transform: uppercase; }
-        .status-dot { width: 6px; height: 6px; background: #39ff14; display: inline-block; border-radius: 50%; margin-right: 5px; box-shadow: 0 0 5px #39ff14; }
+        /* Paleta de Color: Diseño Táctico Moderno con Acentos de Oro Militar */
+        :root {
+            --stealth-bg: #030609;
+            --panel-glass: rgba(12, 19, 30, 0.65);
+            --border-cyan: #00d9ff;
+            --gold-honor: #dfb241; /* Oro militar pulido */
+            --gold-glow: rgba(223, 178, 65, 0.35);
+            --text-primary: #f0f6fc;
+            --text-secondary: #748393;
+            --neon-glow: rgba(0, 217, 255, 0.3);
+        }
+
+        body {
+            background-color: var(--stealth-bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        /* Ondas de Sonar Minimalistas Avanzadas en el Fondo */
+        .sonar-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .sonar-wave {
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border: 1px solid rgba(0, 217, 255, 0.06);
+            border-radius: 50%;
+            animation: modern-pulse 6s infinite linear;
+            opacity: 0;
+        }
+        .sonar-wave:nth-child(2) { animation-delay: 2s; }
+        .sonar-wave:nth-child(3) { animation-delay: 4s; }
+
+        @keyframes modern-pulse {
+            0% { transform: scale(0.8); opacity: 0; }
+            10% { opacity: 1; }
+            100% { transform: scale(3.5); opacity: 0; }
+        }
+
+        /* Contenedor de Cristal Táctico Avanzado (Glassmorphism de Precisión) */
+        .mainframe-container {
+            background: var(--panel-glass);
+            border: 1px solid rgba(0, 217, 255, 0.12);
+            padding: 35px 25px;
+            width: 90%;
+            max-width: 440px;
+            box-sizing: border-box;
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.04);
+            position: relative;
+            z-index: 5;
+            border-radius: 4px;
+        }
+
+        /* Líneas de Corte Láser de Esquinas Miliertas */
+        .corner-laser {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--border-cyan);
+        }
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* Cabecera de la Interfaz */
+        .header-shield {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .sys-code {
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--text-secondary);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-size: 24px;
+            font-weight: 800;
+            margin: 6px 0 0 0;
+            letter-spacing: 2px;
+            color: var(--text-primary);
+            text-shadow: 0 0 10px rgba(250,252,255,0.15);
+        }
+
+        /* SECCIÓN ALTO MANDO: Ubicada arriba con máximo respeto visual */
+        .supreme-command-zone {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .btn-lider {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(223, 178, 65, 0.03), rgba(223, 178, 65, 0.08));
+            border: 1px solid var(--gold-honor);
+            border-radius: 3px;
+            color: var(--gold-honor);
+            text-decoration: none;
+            box-shadow: 0 0 15px rgba(223, 178, 65, 0.05);
+            transition: all 0.25s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-lider .rank-title {
+            font-size: 13px;
+            font-weight: 800;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+        }
+
+        .btn-lider .rank-subtitle {
+            font-size: 10px;
+            color: rgba(223, 178, 65, 0.6);
+            letter-spacing: 1px;
+            font-family: monospace;
+        }
+
+        /* Efecto de activación táctil con respeto institucional */
+        .btn-lider:active {
+            background: rgba(223, 178, 65, 0.16);
+            box-shadow: 0 0 25px var(--gold-glow);
+            transform: scale(0.99);
+        }
+
+        /* Divisor de Rangos Tácticos */
+        .rank-divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0 15px 0;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--text-secondary);
+            letter-spacing: 1.5px;
+        }
+        .rank-divider::before, .rank-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .rank-divider:not(:empty)::before { margin-right: .75em; }
+        .rank-divider:not(:empty)::after { margin-left: .75em; }
+
+        /* Botones de Selección para Reclutas Ordinarios */
+        .btn-faction {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 18px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.015);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            box-sizing: border-box;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-faction .arrow {
+            color: var(--text-secondary);
+            font-family: monospace;
+        }
+
+        .btn-faction:active {
+            background: rgba(0, 217, 255, 0.08);
+            border-color: var(--border-cyan);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
+            color: var(--border-cyan);
+        }
+
+        /* Barra de Sonar Táctil Inferior */
+        .status-bar {
+            margin-top: 20px;
+            background: rgba(0, 217, 255, 0.04);
+            border: 1px solid rgba(0, 217, 255, 0.1);
+            color: var(--border-cyan);
+            font-size: 11px;
+            padding: 12px;
+            text-align: center;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            user-select: none;
+        }
+        .status-bar:active {
+            background: rgba(0, 217, 255, 0.12);
+        }
+
+        /* Métricas de Encriptación del Servidor */
+        .footer-metrics {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            font-size: 9px;
+            font-family: monospace;
+            color: var(--text-secondary);
+            letter-spacing: 0.5px;
+        }
     </style>
 </head>
 <body>
 
-    <h1>[ CENTRAL MILITARY LOGNET ]</h1>
-    <div class="sub-header">ESTADO DE LA RED: <span class="status-dot"></span>OPERACIONAL // CLASIFICACIÓN: TOP SECRET</div>
-
-    <!-- 👑 COMPONENTE DE COMANDANTES (MÁXIMA JERARQUÍA) -->
-    <div class="priority-container">
-        <div class="tactical-card altomando" onclick="irAlAltoMando()">
-            <div style="font-size: 45px;">🦅</div>
-            <h2>[ ALTO MANDO ]</h2>
-            <p>Acceso y control de oficiales</p>
-        </div>
+    <!-- Red de Ondas del Sonar Táctico -->
+    <div class="sonar-container">
+        <div class="sonar-wave"></div>
+        <div class="sonar-wave"></div>
+        <div class="sonar-wave"></div>
     </div>
 
-    <!-- 🛡️ PERÍMETRO DE ACCESO DE RECLUTAS -->
-    <div class="grid">
-        <div class="tactical-card fuego" onclick="irALogin('Fuego')">
-            <div style="font-size: 40px;">🔥</div>
-            <h2>División Fuego</h2>
-            <p>Sector Volcánico / Activo</p>
+    <div class="mainframe-container">
+        <!-- Esquinas Láser -->
+        <div class="corner-laser tl"></div>
+        <div class="corner-laser tr"></div>
+        <div class="corner-laser bl"></div>
+        <div class="corner-laser br"></div>
+
+        <!-- Encabezado Central -->
+        <div class="header-shield">
+            <div class="sys-code">SISTEMA INTEGRADO DE CONTROL</div>
+            <h1>EJERCITO DE MESA</h1>
+        </div>
+        
+        <!-- SECCIÓN ALTO MANDO: Prioridad Absoluta, Ubicación Superior y Respeto Institucional -->
+        <div class="supreme-command-zone">
+            <a class="btn-lider" href="/altomando/login">
+                <span class="rank-title">✦ ALTO MANDO ✦</span>
+                <span class="rank-subtitle">[ ACCESO RESTRINGIDO A COMANDANTES ]</span>
+            </a>
         </div>
 
-        <div class="tactical-card agua" onclick="irALogin('Agua')">
-            <div style="font-size: 40px;">💧</div>
-            <h2>División Agua</h2>
-            <p>Sector Oceánico / Activo</p>
+        <!-- Línea Divisoria de Rangos -->
+        <div class="rank-divider">SELECCIÓN DE DESTACAMENTO PARA RECLUTAS</div>
+
+        <!-- Botones de las Divisiones Inferiores -->
+        <a class="btn-faction" href="/fuego/login">
+            <span>Comando Táctico Fuego</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="btn-faction" href="/agua/login">
+            <span>Fuerzas Anfibias Agua</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="btn-faction" href="/tierra/login">
+            <span>Infantería Blindada Tierra</span>
+            <span class="arrow">→</span>
+        </a>
+
+        <!-- Interfaz Interactiva de Sonar -->
+        <div class="status-bar" id="alertBtn">
+            EMITIR PULSO DE SONAR OPERATIVO
         </div>
 
-        <div class="tactical-card tierra" onclick="irALogin('Tierra')">
-            <div style="font-size: 40px;">🪨</div>
-            <h2>División Tierra</h2>
-            <p>Sector Fortaleza / Activo</p>
-        </div>
-    </div>
-
-    <script {nonce}>
-        function irAlAltoMando() { window.location.href = '/altomando/login'; }
-        function irALogin(nombreFaction) { window.location.href = `/${nombreFaction.toLowerCase()}/login`; }
-    </script>
-</body>
-</html>
+        <div class="footer-metrics">
+            <span>SYS: SECURE NODE</span>
