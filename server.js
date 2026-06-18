@@ -21,9 +21,9 @@ app.use(express.static(path.join(__dirname), {
     setHeaders: (res) => { res.setHeader('Cache-Control', 'public, max-age=604800'); }
 }));
 
-// Si usas el disco persistente de Render, cambia esta ruta por la ruta del disco (/opt/render/project/src/datos/usuarios.json)
 const ARCHIVO_USUARIOS = path.join(__dirname, 'usuarios.json');
 
+// Cuentas maestras de los líderes (Ellos mantienen usuario y clave)
 const lideresPorDefecto = [
     { user: "lider_fuego", pass: "fuego123", faction: "Fuego", role: "Lider" },
     { user: "lider_agua", pass: "agua123", faction: "Agua", role: "Lider" },
@@ -39,15 +39,11 @@ function cargarUsuariosDeArchivo() {
             fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lideresPorDefecto, null, 2), 'utf8');
             return [...lideresPorDefecto];
         }
-    } catch (error) {
-        return [...lideresPorDefecto];
-    }
+    } catch (error) { return [...lideresPorDefecto]; }
 }
 
-function guardarUsuariosEnArchivo(listaUsuarios) {
-    try {
-        fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(listaUsuarios, null, 2), 'utf8');
-    } catch (error) {}
+function guardarUsuariosEnArchivo(lista) {
+    try { fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lista, null, 2), 'utf8'); } catch (error) {}
 }
 
 const urlsFacciones = {
@@ -58,103 +54,89 @@ const urlsFacciones = {
 
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
 
-// ----------------------------------------------------
-// 🔑 SECCIÓN A: PORTAL EXCLUSIVO DEL ALTO MANDO (LÍDERES)
-// ----------------------------------------------------
-app.get('/altomando/login', (req, res) => {
-    res.sendFile(path.join(__dirname, 'login_lideres.html'));
-});
+// 🦅 LOGIN DE LÍDERES
+app.get('/altomando/login', (req, res) => { res.sendFile(path.join(__dirname, 'login_lideres.html')); });
 
 app.post('/api/login-lideres', (req, res) => {
     const { user, pass } = req.body;
-    const listaUsuariosActuales = cargarUsuariosDeArchivo();
-    const usuarioEncontrado = listaUsuariosActuales.find(u => u.user === user && u.pass === pass);
+    const lista = cargarUsuariosDeArchivo();
+    const encontrado = lista.find(u => u.user === user && u.pass === pass && u.role === "Lider");
 
-    if (usuarioEncontrado) {
-        // 🛡️ CONTROL DE ACCESO: Si no es líder, es rechazado inmediatamente
-        if (usuarioEncontrado.role !== "Lider") {
-            return res.status(403).json({ success: false, message: "⚠️ Acceso denegado. Este portal es únicamente para el Alto Mando." });
-        }
-
+    if (encontrado) {
         req.session.usuarioLogueado = true;
-        req.session.faction = usuarioEncontrado.faction;
-        req.session.role = usuarioEncontrado.role;
+        req.session.faction = encontrado.faction;
+        req.session.role = encontrado.role;
         res.json({ success: true, redirect: '/panel-lider' });
     } else {
         res.status(401).json({ success: false, message: "Credenciales de Líder incorrectas." });
     }
 });
 
-// ----------------------------------------------------
-// 🔑 SECCIÓN B: PORTALES DE FACCIONES (RECLUTAS / MIEMBROS)
-// ----------------------------------------------------
+// 🔑 PORTALES DE RECLUTAS (AHORA POR TOKEN)
 app.get('/:faccion/login', (req, res) => {
-    const faccion = req.params.faccion.toLowerCase();
-    if (['fuego', 'agua', 'tierra'].includes(faccion)) {
+    if (['fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
         res.sendFile(path.join(__dirname, 'login_facciosos.html'));
-    } else {
-        res.status(404).send('<h1>Facción inexistente</h1>');
-    }
+    } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
 });
 
-app.post('/api/login-exclusivo', (req, res) => {
-    const { user, pass, factionUrl } = req.body;
-    const listaUsuariosActuales = cargarUsuariosDeArchivo();
-    const usuarioEncontrado = listaUsuariosActuales.find(u => u.user === user && u.pass === pass);
+// VALIDACIÓN DE TOKEN ÚNICO
+app.post('/api/login-token', (req, res) => {
+    const { token, factionUrl } = req.body;
+    const lista = cargarUsuariosDeArchivo();
+    
+    // Buscamos si el token existe en la base de datos
+    const tokenValido = lista.find(u => u.token === token && u.role === "Miembro");
 
-    if (usuarioEncontrado) {
-        // 🛡️ CONTROL DE ACCESO: Un líder no puede usar el login de los miembros comunes
-        if (usuarioEncontrado.role === "Lider") {
-            return res.status(403).json({ success: false, message: "⚠️ Los líderes deben iniciar sesión desde el Portal del Alto Mando." });
-        }
-
-        if (usuarioEncontrado.faction.toLowerCase() !== factionUrl.toLowerCase()) {
-            return res.status(403).json({ success: false, message: `⚠️ ¡Acceso denegado! No perteneces a la Facción ${factionUrl}.` });
+    if (tokenValido) {
+        // Bloqueo si el token es de otra facción
+        if (tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
+            return res.status(403).json({ success: false, message: `⚠️ Código inválido para la Facción ${factionUrl}.` });
         }
 
         req.session.usuarioLogueado = true;
-        req.session.faction = usuarioEncontrado.faction;
-        req.session.role = usuarioEncontrado.role;
+        req.session.faction = tokenValido.faction;
+        req.session.role = tokenValido.role;
         res.json({ success: true, redirect: '/acceso-facciosos' });
     } else {
-        res.status(401).json({ success: false, message: "Usuario o contraseña incorrectos." });
+        res.status(401).json({ success: false, message: "El Token de acceso no existe o ya expiró." });
     }
 });
 
-// ----------------------------------------------------
-// 🛡️ SECCIÓN C: SEGURIDAD INTERNA Y RECLUTAMIENTO
-// ----------------------------------------------------
+// 🛡️ CONTROL INTERNO Y GENERACIÓN DE TOKENS
 app.get('/panel-lider', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Lider") {
-        return res.status(403).send("<h1>Acceso Denegado: No eres líder.</h1>");
-    }
+    if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).send("No autorizado");
     res.sendFile(path.join(__dirname, 'lider.html'));
 });
 
 app.get('/api/info-lider', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Lider") { return res.status(403).json({ error: "No autorizado" }); }
+    if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "No autorizado" });
     res.json({ faction: req.session.faction });
 });
 
-app.post('/api/registrar-por-lider', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Lider") { return res.status(403).json({ error: "Acceso denegado." }); }
+// EL LÍDER GENERA UN TOKEN ÚNICO COMPACTO
+app.post('/api/generar-token', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "Denegado" });
 
-    const faccionLider = req.session.faction; 
-    const nuevoUsuario = "recluta_" + faccionLider.toLowerCase() + "_" + Math.floor(1000 + Math.random() * 9000);
+    const faccionLider = req.session.faction;
     
+    // Genera un código tipo FUEGO-K92B-47A1
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    let nuevaContrasena = "";
-    for (let i = 0; i < 8; i++) { nuevaContrasena += caracteres.charAt(Math.floor(Math.random() * caracteres.length)); }
+    let bloque1 = "", bloque2 = "";
+    for (let i = 0; i < 4; i++) {
+        bloque1 += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        bloque2 += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+    }
+    const tokenGenerado = `${faccionLider.toUpperCase()}-${bloque1}-${bloque2}`;
 
-    const listaUsuariosActuales = cargarUsuariosDeArchivo();
-    listaUsuariosActuales.push({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionLider, role: "Miembro" });
-    guardarUsuariosEnArchivo(listaUsuariosActuales);
+    const lista = cargarUsuariosDeArchivo();
+    lista.push({ token: tokenGenerado, faction: faccionLider, role: "Miembro" });
+    guardarUsuariosEnArchivo(lista);
 
-    res.json({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionLider });
+    res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
 app.get('/acceso-facciosos', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") { return res.status(403).send("<h1>Acceso Denegado.</h1>"); }
+    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") return res.status(403).send("Acceso Denegado.");
     const urlDestino = urlsFacciones[req.session.faction];
     res.send(`
         <!DOCTYPE html>
@@ -162,19 +144,15 @@ app.get('/acceso-facciosos', (req, res) => {
         <head><title>Cargando...</title><style>body { background: #121214; color: white; font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }</style></head>
         <body>
             <div style="text-align: center;">
-                <h2>Ingresando al santuario...</h2>
-                <p>Si no redirige automáticamente, <a href="${urlDestino}" style="color: #007bff; font-weight: bold;">haz clic aquí</a></p>
+                <h2>Acceso concedido mediante Token...</h2>
+                <script>window.location.replace("${urlDestino}");</script>
             </div>
-            <script>window.location.replace("${urlDestino}");</script>
         </body>
         </html>
     `);
 });
 
-app.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
-});
+app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { console.log(`Servidor de facciones activo en puerto ${PORT}`); });
+app.listen(PORT, () => { console.log(`Servidor de Tokens activo en puerto ${PORT}`); });
