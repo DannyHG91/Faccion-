@@ -13,7 +13,7 @@ app.use(session({
     secret: 'token_ancestral_facciones_2026',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // Sesión por 24 horas
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // Sesión activa por 24 horas
 }));
 
 app.use(express.static(path.join(__dirname), {
@@ -21,9 +21,9 @@ app.use(express.static(path.join(__dirname), {
     setHeaders: (res) => { res.setHeader('Cache-Control', 'public, max-age=604800'); }
 }));
 
+// Si usas el disco persistente de Render, cambia esta ruta por la de tu volumen (/opt/render/project/src/datos/usuarios.json)
 const ARCHIVO_USUARIOS = path.join(__dirname, 'usuarios.json');
 
-// Cuentas maestras de los líderes (Ellos mantienen usuario y clave)
 const lideresPorDefecto = [
     { user: "lider_fuego", pass: "fuego123", faction: "Fuego", role: "Lider" },
     { user: "lider_agua", pass: "agua123", faction: "Agua", role: "Lider" },
@@ -46,15 +46,9 @@ function guardarUsuariosEnArchivo(lista) {
     try { fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lista, null, 2), 'utf8'); } catch (error) {}
 }
 
-const urlsFacciones = {
-    "Fuego": "https://ejemplo.com",
-    "Agua": "https://ejemplo.com",
-    "Tierra": "https://ejemplo.com"
-};
-
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
 
-// 🦅 LOGIN DE LÍDERES
+// 🦅 PORTAL EXCLUSIVO DEL ALTO MANDO
 app.get('/altomando/login', (req, res) => { res.sendFile(path.join(__dirname, 'login_lideres.html')); });
 
 app.post('/api/login-lideres', (req, res) => {
@@ -72,30 +66,30 @@ app.post('/api/login-lideres', (req, res) => {
     }
 });
 
-// 🔑 PORTALES DE RECLUTAS (AHORA POR TOKEN)
+// 🔑 PORTALES DE RECLUTAS
 app.get('/:faccion/login', (req, res) => {
     if (['fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
         res.sendFile(path.join(__dirname, 'login_facciosos.html'));
     } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
 });
 
-// VALIDACIÓN DE TOKEN ÚNICO
+// VALIDACIÓN Y CREACIÓN DE SESIÓN RECLUTA
 app.post('/api/login-token', (req, res) => {
     const { token, factionUrl } = req.body;
     const lista = cargarUsuariosDeArchivo();
     
-    // Buscamos si el token existe en la base de datos
     const tokenValido = lista.find(u => u.token === token && u.role === "Miembro");
 
     if (tokenValido) {
-        // Bloqueo si el token es de otra facción
         if (tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
-            return res.status(403).json({ success: false, message: `⚠️ Código inválido para la Facción ${factionUrl}.` });
+            return res.status(403).json({ success: false, message: `⚠️ Código inválido para la División ${factionUrl.toUpperCase()}.` });
         }
 
+        // Activamos la sesión del recluta en el servidor
         req.session.usuarioLogueado = true;
         req.session.faction = tokenValido.faction;
         req.session.role = tokenValido.role;
+
         res.json({ success: true, redirect: '/acceso-facciosos' });
     } else {
         res.status(401).json({ success: false, message: "El Token de acceso no existe o ya expiró." });
@@ -113,13 +107,11 @@ app.get('/api/info-lider', (req, res) => {
     res.json({ faction: req.session.faction });
 });
 
-// EL LÍDER GENERA UN TOKEN ÚNICO COMPACTO
 app.post('/api/generar-token', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "Denegado" });
 
     const faccionLider = req.session.faction;
     
-    // Genera un código tipo FUEGO-K92B-47A1
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let bloque1 = "", bloque2 = "";
     for (let i = 0; i < 4; i++) {
@@ -135,21 +127,20 @@ app.post('/api/generar-token', (req, res) => {
     res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
-// GUARDIÁN DE ARCHIVOS LOCALES MILITARES
+// 📂 NUEVA RUTA DE DESPACHO INTERNO DE ARCHIVOS MILITARES
 app.get('/acceso-facciosos', (req, res) => {
-    // 1. Bloqueo radical si no ha iniciado sesión con token
-    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") { 
-        return res.status(403).send("<h1>[ACCESO DENEGADO]: Autenticación Requerida.</h1>"); 
+    // Si un intruso intenta forzar esta ruta sin haber validado su token, es bloqueado por el servidor
+    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") {
+        return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
     }
     
-    const faccionDelUsuario = req.session.faction.toLowerCase(); // 'fuego', 'agua' o 'tierra'
+    const divisionMiembro = req.session.faction.toLowerCase(); // 'fuego', 'agua' o 'tierra'
 
-    // 2. Servimos el archivo HTML local exclusivo de su bando en pantalla completa
-    res.sendFile(path.join(__dirname, `contenido_${faccionDelUsuario}.html`));
+    // Servimos directamente el archivo HTML correspondiente desde el disco del servidor
+    res.sendFile(path.join(__dirname, `contenido_${divisionMiembro}.html`));
 });
-
 
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { console.log(`Servidor de Tokens activo en puerto ${PORT}`); });
+app.listen(PORT, () => { console.log(`Servidor de Contenidos Locales activo en puerto ${PORT}`); });
