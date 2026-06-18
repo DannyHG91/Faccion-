@@ -1,0 +1,76 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Exclusivo</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #121214; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1f1f23; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 340px; text-align: center; border-top: 5px solid #fff; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; border-radius: 6px; box-sizing: border-box; background: #2a2a30; color: white; }
+        input:focus { border-color: #007bff; outline: none; }
+        button { background: #007bff; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
+        button:hover { background: #0056b3; }
+        .btn-volver { background: transparent; border: 1px solid #444; color: #aaa; margin-top: 5px; }
+        .btn-volver:hover { background: #2a2a30; color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="loginCard">
+        <div id="emblema" style="font-size: 45px;">🔮</div>
+        <h2 id="titulo">Portal de Acceso</h2>
+        <p style="color: #888; font-size: 13px; margin-bottom: 20px;">Solo se permiten miembros autorizados</p>
+        
+        <input type="text" id="loginUser" placeholder="Nombre de Usuario">
+        <input type="password" id="loginPass" placeholder="Clave Secreta">
+        <button onclick="ejecutarLogin()">Desbloquear Entrada</button>
+        <button onclick="window.location.href='/'" class="btn-volver">Volver al Menú</button>
+    </div>
+
+    <script {nonce}>
+        // 🔮 MAGIA FRONTEND: Detecta la facción leyendo la URL actual del navegador
+        const urlPartes = window.location.pathname.split('/');
+        const facciónActual = urlPartes[1]; // Obtiene 'fuego', 'agua' o 'tierra'
+
+        const card = document.getElementById("loginCard");
+        const emblema = document.getElementById("emblema");
+        const titulo = document.getElementById("titulo");
+
+        // Personalizar interfaz dinámicamente según la URL
+        if (facciónActual === 'fuego') {
+            card.style.borderTopColor = '#ff4d4d';
+            emblema.innerText = '🔥';
+            titulo.innerText = 'Portal de Fuego';
+        } else if (facciónActual === 'agua') {
+            card.style.borderTopColor = '#3399ff';
+            emblema.innerText = '💧';
+            titulo.innerText = 'Portal de Agua';
+        } else if (facciónActual === 'tierra') {
+            card.style.borderTopColor = '#996633';
+            emblema.innerText = '🪨';
+            titulo.innerText = 'Portal de Tierra';
+        }
+
+        async function ejecutarLogin() {
+            const user = document.getElementById("loginUser").value;
+            const pass = document.getElementById("loginPass").value;
+
+            // Envía la petición al backend incluyendo cuál login se está usando
+            const response = await fetch('/api/login-exclusivo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pass, factionUrl: facciónActual })
+            });
+
+            const resultado = await response.json();
+
+            if (resultado.success) {
+                window.location.href = resultado.redirect;
+            } else {
+                alert(resultado.message);
+            }
+        }
+    </script>
+</body>
+</html>
