@@ -35,7 +35,7 @@ let usuarios = [
 
 // URLs Secretas de Pantalla Completa para los Miembros
 const urlsFacciones = {
-    "Fuego": "https://ejemplo.com",
+    "Fuego": "https://grupo-cobra-macros.netlify.app/",
     "Agua": "https://ejemplo.com",
     "Tierra": "https://ejemplo.com"
 };
