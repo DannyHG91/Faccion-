@@ -1,0 +1,63 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Control del Líder</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #eec; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 400px; text-align: center; }
+        button { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; background: #28a745; color: white;}
+        .credenciales { background: #e9ecef; padding: 10px; border-radius: 4px; text-align: left; font-family: monospace; font-size: 14px; margin-top: 15px; }
+        .hidden { display: none !important; }
+        .logout { background: #dc3545; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Panel de Reclutamiento</h2>
+        <p>Comandante de la Facción: <strong id="lblFaction" style="color: #007bff;">Cargando...</strong></p>
+        
+        <button onclick="generarMiembro()">Generar Nuevo Recluta</button>
+
+        <div id="resultado" class="hidden">
+            <p style="color: green; font-weight: bold;">¡Nuevo acceso blindado creado!</p>
+            <div class="credenciales">
+                <strong>Usuario:</strong> <span id="resUser"></span><br>
+                <strong>Contraseña:</strong> <span id="resPass"></span><br>
+                <strong>Facción Asignada:</strong> <span id="resFaction"></span>
+            </div>
+            <p><small>Copia estos datos y entrégalos a tu nuevo soldado.</small></p>
+        </div>
+        
+        <hr>
+        <button onclick="window.location.href='/logout'" class="logout">Cerrar Sesión</button>
+    </div>
+
+    <script {nonce}>
+        // Al cargar la página, le preguntamos al servidor qué facción lidera este usuario
+        async function cargarInfoLider() {
+            const res = await fetch('/api/info-lider');
+            if(res.ok) {
+                const datos = await res.json();
+                document.getElementById("lblFaction").innerText = datos.faction;
+            } else {
+                window.location.href = '/';
+            }
+        }
+
+        async function generarMiembro() {
+            const response = await fetch('/api/registrar-por-lider', { method: 'POST' });
+            const datos = await response.json();
+
+            document.getElementById("resUser").innerText = datos.user;
+            document.getElementById("resPass").innerText = datos.pass;
+            document.getElementById("resFaction").innerText = datos.faction;
+            document.getElementById("resultado").classList.remove("hidden");
+        }
+
+        cargarInfoLider();
+    </script>
+</body>
+</html>
