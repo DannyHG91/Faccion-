@@ -2,50 +2,366 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Alto Mando</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>[ COBRA HIGH COMMAND - AUTHENTICATION ]</title>
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: #0b0c10; color: #66fcf1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: #1f2833; padding: 40px 30px; border-radius: 4px; box-shadow: 0 0 20px rgba(102,252,241,0.2); width: 340px; text-align: center; border: 1px solid #45f3ff; }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #45f3ff; border-radius: 2px; box-sizing: border-box; background: #0b0c10; color: #66fcf1; font-family: monospace; }
-        input:focus { box-shadow: 0 0 10px #45f3ff; outline: none; }
-        button { background: #45f3ff; color: #0b0c10; cursor: pointer; font-weight: bold; font-size: 16px; transition: all 0.3s; }
-        button:hover { background: transparent; color: #45f3ff; box-shadow: 0 0 15px #45f3ff; }
-        .back-link { display: inline-block; margin-top: 15px; color: #c5a059; text-decoration: none; font-size: 13px; }
+        /* Variables de Sistema del Alto Mando: Oro de Prestigio y Negro Sigilo */
+        :root {
+            --stealth-dark: #020407;
+            --glass-core: rgba(14, 21, 31, 0.75);
+            --gold-prestige: #dcae3b;
+            --gold-glow: rgba(220, 174, 59, 0.25);
+            --laser-cyan: #00d9ff;
+            --sub-slate: #56687a;
+            --pure-light: #f1f5f9;
+            --alert-red: #ff4a4a;
+            --grid-line: rgba(220, 174, 59, 0.015);
+        }
+
+        body {
+            background-color: var(--stealth-dark);
+            color: var(--pure-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            touch-action: manipulation;
+            position: relative;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+        }
+
+        /* FONDO ANIMADO: Radar cuántico en tono áureo */
+        .radar-wave-hub {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            border: 1px solid rgba(220, 174, 59, 0.04);
+            border-radius: 50%;
+            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            opacity: 0;
+        }
+        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
+        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
+        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
+
+        @keyframes node-pulse {
+            0% { transform: scale(0.6); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: scale(3.2); opacity: 0; border-color: rgba(220, 174, 59, 0.01); }
+        }
+        /* CONSOLA CENTRAL DE AUTENTICACIÓN RESTINGIDA */
+        .mainframe-container {
+            background: var(--glass-core);
+            border: 1px solid rgba(220, 174, 59, 0.2);
+            padding: 40px 30px;
+            width: 92%;
+            max-width: 420px;
+            box-sizing: border-box;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.85);
+            position: relative;
+            z-index: 5;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        /* LÁSER PERIMETRAL DE AUTORIDAD */
+        .laser-border {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--gold-prestige), transparent);
+            z-index: 6;
+        }
+        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
+        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
+        
+        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+        /* Biseles de Esquina de Oro Militar */
+        .corner-bracket {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(220, 174, 59, 0.4);
+            z-index: 7;
+        }
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+        /* CABECERA PRIVADA */
+        .header-shield {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(220, 174, 59, 0.15);
+            padding-bottom: 15px;
+        }
+
+        .sys-badge {
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--gold-prestige);
+            letter-spacing: 3px;
+            font-weight: bold;
+        }
+
+        h1 {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 6px 0 0 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--pure-light);
+        }
+
+        /* CAMPOS DE FORMULARIO HUD MILITAR */
+        .form-group {
+            margin-bottom: 22px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            margin-bottom: 8px;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(0, 0, 0, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 3px;
+            color: var(--pure-light);
+            font-size: 14px;
+            box-sizing: border-box;
+            outline: none;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold-prestige);
+            background: rgba(220, 174, 59, 0.02);
+            box-shadow: 0 0 15px rgba(220, 174, 59, 0.15);
+        }
+
+        /* BOTÓN DE VALIDACIÓN DE CREDENCIALES */
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, rgba(220, 174, 59, 0.03), rgba(220, 174, 59, 0.08));
+            border: 1px solid var(--gold-prestige);
+            color: var(--gold-prestige);
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-sizing: border-box;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+            margin-top: 25px;
+        }
+
+        .btn-submit:active {
+            background: var(--gold-prestige);
+            color: var(--stealth-dark);
+            box-shadow: 0 0 25px var(--gold-glow);
+        }
+
+        /* CUADRO DE NOTIFICACIÓN DE ADVERTENCIA */
+        .alert-box {
+            display: none;
+            margin-top: 20px;
+            background: rgba(255, 74, 74, 0.04);
+            border: 1px solid var(--alert-red);
+            border-left: 3px solid var(--alert-red);
+            color: var(--alert-red);
+            font-size: 11px;
+            font-family: monospace;
+            padding: 12px;
+            text-align: left;
+            line-height: 1.4;
+        }
+
+        .btn-back {
+            display: block;
+            text-align: center;
+            font-size: 10px;
+            font-family: monospace;
+            color: var(--sub-slate);
+            text-decoration: none;
+            margin-top: 20px;
+            letter-spacing: 1px;
+            transition: color 0.2s ease;
+        }
+        .btn-back:active { color: var(--laser-cyan); }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div style="font-size: 40px;">🦅</div>
-        <h2>ALTO MANDO</h2>
-        <p style="color: #c5a059; font-size: 12px; margin-bottom: 20px;">SISTEMA CENTRAL DE COMANDANTES</p>
-        
-        <input type="text" id="leaderUser" placeholder="IDENTIFICADOR LÍDER">
-        <input type="password" id="leaderPass" placeholder="CLAVE DE ENCRIPCIÓN">
-        <button onclick="autenticarLider()">INICIAR SECUENCIA</button>
-        <a href="/" class="back-link">< Volver al plano público</a>
+    <!-- Capas animadas del búnker del Alto Mando -->
+    <div class="radar-wave-hub">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
     </div>
 
-    <script {nonce}>
-        async function autenticarLider() {
-            const user = document.getElementById("leaderUser").value;
-            const pass = document.getElementById("leaderPass").value;
+    <div class="mainframe-container">
+        <!-- Haz de luz perimetral en oro -->
+        <div class="laser-border lb-top"></div>
+        <div class="laser-border lb-bottom"></div>
 
-            const response = await fetch('/api/login-lideres', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user, pass })
-            });
+        <!-- Ángulos estructurales fijados -->
+        <div class="corner-bracket tl"></div>
+        <div class="corner-bracket tr"></div>
+        <div class="corner-bracket bl"></div>
+        <div class="corner-bracket br"></div>
 
-            const resultado = await response.json();
+        <!-- Cabecera de Alto Rango -->
+        <div class="header-shield">
+            <div class="sys-badge">✦ AUTENTICACIÓN MILITAR ✦</div>
+            <h1>ALTO MANDO GENERAL</h1>
+        </div>
 
-            if (resultado.success) {
-                window.location.href = resultado.redirect;
-            } else {
-                alert(resultado.message);
+        <!-- Formulario Táctico de Credenciales -->
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="user">IDENTIFICADOR DE COMANDANTE</label>
+                <input type="text" class="form-input" id="user" required autocomplete="off" placeholder="EJ: lider_fuego">
+            </div>
+
+            <div class="form-group">
+                <label for="pass">LLAVE CRIPTOGRÁFICA DE ACCESO</label>
+                <input type="password" class="form-input" id="pass" required placeholder="••••••••">
+            </div>
+
+            <button type="submit" class="btn-submit">VERIFICAR MANDATO</button>
+        </form>
+
+        <!-- Mensajes de Alerta Crítica -->
+        <div id="errorMessage" class="alert-box"></div>
+
+        <a href="/" class="btn-back">← ABORTAR OPERACIÓN / VOLVER AL INICIO</a>
+    </div>
+
+    <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
+    <script>
+        let audioCtx = null;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
             }
         }
+
+        // Tono: Enlace exitoso (Pulso doble de alta frecuencia)
+        function playSuccessSound() {
+            initAudio();
+            let osc1 = audioCtx.createOscillator();
+            let gain1 = audioCtx.createGain();
+            osc1.type = 'sine';
+            osc1.frequency.setValueAtTime(1500, audioCtx.currentTime);
+            gain1.gain.setValueAtTime(0.06, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc1.connect(gain1);
+            gain1.connect(audioCtx.destination);
+            osc1.start();
+            osc1.stop(audioCtx.currentTime + 0.04);
+
+            setTimeout(() => {
+                let osc2 = audioCtx.createOscillator();
+                let gain2 = audioCtx.createGain();
+                osc2.type = 'sine';
+                osc2.frequency.setValueAtTime(1900, audioCtx.currentTime);
+                gain2.gain.setValueAtTime(0.06, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc2.connect(gain2);
+                gain2.connect(audioCtx.destination);
+                osc2.start();
+                osc2.stop(audioCtx.currentTime + 0.04);
+            }, 40);
+        }
+
+        // Tono: Acceso Denegado (Pulso descendente de advertencia)
+        function playFailureSound() {
+            initAudio();
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(700, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(250, audioCtx.currentTime + 0.15);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.15);
+        }
+
+        // Escucha táctil para habilitar el motor de audio en teléfonos móviles
+        document.body.addEventListener('touchstart', initAudio, {passive: true});
+
+        // Envío seguro de credenciales al servidor de Express
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            initAudio();
+
+            const userVal = document.getElementById('user').value.trim();
+            const passVal = document.getElementById('pass').value;
+            const errorDiv = document.getElementById('errorMessage');
+            
+            errorDiv.style.display = "none";
+            errorDiv.innerText = "";
+
+            fetch('/api/login-lideres', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user: userVal, pass: passVal })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    playSuccessSound();
+                    // Breve retraso para oír el tono de éxito antes de la redirección al panel de control
+                    setTimeout(() => { window.location.href = data.redirect; }, 120);
+                } else {
+                    playFailureSound();
+                    errorDiv.innerText = `⚠️ [DENEGADO]: ${data.message}`;
+                    errorDiv.style.display = "block";
+                }
+            })
+            .catch(() => {
+                playFailureSound();
+                errorDiv.innerText = "🚨 [FALLA DE ENLACE]: Mainframe central inaccesible.";
+                errorDiv.style.display = "block";
+            });
+        });
     </script>
 </body>
 </html>
