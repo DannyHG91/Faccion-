@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acceso Exclusivo</title>
+    <title>Pase de Facción</title>
     <style>
         body { font-family: Arial, sans-serif; background: #121214; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
         .card { background: #1f1f23; padding: 40px 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); width: 340px; text-align: center; border-top: 5px solid #fff; }
-        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #333; border-radius: 6px; box-sizing: border-box; background: #2a2a30; color: white; }
+        input, button { width: 100%; padding: 14px; margin: 12px 0; border: 1px solid #333; border-radius: 6px; box-sizing: border-box; background: #2a2a30; color: white; text-align: center; font-size: 16px; font-family: monospace; }
         input:focus { border-color: #007bff; outline: none; }
-        button { background: #007bff; border: none; cursor: pointer; font-weight: bold; font-size: 16px; transition: background 0.2s; }
+        button { background: #007bff; border: none; cursor: pointer; font-weight: bold; transition: background 0.2s; }
         button:hover { background: #0056b3; }
-        .btn-volver { background: transparent; border: 1px solid #444; color: #aaa; margin-top: 5px; }
-        .btn-volver:hover { background: #2a2a30; color: white; }
+        .btn-volver { background: transparent; border: 1px solid #444; color: #aaa; font-size: 14px; margin-top: 5px; font-family: Arial; }
     </style>
 </head>
 <body>
@@ -20,53 +19,38 @@
     <div class="card" id="loginCard">
         <div id="emblema" style="font-size: 45px;">🔮</div>
         <h2 id="titulo">Portal de Acceso</h2>
-        <p style="color: #888; font-size: 13px; margin-bottom: 20px;">Solo se permiten miembros autorizados</p>
+        <p style="color: #888; font-size: 13px;">Introduce tu Token de acceso asignado</p>
         
-        <input type="text" id="loginUser" placeholder="Nombre de Usuario">
-        <input type="password" id="loginPass" placeholder="Clave Secreta">
-        <button onclick="ejecutarLogin()">Desbloquear Entrada</button>
+        <!-- CORRECCIÓN: Un solo campo de texto para el código de pase -->
+        <input type="text" id="accessToken" placeholder="XXXX-XXXX-XXXX" autocomplete="off">
+        <button onclick="validarToken()">Validar Pase</button>
         <button onclick="window.location.href='/'" class="btn-volver">Volver al Menú</button>
     </div>
 
     <script {nonce}>
-        // CORRECCIÓN: Extrae correctamente la palabra limpia (fuego, agua o tierra) de la URL
         const urlPartes = window.location.pathname.split('/');
-        const faccionActual = urlPartes[1] ? urlPartes[1].toLowerCase() : '';
+        const faccionActual = urlPartes[1].toLowerCase();
 
         const card = document.getElementById("loginCard");
         const emblema = document.getElementById("emblema");
         const titulo = document.getElementById("titulo");
 
-        // Personalizar interfaz dinámicamente según la URL detectada
-        if (faccionActual === 'fuego') {
-            card.style.borderTopColor = '#ff4d4d';
-            emblema.innerText = '🔥';
-            titulo.innerText = 'Portal de Fuego';
-        } else if (faccionActual === 'agua') {
-            card.style.borderTopColor = '#3399ff';
-            emblema.innerText = '💧';
-            titulo.innerText = 'Portal de Agua';
-        } else if (faccionActual === 'tierra') {
-            card.style.borderTopColor = '#996633';
-            emblema.innerText = '🪨';
-            titulo.innerText = 'Portal de Tierra';
-        }
+        if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff4d4d'; emblema.innerText = '🔥'; titulo.innerText = 'Acceso Fuego'; } 
+        else if (faccionActual === 'agua') { card.style.borderTopColor = '#3399ff'; emblema.innerText = '💧'; titulo.innerText = 'Acceso Agua'; } 
+        else if (faccionActual === 'tierra') { card.style.borderTopColor = '#996633'; emblema.innerText = '🪨'; titulo.innerText = 'Acceso Tierra'; }
 
-        async function ejecutarLogin() {
-            const user = document.getElementById("loginUser").value;
-            const pass = document.getElementById("loginPass").value;
+        async function validarToken() {
+            const token = document.getElementById("accessToken").value.trim();
 
-            // Envía la petición al backend incluyendo cuál login se está usando de manera limpia
-            const response = await fetch('/api/login-exclusivo', {
+            const response = await fetch('/api/login-token', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user, pass, factionUrl: faccionActual })
+                body: JSON.stringify({ token, factionUrl: faccionActual })
             });
 
             const resultado = await response.json();
 
             if (resultado.success) {
-                // Redirección exitosa a la URL de pantalla completa
                 window.location.href = resultado.redirect;
             } else {
                 alert(resultado.message);
