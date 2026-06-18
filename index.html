@@ -3,81 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Santuario de Facciones</title>
+    <title>RED CENTRAL DE RECLUTAMIENTO MILITAR</title>
     <style>
-        body { font-family: 'Arial', sans-serif; background: #121214; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px 0; box-sizing: border-box; }
-        h1 { margin-bottom: 10px; text-shadow: 0 4px 10px rgba(0,0,0,0.5); user-select: none; }
+        body { font-family: 'Courier New', Courier, monospace; background: #06090c; color: #39ff14; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; box-sizing: border-box; overflow-x: hidden; }
         
-        /* Contenedor Superior para marcar la prioridad del Líder */
-        .priority-container { margin-bottom: 40px; display: flex; justify-content: center; width: 100%; }
+        /* Efecto de línea de radar antiguo */
+        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06)); z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none; }
         
-        /* Contenedor Inferior para las Facciones Comunes */
-        .grid { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; max-width: 1100px; padding: 0 20px; }
+        h1 { margin-bottom: 5px; font-size: 28px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 10px #39ff14; text-align: center; }
+        .sub-header { color: #888; font-size: 12px; margin-bottom: 40px; text-transform: uppercase; letter-spacing: 3px; text-align: center; }
         
-        .faction-card { background: #1f1f23; border: 2px solid #2f2f35; border-radius: 12px; padding: 40px 20px; width: 200px; text-align: center; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 8px 15px rgba(0,0,0,0.3); }
+        .priority-container { margin-bottom: 50px; display: flex; justify-content: center; width: 100%; }
+        .grid { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; max-width: 1200px; }
         
-        /* Efectos visuales para las tarjetas de reclutas */
-        .fuego:hover { border-color: #ff4d4d; box-shadow: 0 0 20px rgba(255,77,77,0.4); transform: translateY(-5px); }
-        .agua:hover { border-color: #3399ff; box-shadow: 0 0 20px rgba(51,153,255,0.4); transform: translateY(-5px); }
-        .tierra:hover { border-color: #996633; box-shadow: 0 0 20px rgba(153,102,51,0.4); transform: translateY(-5px); }
+        /* Tarjeta base militar */
+        .tactical-card { background: #0c1015; border: 1px solid #1f2d3d; border-radius: 0px; padding: 35px 20px; width: 220px; text-align: center; cursor: pointer; transition: all 0.25s ease-in-out; position: relative; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+        .tactical-card::before { content: ""; position: absolute; top: -1px; left: -1px; width: 10px; height: 10px; border-top: 2px solid #1f2d3d; border-left: 2px solid #1f2d3d; }
         
-        /* 🦅 CASILLA SUPERIOR EXCLUSIVA DEL ALTO MANDO */
-        .altomando { background: #151922; border: 2px solid #3a4750; width: 250px; padding: 30px 20px; }
-        .altomando:hover { border-color: #c5a059; box-shadow: 0 0 25px rgba(197,160,89,0.6); transform: translateY(-5px); }
+        /* Enfoque visual por bando */
+        .fuego:hover { border-color: #ff3333; box-shadow: 0 0 15px rgba(255,51,51,0.3); transform: scale(1.02); }
+        .fuego:hover h2 { color: #ff3333; text-shadow: 0 0 8px #ff3333; }
         
-        h2 { margin: 15px 0 10px 0; font-size: 22px; }
-        .altomando h2 { color: #c5a059; font-size: 24px; } /* Texto dorado y más grande para el líder */
-        p { color: #aaa; font-size: 14px; margin: 0;}
+        .agua:hover { border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.3); transform: scale(1.02); }
+        .agua:hover h2 { color: #00ffff; text-shadow: 0 0 8px #00ffff; }
+        
+        .tierra:hover { border-color: #ffaa00; box-shadow: 0 0 15px rgba(255,170,0,0.3); transform: scale(1.02); }
+        .tierra:hover h2 { color: #ffaa00; text-shadow: 0 0 8px #ffaa00; }
+        
+        /* 🦅 DISEÑO DE COMANDANCIA SUPERIOR */
+        .altomando { background: #0e171e; border: 1px solid #45f3ff; width: 300px; padding: 25px; }
+        .altomando::before { border-top-color: #45f3ff; border-left-color: #45f3ff; }
+        .altomando h2 { color: #45f3ff !important; text-shadow: 0 0 10px #45f3ff; font-size: 24px; }
+        .altomando:hover { box-shadow: 0 0 25px rgba(69,243,255,0.4); border-color: #45f3ff; transform: translateY(-3px); }
+        
+        h2 { margin: 15px 0 8px 0; font-size: 20px; color: #fff; text-transform: uppercase; letter-spacing: 1px; transition: color 0.2s; }
+        p { color: #657b83; font-size: 12px; margin: 0; text-transform: uppercase; }
+        .status-dot { width: 6px; height: 6px; background: #39ff14; display: inline-block; border-radius: 50%; margin-right: 5px; box-shadow: 0 0 5px #39ff14; }
     </style>
 </head>
 <body>
 
-    <h1>Santuario de Facciones</h1>
-    <p style="color: #666; margin-bottom: 30px;">Estructura Jerárquica del Sistema</p>
+    <h1>[ CENTRAL MILITARY LOGNET ]</h1>
+    <div class="sub-header">ESTADO DE LA RED: <span class="status-dot"></span>OPERACIONAL // CLASIFICACIÓN: TOP SECRET</div>
 
-    <!-- 👑 SECCIÓN SUPERIOR: PRIORIDAD ALTO MANDO -->
+    <!-- 👑 COMPONENTE DE COMANDANTES (MÁXIMA JERARQUÍA) -->
     <div class="priority-container">
-        <div class="faction-card altomando" onclick="irAlAltoMando()">
-            <div style="font-size: 55px;">🦅</div>
-            <h2>Alto Mando</h2>
-            <p>Acceso exclusivo Comandantes</p>
+        <div class="tactical-card altomando" onclick="irAlAltoMando()">
+            <div style="font-size: 45px;">🦅</div>
+            <h2>[ ALTO MANDO ]</h2>
+            <p>Acceso y control de oficiales</p>
         </div>
     </div>
 
-    <!-- 🛡️ SECCIÓN INFERIOR: ACCESOS DE MIEMBROS -->
+    <!-- 🛡️ PERÍMETRO DE ACCESO DE RECLUTAS -->
     <div class="grid">
-        <!-- Casilla Fuego -->
-        <div class="faction-card fuego" onclick="irALogin('Fuego')">
-            <div style="font-size: 50px;">🔥</div>
-            <h2>Fuego</h2>
-            <p>Ingresar al volcán</p>
+        <div class="tactical-card fuego" onclick="irALogin('Fuego')">
+            <div style="font-size: 40px;">🔥</div>
+            <h2>División Fuego</h2>
+            <p>Sector Volcánico / Activo</p>
         </div>
 
-        <!-- Casilla Agua -->
-        <div class="faction-card agua" onclick="irALogin('Agua')">
-            <div style="font-size: 50px;">💧</div>
-            <h2>Agua</h2>
-            <p>Ingresar al océano</p>
+        <div class="tactical-card agua" onclick="irALogin('Agua')">
+            <div style="font-size: 40px;">💧</div>
+            <h2>División Agua</h2>
+            <p>Sector Oceánico / Activo</p>
         </div>
 
-        <!-- Casilla Tierra -->
-        <div class="faction-card tierra" onclick="irALogin('Tierra')">
-            <div style="font-size: 50px;">🪨</div>
-            <h2>Tierra</h2>
-            <p>Ingresar a la fortaleza</p>
+        <div class="tactical-card tierra" onclick="irALogin('Tierra')">
+            <div style="font-size: 40px;">🪨</div>
+            <h2>División Tierra</h2>
+            <p>Sector Fortaleza / Activo</p>
         </div>
     </div>
 
     <script {nonce}>
-        // Envía a los líderes a su portal independiente superior
-        function irAlAltoMando() {
-            window.location.href = '/altomando/login';
-        }
-
-        // Envía a los reclutas al login de su respectivo bando inferior
-        function irALogin(nombreFaction) {
-            window.location.href = `/${nombreFaction.toLowerCase()}/login`;
-        }
+        function irAlAltoMando() { window.location.href = '/altomando/login'; }
+        function irALogin(nombreFaction) { window.location.href = `/${nombreFaction.toLowerCase()}/login`; }
     </script>
 </body>
 </html>
