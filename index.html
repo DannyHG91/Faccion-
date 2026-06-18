@@ -8,9 +8,10 @@
         /* Variables de Sistema de Nueva Generación */
         :root {
             --stealth-dark: #020407;
-            --glass-core: rgba(7, 13, 22, 0.7);
+            --glass-core: rgba(7, 13, 22, 0.75);
             --laser-cyan: #00d9ff;
             --gold-prestige: #dcae3b;
+            --gold-glow: rgba(220, 174, 59, 0.25);
             --sub-slate: #56687a;
             --pure-light: #f1f5f9;
             --grid-line: rgba(0, 217, 255, 0.015);
@@ -326,28 +327,28 @@
         <!-- Cabecera Operativa -->
         <div class="header-shield">
             <div class="live-data-stream">
-                <span>SYSTEM ID // CBR-MAIN</span>
+                <span>SYSTEM ID // DATA CENTER-MESA</span>
                 <span class="live-node">CON_SECURE</span>
             </div>
-            <h1>COBRA OPERATIONS</h1>
+            <h1>CENTRAL MILITAR DE MESA (C.M.M.)</h1>
         </div>
         
-        <!-- SECCIÓN ALTO MANDO: Máxima jerarquía y respeto con audio de alto rango -->
+        <!-- SECCIÓN ALTO MANDO: Máxima jerarquía y respeto -->
         <div class="supreme-command-zone">
             <a class="btn-lider" id="btnLiderCommand" href="/altomando/login">
-                <span class="rank-title">✦ HIGH COMMAND ✦</span>
-                <span class="rank-subtitle">[ ENCRYPTED DIRECTORY ENTRY ]</span>
+                <span class="rank-title">✦ ALTO MANDO✦</span>
+                <span class="rank-subtitle">[ACCESO SOLO PERSONAL AUTORIZADO]</span>
             </a>
         </div>
 
         <!-- Separador Dinámico -->
         <div class="rank-divider">
             <div class="bar-loader-static"></div>
-            <span>DIVISIONAL GATEWAYS</span>
+            <span>DIVISIONES ESPECIALES</span>
             <div class="bar-loader-static"></div>
         </div>
 
-        <!-- Accesos de Destacamento con audio táctil -->
+        <!-- Accesos de Destacamento -->
         <a class="btn-faction btn-ops" href="/fuego/login">
             <span>Comando Táctico Fuego</span>
             <span class="arrow">→</span>
@@ -363,14 +364,15 @@
 
         <!-- Pie de Monitoreo de Datos -->
         <div class="status-footer">
-            <span class="terminal-stream">CORE STATUS: STABLE</span>
+            <span class="terminal-stream">RADAR: ACTIVE</span>
             <span>SHIELD_v4.2</span>
         </div>
     </div>
 
-    <!-- SINTETIZADOR NATIVO DE AUDIO MILITAR MODERNO -->
+    <!-- AUDIO SINTÉTICO: LOOP DE RADAR AUTOMÁTICO Y EFECTOS TÁCTILES -->
     <script>
         let audioCtx = null;
+        let radarInterval = null;
 
         function initAudio() {
             if (!audioCtx) {
@@ -379,9 +381,39 @@
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
+            // Iniciar el sonido continuo del radar de forma automática tras el primer toque
+            if (!radarInterval) {
+                playRadarPing(); // Primer pitido inmediato
+                radarInterval = setInterval(playRadarPing, 4000); // Se repite infinitamente cada 4 segundos
+            }
         }
 
-        // Tono 1: Clic electrónico digital refinado (Reclutas)
+        // Pitido de fondo del Radar (Sonar Ping Profundo)
+        function playRadarPing() {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                
+                osc.type = 'sine';
+                // Tono de sonar clásico de centro de mando militar
+                osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 1.8); 
+                
+                // Volumen muy tenue y sutil para que funcione de fondo sin molestar
+                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
+                
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 2.0);
+            } catch (err) {
+                console.log("Falla de audio temporal");
+            }
+        }
+
+        // Clic electrónico para botones comunes (Reclutas)
         function playOpsClick(e) {
             initAudio();
             e.preventDefault();
@@ -389,9 +421,8 @@
 
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
-
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200, audioCtx.currentTime); // Pulso rápido y agudo
+            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
 
             gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
@@ -404,17 +435,16 @@
             setTimeout(() => { window.location.href = targetUrl; }, 60);
         }
 
-        // Tono 2: Pulso doble de alta frecuencia (Alto Mando)
+        // Clic de confirmación doble de alta jerarquía (Alto Mando)
         function playLiderClick(e) {
             initAudio();
             e.preventDefault();
             const targetUrl = this.getAttribute('href');
 
-            // Primer pulso
             let osc1 = audioCtx.createOscillator();
             let gain1 = audioCtx.createGain();
             osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(1600, audioCtx.currentTime);
+            osc1.frequency.setValueAtTime(1500, audioCtx.currentTime);
             gain1.gain.setValueAtTime(0.08, audioCtx.currentTime);
             gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
             osc1.connect(gain1);
@@ -422,12 +452,11 @@
             osc1.start();
             osc1.stop(audioCtx.currentTime + 0.04);
 
-            // Segundo pulso (Retardado 0.05s para dar el efecto doble)
             setTimeout(() => {
                 let osc2 = audioCtx.createOscillator();
                 let gain2 = audioCtx.createGain();
                 osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(2000, audioCtx.currentTime);
+                osc2.frequency.setValueAtTime(1900, audioCtx.currentTime);
                 gain2.gain.setValueAtTime(0.08, audioCtx.currentTime);
                 gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
                 osc2.connect(gain2);
@@ -439,10 +468,11 @@
             setTimeout(() => { window.location.href = targetUrl; }, 120);
         }
 
-        // Inicializador para evitar bloqueos en navegadores móviles
+        // Captura el primer toque en pantallas de celulares para arrancar el radar de fondo
         document.body.addEventListener('touchstart', initAudio, {passive: true});
+        document.body.addEventListener('click', initAudio);
 
-        // Enlace de triggers de sonido
+        // Vinculación de eventos
         document.querySelectorAll('.btn-ops').forEach(btn => {
             btn.addEventListener('click', playOpsClick);
         });
