@@ -135,22 +135,19 @@ app.post('/api/generar-token', (req, res) => {
     res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
+// GUARDIÁN DE ARCHIVOS LOCALES MILITARES
 app.get('/acceso-facciosos', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") return res.status(403).send("Acceso Denegado.");
-    const urlDestino = urlsFacciones[req.session.faction];
-    res.send(`
-        <!DOCTYPE html>
-        <html>
-        <head><title>Cargando...</title><style>body { background: #121214; color: white; font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }</style></head>
-        <body>
-            <div style="text-align: center;">
-                <h2>Acceso concedido mediante Token...</h2>
-                <script>window.location.replace("${urlDestino}");</script>
-            </div>
-        </body>
-        </html>
-    `);
+    // 1. Bloqueo radical si no ha iniciado sesión con token
+    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") { 
+        return res.status(403).send("<h1>[ACCESO DENEGADO]: Autenticación Requerida.</h1>"); 
+    }
+    
+    const faccionDelUsuario = req.session.faction.toLowerCase(); // 'fuego', 'agua' o 'tierra'
+
+    // 2. Servimos el archivo HTML local exclusivo de su bando en pantalla completa
+    res.sendFile(path.join(__dirname, `contenido_${faccionDelUsuario}.html`));
 });
+
 
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
