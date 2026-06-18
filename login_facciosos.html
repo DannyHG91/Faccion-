@@ -23,23 +23,22 @@
     <div class="bunker-card" id="bunkerCard">
         <div id="emblema" style="font-size: 40px;">⚠️</div>
         <h2 id="titulo" style="margin: 10px 0 5px 0; text-transform: uppercase;">TERMINAL SECRETA</h2>
-        
         <p>INGRESE EL CÓDIGO CRIPTOGRÁFICO ASIGNADO</p>
+        
         <input type="text" id="accessToken" placeholder="[ XXXX-XXXX-XXXX ]" autocomplete="off">
         <button onclick="validarToken()">VERIFICAR CREDENCIAL</button>
         <button onclick="window.location.href='/'" class="btn-volver">< ABORTAR PROCESO</button>
     </div>
 
     <script {nonce}>
-        // 🛠️ CORRECCIÓN CRÍTICA: Extrae de forma segura la palabra limpia de la URL interna de la ruta
+        // 🛡️ CORRECCIÓN DE EXTRACCIÓN: Lee adecuadamente el nodo de la URL del navegador
         const urlPartes = window.location.pathname.split('/');
-        const faccionActual = urlPartes[1] ? urlPartes[1].toLowerCase() : '';
+        const faccionActual = (urlPartes && urlPartes[1]) ? urlPartes[1].toLowerCase() : '';
 
         const card = document.getElementById("bunkerCard");
         const emblema = document.getElementById("emblema");
         const titulo = document.getElementById("titulo");
 
-        // Aplicación del diseño estético según bando verificado
         if (faccionActual === 'fuego') { card.style.borderTopColor = '#ff3333'; emblema.innerText = '🔥'; titulo.innerText = 'NÚCLEO FUEGO'; } 
         else if (faccionActual === 'agua') { card.style.borderTopColor = '#00ffff'; emblema.innerText = '💧'; titulo.innerText = 'NÚCLEO AGUA'; } 
         else if (faccionActual === 'tierra') { card.style.borderTopColor = '#ffaa00'; emblema.innerText = '🪨'; titulo.innerText = 'NÚCLEO TIERRA'; }
@@ -57,7 +56,7 @@
             const resultado = await response.json();
 
             if (resultado.success) {
-                // Redirige al despachador interno del servidor para abrir tu archivo local
+                // Redirige al despachador blindado del servidor
                 window.location.href = resultado.redirect;
             } else {
                 alert("[ALERTA DE INTRUSO]: " + resultado.message);
