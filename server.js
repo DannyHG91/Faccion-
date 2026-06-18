@@ -13,7 +13,7 @@ app.use(session({
     secret: 'token_ancestral_facciones_2026',
     resave: false,
     saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 } // Sesión activa por 24 horas
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
 app.use(express.static(path.join(__dirname), {
@@ -21,7 +21,7 @@ app.use(express.static(path.join(__dirname), {
     setHeaders: (res) => { res.setHeader('Cache-Control', 'public, max-age=604800'); }
 }));
 
-// Si usas el disco persistente de Render, cambia esta ruta por la de tu volumen (/opt/render/project/src/datos/usuarios.json)
+// Si usas el disco persistente de Render usa: '/opt/render/project/src/datos/usuarios.json'
 const ARCHIVO_USUARIOS = path.join(__dirname, 'usuarios.json');
 
 const lideresPorDefecto = [
@@ -30,6 +30,7 @@ const lideresPorDefecto = [
     { user: "lider_tierra", pass: "tierra123", faction: "Tierra", role: "Lider" }
 ];
 
+// PROTECCIÓN DE LECTURA DE ARCHIVO
 function cargarUsuariosDeArchivo() {
     try {
         if (fs.existsSync(ARCHIVO_USUARIOS)) {
@@ -39,16 +40,22 @@ function cargarUsuariosDeArchivo() {
             fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lideresPorDefecto, null, 2), 'utf8');
             return [...lideresPorDefecto];
         }
-    } catch (error) { return [...lideresPorDefecto]; }
+    } catch (error) {
+        console.error("Fallo de lectura de disco:", error);
+        return [...lideresPorDefecto]; // Evita romper el servidor devolviendo los líderes en memoria
+    }
 }
 
 function guardarUsuariosEnArchivo(lista) {
-    try { fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lista, null, 2), 'utf8'); } catch (error) {}
+    try { 
+        fs.writeFileSync(ARCHIVO_USUARIOS, JSON.stringify(lista, null, 2), 'utf8'); 
+    } catch (error) {
+        console.error("Fallo de escritura de disco:", error);
+    }
 }
 
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
 
-// 🦅 PORTAL EXCLUSIVO DEL ALTO MANDO
 app.get('/altomando/login', (req, res) => { res.sendFile(path.join(__dirname, 'login_lideres.html')); });
 
 app.post('/api/login-lideres', (req, res) => {
@@ -66,37 +73,40 @@ app.post('/api/login-lideres', (req, res) => {
     }
 });
 
-// 🔑 PORTALES DE RECLUTAS
 app.get('/:faccion/login', (req, res) => {
     if (['fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
         res.sendFile(path.join(__dirname, 'login_facciosos.html'));
     } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
 });
 
-// VALIDACIÓN Y CREACIÓN DE SESIÓN RECLUTA
+// VALIDACIÓN MEJORADA CONTRA ERRORES CRÍTICOS
 app.post('/api/login-token', (req, res) => {
-    const { token, factionUrl } = req.body;
-    const lista = cargarUsuariosDeArchivo();
-    
-    const tokenValido = lista.find(u => u.token === token && u.role === "Miembro");
+    try {
+        const { token, factionUrl } = req.body;
+        const lista = cargarUsuariosDeArchivo();
+        
+        const tokenValido = lista.find(u => u.token === token && u.role === "Miembro");
 
-    if (tokenValido) {
-        if (tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
+        // VALIDACIÓN: Si el token no existe, frena aquí de forma segura
+        if (!tokenValido) {
+            return res.status(401).json({ success: false, message: "El Token de acceso no existe o ya expiró." });
+        }
+
+        // VALIDACIÓN: Comprueba que la división coincida
+        if (!tokenValido.faction || tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
             return res.status(403).json({ success: false, message: `⚠️ Código inválido para la División ${factionUrl.toUpperCase()}.` });
         }
 
-        // Activamos la sesión del recluta en el servidor
         req.session.usuarioLogueado = true;
         req.session.faction = tokenValido.faction;
         req.session.role = tokenValido.role;
 
         res.json({ success: true, redirect: '/acceso-facciosos' });
-    } else {
-        res.status(401).json({ success: false, message: "El Token de acceso no existe o ya expiró." });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Falla temporal en el mainframe militar." });
     }
 });
 
-// 🛡️ CONTROL INTERNO Y GENERACIÓN DE TOKENS
 app.get('/panel-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).send("No autorizado");
     res.sendFile(path.join(__dirname, 'lider.html'));
@@ -111,7 +121,6 @@ app.post('/api/generar-token', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "Denegado" });
 
     const faccionLider = req.session.faction;
-    
     const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let bloque1 = "", bloque2 = "";
     for (let i = 0; i < 4; i++) {
@@ -127,20 +136,24 @@ app.post('/api/generar-token', (req, res) => {
     res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
-// 📂 NUEVA RUTA DE DESPACHO INTERNO DE ARCHIVOS MILITARES
+// DESPACHADOR DE ARCHIVOS PROTEGIDO CON COMPROBACIÓN EXPLICITA
 app.get('/acceso-facciosos', (req, res) => {
-    // Si un intruso intenta forzar esta ruta sin haber validado su token, es bloqueado por el servidor
-    if (!req.session.usuarioLogueado || req.session.role !== "Miembro") {
+    if (!req.session.usuarioLogueado || req.session.role !== "Miembro" || !req.session.faction) {
         return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
     }
     
-    const divisionMiembro = req.session.faction.toLowerCase(fuego); // 'fuego', 'agua' o 'tierra'
+    const divisionMiembro = req.session.faction.toLowerCase();
+    const rutaArchivo = path.join(__dirname, `contenido_${divisionMiembro}.html`);
 
-    // Servimos directamente el archivo HTML correspondiente desde el disco del servidor
-    res.sendFile(path.join(__dirname, `contenido_${divisionMiembro}.html`));
+    // Comprobamos físicamente si creaste el archivo html antes de mandarlo para evitar pantallas de error
+    if (fs.existsSync(rutaArchivo)) {
+        res.sendFile(rutaArchivo);
+    } else {
+        res.status(404).send(`<h1>[ERROR CENTRAL]: El archivo 'contenido_${divisionMiembro}.html' no ha sido cargado en GitHub por el administrador.</h1>`);
+    }
 });
 
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => { console.log(`Servidor de Contenidos Locales activo en puerto ${PORT}`); });
+app.listen(PORT, () => { console.log(`Servidor militar asegurado en puerto ${PORT}`); });
