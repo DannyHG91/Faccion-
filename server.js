@@ -16,9 +16,18 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+// Despachador estático inteligente: no guarda caché para evitar bloqueos en cambios de diseño
 app.use(express.static(path.join(__dirname), {
-    maxAge: '7d',
-    setHeaders: (res) => { res.setHeader('Cache-Control', 'public, max-age=604800'); }
+    maxAge: 0,
+    setHeaders: (res, ruta) => { 
+        if (ruta.endsWith('.html')) {
+            // Los archivos HTML se verifican SIEMPRE en el servidor
+            res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private'); 
+        } else {
+            // Imágenes o recursos pesados pueden mantener un caché corto
+            res.setHeader('Cache-Control', 'public, max-age=3600'); 
+        }
+    }
 }));
 
 // Si usas el disco persistente de Render usa: '/opt/render/project/src/datos/usuarios.json'
