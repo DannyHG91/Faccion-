@@ -115,19 +115,38 @@ app.post('/api/registrar-por-lider', (req, res) => {
     res.json({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionLider });
 });
 
-// 🛡️ GUARDIÁN DE RUTAS: Redirección estricta en la nube
+// GUARDIÁN DE RUTAS OPTIMIZADO PARA EVITAR PANTALLAS NEGRAS
 app.get('/acceso-facciosos', (req, res) => {
     if (!req.session.usuarioLogueado) {
         return res.status(403).send("<h1>Acceso Denegado: Inicia sesión primero.</h1>");
     }
-    const urlDestino = urlsFacciones[req.session.faction];
-    res.redirect(urlDestino);
+    
+    const faccionDelUsuario = req.session.faction;
+    const urlDestino = urlsFacciones[faccionDelUsuario];
+
+    // CORRECCIÓN: En lugar de forzar la redirección aquí, enviamos una página intermedia ultrarrápida
+    // que obliga al navegador del celular a cargar la URL real de forma limpia.
+    res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Cargando Faccción...</title>
+            <style>body { background: #121214; color: white; font-family: Arial; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }</style>
+        </head>
+        <body>
+            <div style="text-align: center;">
+                <h2>Ingresando al santuario...</h2>
+                <p>Si no redirige automáticamente, <a href="${urlDestino}" style="color: #007bff; font-weight: bold;">haz clic aquí</a></p>
+            </div>
+            <script>
+                // Forzamos al navegador a limpiar memoria y cargar la URL real en pantalla completa
+                window.location.replace("${urlDestino}");
+            </script>
+        </body>
+        </html>
+    `);
 });
 
-app.get('/logout', (req, res) => {
-    req.session.destroy();
-    res.redirect('/');
-});
 
 // ⚡ PUERTO DINÁMICO PARA RENDER
 const PORT = process.env.PORT || 3000;
