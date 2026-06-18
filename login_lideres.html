@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acceso Alto Mando</title>
+    <style>
+        body { font-family: 'Courier New', Courier, monospace; background: #0b0c10; color: #66fcf1; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1f2833; padding: 40px 30px; border-radius: 4px; box-shadow: 0 0 20px rgba(102,252,241,0.2); width: 340px; text-align: center; border: 1px solid #45f3ff; }
+        input, button { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #45f3ff; border-radius: 2px; box-sizing: border-box; background: #0b0c10; color: #66fcf1; font-family: monospace; }
+        input:focus { box-shadow: 0 0 10px #45f3ff; outline: none; }
+        button { background: #45f3ff; color: #0b0c10; cursor: pointer; font-weight: bold; font-size: 16px; transition: all 0.3s; }
+        button:hover { background: transparent; color: #45f3ff; box-shadow: 0 0 15px #45f3ff; }
+        .back-link { display: inline-block; margin-top: 15px; color: #c5a059; text-decoration: none; font-size: 13px; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div style="font-size: 40px;">🦅</div>
+        <h2>ALTO MANDO</h2>
+        <p style="color: #c5a059; font-size: 12px; margin-bottom: 20px;">SISTEMA CENTRAL DE COMANDANTES</p>
+        
+        <input type="text" id="leaderUser" placeholder="IDENTIFICADOR LÍDER">
+        <input type="password" id="leaderPass" placeholder="CLAVE DE ENCRIPCIÓN">
+        <button onclick="autenticarLider()">INICIAR SECUENCIA</button>
+        <a href="/" class="back-link">< Volver al plano público</a>
+    </div>
+
+    <script {nonce}>
+        async function autenticarLider() {
+            const user = document.getElementById("leaderUser").value;
+            const pass = document.getElementById("leaderPass").value;
+
+            const response = await fetch('/api/login-lideres', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ user, pass })
+            });
+
+            const resultado = await response.json();
+
+            if (resultado.success) {
+                window.location.href = resultado.redirect;
+            } else {
+                alert(resultado.message);
+            }
+        }
+    </script>
+</body>
+</html>
