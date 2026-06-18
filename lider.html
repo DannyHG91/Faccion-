@@ -1,60 +1,87 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel de Control del Líder</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #eec; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); width: 400px; text-align: center; }
-        button { width: 100%; padding: 10px; margin: 10px 0; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; background: #28a745; color: white;}
-        .credenciales { background: #e9ecef; padding: 10px; border-radius: 4px; text-align: left; font-family: monospace; font-size: 14px; margin-top: 15px; }
+        body { font-family: Arial, sans-serif; background: #121214; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .card { background: #1f1f23; padding: 35px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 400px; text-align: center; border: 1px solid #333; }
+        button { width: 100%; padding: 12px; margin: 10px 0; border: none; border-radius: 6px; cursor: pointer; font-weight: bold; background: #28a745; color: white; font-size: 16px; transition: background 0.2s; }
+        button:hover { background: #218838; }
+        .credenciales { background: #2a2a30; padding: 15px; border-radius: 6px; text-align: center; border: 1px dashed #28a745; margin-top: 15px; position: relative; }
+        .token-text { font-family: monospace; font-size: 22px; color: #28a745; font-weight: bold; letter-spacing: 1px; display: block; margin-bottom: 10px; }
+        
+        /* 📋 BOTÓN DE COPIA RÁPIDA */
+        .btn-copy { background: #007bff; font-size: 14px; padding: 8px; margin: 5px 0 0 0; width: auto; display: inline-block; padding-left: 20px; padding-right: 20px; }
+        .btn-copy:hover { background: #0056b3; }
+        .btn-copied { background: #6c757d !important; } /* Color gris cuando ya se copió */
+        
         .hidden { display: none !important; }
-        .logout { background: #dc3545; }
+        .logout { background: #dc3545; margin-top: 20px; }
+        .logout:hover { background: #bd2130; }
     </style>
 </head>
 <body>
 
     <div class="card">
-        <h2>Panel de Reclutamiento</h2>
-        <p>Comandante de la Facción: <strong id="lblFaction" style="color: #007bff;">Cargando...</strong></p>
+        <h2>Panel de Control</h2>
+        <p>Comandante de la Facción: <strong id="lblFaction" style="color: #007bff;">...</strong></p>
         
-        <button onclick="generarMiembro()">Generar Nuevo Recluta</button>
+        <button onclick="generarTokenAcceso()">Generar Código de Pase Único</button>
 
         <div id="resultado" class="hidden">
-            <p style="color: green; font-weight: bold;">¡Nuevo acceso blindado creado!</p>
             <div class="credenciales">
-                <strong>Usuario:</strong> <span id="resUser"></span><br>
-                <strong>Contraseña:</strong> <span id="resPass"></span><br>
-                <strong>Facción Asignada:</strong> <span id="resFaction"></span>
+                <span style="color: #aaa; font-size: 13px;">TOKEN DE ACCESO:</span>
+                <span id="resToken" class="token-text"></span>
+                
+                <!-- NEW: Botón de Copia Rápida -->
+                <button id="btnCopy" class="btn-copy" onclick="copiarToken()">📋 Copiar Código</button>
             </div>
-            <p><small>Copia estos datos y entrégalos a tu nuevo soldado.</small></p>
+            <p style="color: #888; font-size: 13px;"><small>Copia este código y entrégaselo a tu recluta para acceso inmediato.</small></p>
         </div>
         
-        <hr>
+        <hr style="border-color: #333; margin-top: 25px;">
         <button onclick="window.location.href='/logout'" class="logout">Cerrar Sesión</button>
     </div>
 
     <script {nonce}>
-        // Al cargar la página, le preguntamos al servidor qué facción lidera este usuario
+        let tokenActual = "";
+
         async function cargarInfoLider() {
             const res = await fetch('/api/info-lider');
             if(res.ok) {
                 const datos = await res.json();
                 document.getElementById("lblFaction").innerText = datos.faction;
-            } else {
-                window.location.href = '/';
-            }
+            } else { window.location.href = '/'; }
         }
 
-        async function generarMiembro() {
-            const response = await fetch('/api/registrar-por-lider', { method: 'POST' });
+        async function generarTokenAcceso() {
+            // Restaurar estado del botón de copia si se genera uno nuevo
+            const btn = document.getElementById("btnCopy");
+            btn.innerText = "📋 Copiar Código";
+            btn.classList.remove("btn-copied");
+
+            const response = await fetch('/api/generar-token', { method: 'POST' });
             const datos = await response.json();
 
-            document.getElementById("resUser").innerText = datos.user;
-            document.getElementById("resPass").innerText = datos.pass;
-            document.getElementById("resFaction").innerText = datos.faction;
+            tokenActual = datos.token;
+            document.getElementById("resToken").innerText = datos.token;
             document.getElementById("resultado").classList.remove("hidden");
+        }
+
+        // ⚡ FUNCIÓN DE COPIADO AUTOMÁTICO EN PORTAPAPELES
+        function copiarToken() {
+            if (!tokenActual) return;
+            
+            // Usar la API nativa de navegación para copiar texto de forma limpia
+            navigator.clipboard.writeText(tokenActual).then(() => {
+                const btn = document.getElementById("btnCopy");
+                btn.innerText = "✅ ¡Copiado!";
+                btn.classList.add("btn-copied");
+            }).catch(err => {
+                alert("No se pudo copiar automáticamente. Por favor selecciónalo manualmente.");
+            });
         }
 
         cargarInfoLider();
