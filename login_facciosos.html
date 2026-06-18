@@ -1,4 +1,4 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -29,24 +29,24 @@
     </div>
 
     <script {nonce}>
-        // 🔮 MAGIA FRONTEND: Detecta la facción leyendo la URL actual del navegador
+        // CORRECCIÓN: Extrae correctamente la palabra limpia (fuego, agua o tierra) de la URL
         const urlPartes = window.location.pathname.split('/');
-        const facciónActual = urlPartes[1]; // Obtiene 'fuego', 'agua' o 'tierra'
+        const faccionActual = urlPartes[1] ? urlPartes[1].toLowerCase() : '';
 
         const card = document.getElementById("loginCard");
         const emblema = document.getElementById("emblema");
         const titulo = document.getElementById("titulo");
 
-        // Personalizar interfaz dinámicamente según la URL
-        if (facciónActual === 'fuego') {
+        // Personalizar interfaz dinámicamente según la URL detectada
+        if (faccionActual === 'fuego') {
             card.style.borderTopColor = '#ff4d4d';
             emblema.innerText = '🔥';
             titulo.innerText = 'Portal de Fuego';
-        } else if (facciónActual === 'agua') {
+        } else if (faccionActual === 'agua') {
             card.style.borderTopColor = '#3399ff';
             emblema.innerText = '💧';
             titulo.innerText = 'Portal de Agua';
-        } else if (facciónActual === 'tierra') {
+        } else if (faccionActual === 'tierra') {
             card.style.borderTopColor = '#996633';
             emblema.innerText = '🪨';
             titulo.innerText = 'Portal de Tierra';
@@ -56,16 +56,17 @@
             const user = document.getElementById("loginUser").value;
             const pass = document.getElementById("loginPass").value;
 
-            // Envía la petición al backend incluyendo cuál login se está usando
+            // Envía la petición al backend incluyendo cuál login se está usando de manera limpia
             const response = await fetch('/api/login-exclusivo', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ user, pass, factionUrl: facciónActual })
+                body: JSON.stringify({ user, pass, factionUrl: faccionActual })
             });
 
             const resultado = await response.json();
 
             if (resultado.success) {
+                // Redirección exitosa a la URL de pantalla completa
                 window.location.href = resultado.redirect;
             } else {
                 alert(resultado.message);
