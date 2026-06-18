@@ -3,48 +3,277 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>[ PROTOCOLO FUEGO ]</title>
+    <title>ONESTATE REGLAS CHATS</title>
+
     <style>
-        body { font-family: 'Courier New', Courier, monospace; background: #060202; color: #ff3333; padding: 40px; margin: 0; box-sizing: border-box; }
-        body::before { content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03)); z-index: 10; background-size: 100% 4px, 6px 100%; pointer-events: none; }
-        .header { border-bottom: 2px solid #ff3333; padding-bottom: 15px; margin-bottom: 30px; text-shadow: 0 0 8px #ff3333; }
-        .intel-box { background: #0f0505; border: 1px solid #ff3333; padding: 25px; margin-top: 20px; line-height: 1.6; }
-        .warning-text { color: #fff; background: #ff3333; display: inline-block; padding: 3px 8px; font-weight: bold; text-transform: uppercase; font-size: 13px; margin-bottom: 15px; }
-        .logout-btn { background: transparent; border: 1px solid #ff3333; color: #ff3333; padding: 12px 25px; cursor: pointer; font-weight: bold; font-family: monospace; text-transform: uppercase; margin-top: 40px; transition: all 0.2s; }
-        .logout-btn:hover { background: #ff3333; color: #060202; box-shadow: 0 0 15px #ff3333; }
-        h1, h3 { margin: 0 0 10px 0; text-transform: uppercase; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 10px; }
+    :root {
+        --cobra-negro-selva: #0b110d;       /* Negro verdoso muy profundo */
+        --cobra-bronce: #a48253;            /* Oro viejo / Bronce del emblema */
+        --cobra-bronce-brillante: #d4af37;  /* Oro brillante para efectos activos */
+        --cobra-hover: rgba(164, 130, 83, 0.2); /* Brillo bronce al pasar el mouse */
+        --cobra-texto-claro: #ffffff;       
+        --borde-tactico: rgba(164, 130, 83, 0.4); /* Bordes más visibles de cristal */
+    }
+
+    body {
+        margin: 0;
+        font-family: 'Segoe UI', sans-serif;
+        background: 
+            linear-gradient(rgba(11, 17, 13, 0.1), rgba(11, 17, 13, 0.2)),
+            url('cobra-fondo.png') no-repeat center center fixed; 
+        background-size: cover;
+        color: #fff;
+        background-color: var(--cobra-negro-selva);
+        position: relative;
+        min-height: 100vh;
+        overflow-x: hidden;
+    }
+
+    /* CONTENEDOR DE LA PORTADA */
+    .portada-container {
+        width: 100%;
+        max-width: 900px;
+        margin: 20px auto 0 auto;
+        padding: 0 20px;
+        box-sizing: border-box;
+        opacity: 0;
+        animation: presentacionDesdeArriba 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        animation-delay: 1.5s;
+    }
+
+    .portada-imagen {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: 2px solid var(--cobra-bronce);
+        border-radius: 4px;
+        box-shadow: 0 0 25px rgba(164, 130, 83, 0.3);
+    }
+
+    /* ENCABEZADO */
+    header {
+        text-align: center;
+        padding: 35px 15px;
+        background: rgba(11, 17, 13, 0.5); 
+        backdrop-filter: blur(8px);
+        border-bottom: 3px solid var(--cobra-bronce);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
+        position: relative;
+        z-index: 3; 
+        
+        opacity: 0;
+        animation: presentacionDesdeArriba 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        animation-delay: 2s; 
+    }
+
+    header h1 {
+        margin: 0;
+        font-size: 2.4rem;
+        letter-spacing: 4px; 
+        text-transform: uppercase; 
+        text-shadow: 2px 2px 8px rgba(0,0,0,0.9), 0 0 15px rgba(164, 130, 83, 0.6); 
+    }
+
+    header p {
+        margin-top: 8px;
+        color: var(--cobra-bronce-brillante); 
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        font-weight: 600;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* CONTENEDOR PRINCIPAL */
+    .contenedor {
+        max-width: 900px;
+        margin: auto;
+        padding: 20px;
+        position: relative; 
+        z-index: 2; 
+        
+        opacity: 0;
+        animation: presentacionDesdeAbajo 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        animation-delay: 2.4s; 
+    }
+
+    .parrafo {
+        background: rgba(11, 17, 13, 0.35); 
+        border-left: 5px solid var(--cobra-bronce); 
+        border-top: 1px solid var(--borde-tactico);
+        border-right: 1px solid var(--borde-tactico);
+        border-bottom: 1px solid var(--borde-tactico);
+        padding: 18px;
+        margin: 16px 0;
+        cursor: pointer;
+        backdrop-filter: blur(3px); 
+        -webkit-backdrop-filter: blur(3px);
+        clip-path: polygon(0% 0%, 96% 0%, 100% 18%, 100% 100%, 4% 100%, 0% 82%);
+        
+        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+        will-change: transform, box-shadow;
+    }
+
+    .parrafo:hover {
+        background: var(--cobra-hover);
+        border-color: var(--cobra-bronce-brillante);
+        transform: scale(1.015) translateX(3px); 
+        box-shadow: -5px 0px 15px rgba(164, 130, 83, 0.4), inset 0 0 15px rgba(164, 130, 83, 0.2); 
+    }
+
+    .copiado {
+        background: linear-gradient(135deg, var(--cobra-bronce), var(--cobra-bronce-brillante)) !important;
+        border-color: #fff !important;
+        color: #000; 
+        font-weight: 900;
+        letter-spacing: 1px;
+        box-shadow: 0 0 25px rgba(212, 175, 55, 0.8) !important; 
+        transform: scale(1.025) !important;
+    }
+
+    /* AVISO NOTIFICACIÓN FLOTANTE */
+    .notificacion-tactica {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        background: rgba(11, 17, 13, 0.95);
+        color: var(--cobra-bronce-brillante);
+        border: 2px solid var(--cobra-bronce);
+        padding: 12px 25px;
+        border-radius: 4px;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 0 20px rgba(164, 130, 83, 0.6);
+        z-index: 9999;
+        pointer-events: none;
+        opacity: 0;
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        font-family: 'Segoe UI', sans-serif;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+    }
+
+    .notificacion-tactica.mostrar {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    footer {
+        text-align: center;
+        padding: 30px;
+        font-size: 0.9rem;
+        color: var(--cobra-bronce-brillante);
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+        position: relative;
+        z-index: 3;
+        letter-spacing: 1px;
+        
+        opacity: 0;
+        animation: fadeInSimple 1s ease forwards;
+        animation-delay: 3.2s;
+    }
+
+    /* ANIMACIONES */
+    @keyframes presentacionDesdeArriba {
+        0% {
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes presentacionDesdeAbajo {
+        0% {
+            opacity: 0;
+            transform: translateY(40px);
+        }
+        100% {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInSimple {
+        0% { opacity: 0; }
+        100% { opacity: 0.6; }
+    }
+
+    /* Responsive */
+    @media (max-width: 600px) {
+        header h1 {
+            font-size: 1.8rem;
+        }
+
+        .parrafo {
+            font-size: 0.95rem;
+            padding: 14px;
+            clip-path: polygon(0% 0%, 94% 0%, 100% 15%, 100% 100%, 6% 100%, 0% 85%);
+        }
+    }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>[ MAINFRAME DE INTELIGENCIA: DIVISION FUEGO ]</h1>
-        <div>NIVEL DE ENCRIPCIÓN: DELTA-3 // SECTOR VULCÁNICO</div>
+    <!-- Elemento para la notificación flotante -->
+    <div id="notificacion" class="notificacion-tactica">Comando Copiado Exitosamente</div>
+
+    <div class="portada-container">
+        <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
     </div>
 
-    <div class="warning-text">⚠️ Directiva Operacional Activa</div>
-
-    <h3>Bitácora de Misiones y Coordenadas</h3>
-    <div class="intel-box">
-        <p><strong>[ESTADO GENERAL]:</strong> Perímetro de contención térmica estable al 94.2%. Se registran fluctuaciones magnéticas en los cuadrantes de vanguardia.</p>
-        <hr style="border-color: #ff3333; margin: 20px 0;">
-        <p><strong>INSTRUCCIONES CLASIFICADAS:</strong></p>
-        <ul>
-            <li>[DESPLIEGUE]: Asegurar las líneas de presión en el subsector 09 antes del próximo reinicio de ciclo.</li>
-            <li>[COMUNICACIONES]: Utilizar únicamente canales de frecuencia modulada baja para reportes tácticos directos.</li>
-            <li>[CONTINGENCIA]: En caso de brecha en el firewall local, ejecute la purga del nodo terminal inmediatamente.</li>
-        </ul>
+    <div class="contenedor">
+        <div class="parrafo">/flobby GRUPO COBRA TODOS A PUNTO DE ENCUENTRO.</div>
+        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN ZONA DE DISPARO.</div>
+        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN ZONA FÍSICA.</div>
+        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN AP.</div>
+        <div class="parrafo">/flobby RECLUTAMIENTO EN EL EQUIPO COBRA DE LUNES A VIERNES DEBE SABERSE: Rp 9, Rp 13, Rp 14, Chat 1 y Abuse 1.</div>
+        <div class="parrafo">/me ME PRESENTÓ (NOMBRE) GENERAL FEDERAL ADJUNTO DE EL GRUPO COBRA A SUS ÓRDENES SEÑOR/SEÑORA.</div>
+        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 1 SEGURO Y PROTEGIDO.</div>
+        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 2 SEGURO Y PROTEGIDO.</div>
+        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 3 SEGURO Y PROTEGIDO.</div>
+        <div class="parrafo">/flobby GRUPO COBRA DE SALIDA A RETENES EN PUNTO 1 , 2 Y 3.</div>
+        <div class="parrafo">/flobby GRUPO COBRA DE REGRESO A LA BASE PUNTO 1, 2 Y 3 SEGUROS Y PROTEGIDOS.</div>
+        <div class="parrafo">/flobby GRUPO COBRA DIRIGIÉNDOSE A PUNTO DE ENCUENTRO.</div>
     </div>
 
-    <!-- Espacio libre para que añadas tus textos, enlaces internos o bitácoras -->
-    <div class="intel-box" style="border-style: dashed;">
-        <p>// ESPACIO DE ALMACENAMIENTO ADICIONAL PARA LA DIVISIÓN FUEGO //</p>
-        <p style="color: #8c2424;"><small>Escribe aquí las directivas personalizadas para tus tropas de fuego...</small></p>
-    </div>
+    <footer>
+        Sistema de macros tácticos | Click para copiar
+    </footer>
 
-    <button onclick="window.location.href='/logout'" class="logout-btn">❌ Desconectar Terminal</button>
+<script>
+    const parrafos = document.querySelectorAll('.parrafo');
+    const notificacion = document.getElementById('notificacion');
+    let temporizadorNotificacion;
+
+    parrafos.forEach(p => {
+        p.addEventListener('click', () => {
+            const textoLimpio = p.innerText.trim();
+            
+            navigator.clipboard.writeText(textoLimpio).then(() => {
+                // Efecto visual en el botón
+                p.classList.add('copiado');
+                setTimeout(() => {
+                    p.classList.remove('copiado');
+                }, 400);
+
+                // Control del aviso flotante
+                clearTimeout(temporizadorNotificacion);
+                notificacion.classList.add('mostrar');
+                
+                temporizadorNotificacion = setTimeout(() => {
+                    notificacion.classList.remove('mostrar');
+                }, 1800);
+
+            }).catch(err => {
+                console.error('Error al copiar el texto: ', err);
+            });
+        });
+    });
+</script>
 
 </body>
 </html>
