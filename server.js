@@ -1,48 +1,79 @@
 const express = require('express');
 const session = require('express-session');
+const compression = require('compression');
 const path = require('path');
 const app = express();
 
+// ⚡ OPTIMIZACIÓN EN LA NUBE: Compresión de datos ultrarrápida
+app.use(compression());
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// Configuración de Sesiones Seguras
 app.use(session({
-    secret: 'clave_secreta_facciones_2026',
+    secret: 'token_ancestral_facciones_2026',
     resave: false,
-    saveUninitialized: true
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 } // La sesión expira en 1 día
 }));
 
-// Base de datos simulada con Roles: "Lider" o "Miembro"
+// ⚡ OPTIMIZACIÓN EN LA NUBE: Caché estática para carga instantánea (7 días)
+app.use(express.static(path.join(__dirname), {
+    maxAge: '7d',
+    setHeaders: (res) => {
+        res.setHeader('Cache-Control', 'public, max-age=604800');
+    }
+}));
+
+// Base de Datos Centralizada con Líderes por Defecto
 let usuarios = [
-    { user: "lider_cobra", pass: "cobra123", faction: "cobra", role: "Lider" },
+    { user: "lider_fuego", pass: "fuego123", faction: "Fuego", role: "Lider" },
     { user: "lider_agua", pass: "agua123", faction: "Agua", role: "Lider" },
     { user: "lider_tierra", pass: "tierra123", faction: "Tierra", role: "Lider" }
 ];
 
+// URLs Secretas de Pantalla Completa para los Miembros
 const urlsFacciones = {
-    "Cobra": "https://grupo-cobra-macros.netlify.app/",
+    "Fuego": "https://ejemplo.com",
     "Agua": "https://ejemplo.com",
     "Tierra": "https://ejemplo.com"
 };
 
+// 🏰 PAGINA PRINCIPAL: Listado de selección de Facciones
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-// LOGIN: Identifica si es Líder o Miembro común
-app.post('/api/login', (req, res) => {
-    const { user, pass } = req.body;
+// 🔑 RUTAS DE LOGIN INDIVIDUALES PARA CADA FACCIÓN
+app.get('/:faccion/login', (req, res) => {
+    const faccion = req.params.faccion.toLowerCase();
+    if (['fuego', 'agua', 'tierra'].includes(faccion)) {
+        res.sendFile(path.join(__dirname, 'login_facciosos.html'));
+    } else {
+        res.status(404).send('<h1>Facción inexistente</h1>');
+    }
+});
+
+// 🔐 VALIDACIÓN DE LOGIN EXCLUSIVO POR FACCIÓN
+app.post('/api/login-exclusivo', (req, res) => {
+    const { user, pass, factionUrl } = req.body; // Recibe el usuario, clave y la página desde donde lo intenta
+    
     const usuarioEncontrado = usuarios.find(u => u.user === user && u.pass === pass);
 
     if (usuarioEncontrado) {
+        // 🔥 VALIDACIÓN CRÍTICA DE BANDO: El usuario debe coincidir con el login de su facción
+        if (usuarioEncontrado.faction.toLowerCase() !== factionUrl.toLowerCase()) {
+            return res.status(403).json({ success: false, message: `⚠️ ¡Acceso denegado! Tus credenciales no pertenecen a la Facción ${factionUrl}.` });
+        }
+
         req.session.usuarioLogueado = true;
         req.session.faction = usuarioEncontrado.faction;
-        req.session.role = usuarioEncontrado.role; // Guardamos el rol en la sesión segura
+        req.session.role = usuarioEncontrado.role;
         
         if (usuarioEncontrado.role === "Lider") {
-            // Si es líder, va al panel de control de su facción
             res.json({ success: true, redirect: '/panel-lider' });
         } else {
-            // Si es miembro común, va directo a la URL de pantalla completa
             res.json({ success: true, redirect: '/acceso-facciosos' });
         }
     } else {
@@ -50,15 +81,14 @@ app.post('/api/login', (req, res) => {
     }
 });
 
-// PANEL DEL LÍDER: Solo accesible si el rol verificado es "Lider"
+// 👑 SEGURIDAD: Panel de Control del Líder
 app.get('/panel-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") {
-        return res.status(403).send("<h1>Acceso Denegado: No eres líder de ninguna facción.</h1>");
+        return res.status(403).send("<h1>Acceso Denegado: No eres líder.</h1>");
     }
     res.sendFile(path.join(__dirname, 'lider.html'));
 });
 
-// RUTA DEL SERVIDOR PARA OBTENER LOS DATOS DEL LÍDER ACTUAL
 app.get('/api/info-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") {
         return res.status(403).json({ error: "No autorizado" });
@@ -66,54 +96,41 @@ app.get('/api/info-lider', (req, res) => {
     res.json({ faction: req.session.faction });
 });
 
-// REGISTRO RESTRINGIDO: El servidor fuerza que el nuevo usuario herede la facción del líder logueado
+// 🎯 RECLUTAMIENTO: El Líder crea reclutas automáticos para su propio bando
 app.post('/api/registrar-por-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") {
-        return res.status(403).json({ error: "Acceso denegado. Solo los líderes pueden hacer esto." });
+        return res.status(403).json({ error: "Acceso denegado." });
     }
 
-    // Seguridad estricta: Ignoramos cualquier facción que envíe el navegador, usamos la de la SESIÓN del líder
-    const faccionAutomatica = req.session.faction; 
-    const nuevoUsuario = "miembro_" + faccionAutomatica.toLowerCase() + "_" + Math.floor(1000 + Math.random() * 9000);
+    const faccionLider = req.session.faction; 
+    const nuevoUsuario = "recluta_" + faccionLider.toLowerCase() + "_" + Math.floor(1000 + Math.random() * 9000);
     
-    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     let nuevaContrasena = "";
     for (let i = 0; i < 8; i++) {
         nuevaContrasena += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
     }
 
-    usuarios.push({ 
-        user: nuevoUsuario, 
-        pass: nuevaContrasena, 
-        faction: faccionAutomatica, 
-        role: "Miembro" // Se crea como miembro común
-    });
-    
-    res.json({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionAutomatica });
+    usuarios.push({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionLider, role: "Miembro" });
+    res.json({ user: nuevoUsuario, pass: nuevaContrasena, faction: faccionLider });
 });
 
-// ACCESO MIEMBROS: Redirección estricta según facción
+// 🛡️ GUARDIÁN DE RUTAS: Redirección estricta en la nube
 app.get('/acceso-facciosos', (req, res) => {
     if (!req.session.usuarioLogueado) {
         return res.status(403).send("<h1>Acceso Denegado: Inicia sesión primero.</h1>");
     }
-
-    const faccionDelUsuario = req.session.faction;
-    const urlDestino = urlsFacciones[faccionDelUsuario];
-
-    if (urlDestino) {
-        res.redirect(urlDestino);
-    } else {
-        res.status(404).send("Error: Facción no encontrada.");
-    }
+    const urlDestino = urlsFacciones[req.session.faction];
+    res.redirect(urlDestino);
 });
 
-// CERRAR SESIÓN
 app.get('/logout', (req, res) => {
     req.session.destroy();
     res.redirect('/');
 });
 
-app.listen(3000, () => {
-    console.log('Servidor corriendo de forma segura en http://localhost:3000');
+// ⚡ PUERTO DINÁMICO PARA RENDER
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Servidor activo en el puerto ${PORT}`);
 });
