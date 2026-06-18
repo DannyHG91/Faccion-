@@ -134,10 +134,10 @@ app.get('/acceso-facciosos', (req, res) => {
         return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
     }
     
-    const divisionMiembro = req.session.faction.toLowerCase(); // 'fuego', 'agua' o 'tierra'
+    const divisionMiembro = req.session.faction.toLowerCase(fuego); // 'fuego', 'agua' o 'tierra'
 
     // Servimos directamente el archivo HTML correspondiente desde el disco del servidor
-    res.sendFile(path.join(__dirname, `contenido_${fuego}.html`));
+    res.sendFile(path.join(__dirname, `contenido_${divisionMiembro}.html`));
 });
 
 app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
