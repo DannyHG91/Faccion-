@@ -30,12 +30,7 @@
             overflow: hidden;
             touch-action: manipulation;
             position: relative;
-/* ◄ AÑADE ESTAS CUATRO LÍNEAS PARA ELIMINAR EL RESALTADO TÁCTIL */
-    -webkit-user-select: none;  /* Safari en iOS y Mac */
-    -moz-user-select: none;     /* Firefox */
-    -ms-user-select: none;      /* Internet Explorer/Edge antiguos */
-    user-select: none;          /* Estándar moderno para Chrome y Android */
-        }
+              }
 
         /* FONDO ANIMADO 1: Cuadrícula con pulso de escaneo de satélite */
         .dynamic-bg {
@@ -482,6 +477,20 @@
             btn.addEventListener('click', playOpsClick);
         });
         document.getElementById('btnLiderCommand').addEventListener('click', playLiderClick);
+
+   /* Bloquea el resaltado y la selección nativa en toda la interfaz */
+* {
+    -webkit-tap-highlight-color: transparent; /* Elimina el cuadro azul/negro al presionar botones en Android */
+    user-select: none;                       /* Impide que el usuario mantenga presionado y resalte el texto */
+    -webkit-user-select: none;               /* Compatibilidad con navegadores basados en Safari/Chrome */
+}
+
+/* PERMISO EXCLUSIVO: Solo permitimos seleccionar el Token generado para que el botón de copia funcione */
+.token-text, #resToken {
+    user-select: text !important;
+    -webkit-user-select: text !important;
+}
+
     </script>
 </body>
 </html>
