@@ -2,13 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>[ COBRA HIGH COMMAND - AUTHENTICATION ]</title>
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>[LOGIN LÍDERES]</title>
     <style>
         /* Variables de Sistema del Alto Mando: Oro de Prestigio y Negro Sigilo */
         :root {
             --stealth-dark: #020407;
-            --glass-core: rgba(14, 21, 31, 0.75);
+            --glass-core: rgba(14, 21, 31, 0.85);
             --gold-prestige: #dcae3b;
             --gold-glow: rgba(220, 174, 59, 0.25);
             --laser-cyan: #00d9ff;
@@ -18,24 +19,41 @@
             --grid-line: rgba(220, 174, 59, 0.015);
         }
 
-        body {
-            background-color: var(--stealth-dark);
-            color: var(--pure-light);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES (CERO LAG) */
+        html, body {
+            width: 100vw;
+            height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden;
+            background-color: var(--stealth-dark);
+        }
+
+        body {
+            color: var(--pure-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none;
             position: relative;
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 50px 50px;
             background-position: center;
+
+            /* Bloqueo estricto de resaltado para simular comportamiento de App Nativa */
+            -webkit-user-select: none;
+            user-select: none;
+        }
+
+        /* FORZADO DE RENDERIZADO POR GPU */
+        .mainframe-container, .form-input, .btn-submit, .wave {
+            -webkit-transform: translateZ(0);
+            transform: translateZ(0);
+            will-change: transform, opacity;
         }
 
         /* FONDO ANIMADO: Radar cuántico en tono áureo */
@@ -54,30 +72,31 @@
             animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
             opacity: 0;
         }
-        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
-        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
-        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
+        .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
+        .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 3s; }
 
         @keyframes node-pulse {
             0% { transform: scale(0.6); opacity: 0; }
             15% { opacity: 1; }
-            100% { transform: scale(3.2); opacity: 0; border-color: rgba(220, 174, 59, 0.01); }
+            100% { transform: scale(3.5); opacity: 0; border-color: rgba(220, 174, 59, 0.01); }
         }
-        /* CONSOLA CENTRAL DE AUTENTICACIÓN RESTINGIDA */
+        /* CONSOLA CENTRAL DE AUTENTICACIÓN RESTRINGIDA */
         .mainframe-container {
             background: var(--glass-core);
-            border: 1px solid rgba(220, 174, 59, 0.2);
-            padding: 40px 30px;
-            width: 92%;
-            max-width: 420px;
+            border: 1px solid rgba(220, 174, 59, 0.25);
+            padding: 35px 24px;
+            width: 88vw;
+            max-width: 400px;
+            max-height: 85vh; 
             box-sizing: border-box;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.85);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85);
             position: relative;
             z-index: 5;
             border-radius: 4px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         /* LÁSER PERIMETRAL DE AUTORIDAD */
@@ -107,9 +126,9 @@
         /* CABECERA PRIVADA */
         .header-shield {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             border-bottom: 1px solid rgba(220, 174, 59, 0.15);
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
 
         .sys-badge {
@@ -121,7 +140,7 @@
         }
 
         h1 {
-            font-size: 20px;
+            font-size: 19px;
             font-weight: 800;
             margin: 6px 0 0 0;
             letter-spacing: 2px;
@@ -129,9 +148,9 @@
             color: var(--pure-light);
         }
 
-        /* CAMPOS DE FORMULARIO HUD MILITAR */
+        /* CAMPOS DEL FORMULARIO HUD MILITAR */
         .form-group {
-            margin-bottom: 22px;
+            margin-bottom: 20px;
             text-align: left;
         }
 
@@ -145,27 +164,44 @@
             text-transform: uppercase;
         }
 
+        /* ELEMENTO SELECTOR Y CAMPO DE TEXTO SIN LAG */
         .form-input {
             width: 100%;
             padding: 16px;
-            background: rgba(0, 0, 0, 0.45);
+            background: #020407; 
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 3px;
             color: var(--pure-light);
             font-size: 14px;
             box-sizing: border-box;
             outline: none;
-            transition: all 0.2s ease;
-            -webkit-appearance: none;
+            transition: border-color 0.15s linear, box-shadow 0.15s linear;
+            -webkit-appearance: none; /* Elimina estilos nativos feos en iOS/Android */
+            appearance: none;
+        }
+
+        /* Variante específica para el menú desplegable (añade flecha táctica discreta) */
+        select.form-input {
+            cursor: pointer;
+            background-image: linear-gradient(45deg, transparent 50%, var(--gold-prestige) 50%), linear-gradient(135deg, var(--gold-prestige) 50%, transparent 50%);
+            background-position: calc(100% - 20px) calc(1em + 4px), calc(100% - 15px) calc(1em + 4px);
+            background-size: 5px 5px, 5px 5px;
+            background-repeat: no-repeat;
+        }
+
+        /* Estilos de las opciones internas del desplegable */
+        select.form-input option {
+            background-color: #0c121b;
+            color: var(--pure-light);
+            padding: 10px;
         }
 
         .form-input:focus {
             border-color: var(--gold-prestige);
-            background: rgba(220, 174, 59, 0.02);
             box-shadow: 0 0 15px rgba(220, 174, 59, 0.15);
         }
 
-        /* BOTÓN DE VALIDACIÓN DE CREDENCIALES */
+        /* BOTÓN DE VALIDACIÓN ACCELERADO POR GPU */
         .btn-submit {
             display: block;
             width: 100%;
@@ -173,28 +209,27 @@
             background: linear-gradient(135deg, rgba(220, 174, 59, 0.03), rgba(220, 174, 59, 0.08));
             border: 1px solid var(--gold-prestige);
             color: var(--gold-prestige);
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
             box-sizing: border-box;
             border-radius: 3px;
-            transition: all 0.2s ease;
+            transition: background-color 0.15s linear, color 0.15s linear;
             -webkit-tap-highlight-color: transparent;
-            margin-top: 25px;
+            margin-top: 20px;
         }
 
         .btn-submit:active {
             background: var(--gold-prestige);
             color: var(--stealth-dark);
-            box-shadow: 0 0 25px var(--gold-glow);
         }
 
-        /* CUADRO DE NOTIFICACIÓN DE ADVERTENCIA */
+        /* CUADRO DE NOTIFICACIÓN DE ERROR */
         .alert-box {
             display: none;
-            margin-top: 20px;
+            margin-top: 15px;
             background: rgba(255, 74, 74, 0.04);
             border: 1px solid var(--alert-red);
             border-left: 3px solid var(--alert-red);
@@ -213,9 +248,8 @@
             font-family: monospace;
             color: var(--sub-slate);
             text-decoration: none;
-            margin-top: 20px;
+            margin-top: 18px;
             letter-spacing: 1px;
-            transition: color 0.2s ease;
         }
         .btn-back:active { color: var(--laser-cyan); }
     </style>
@@ -226,7 +260,6 @@
     <div class="radar-wave-hub">
         <div class="wave w1"></div>
         <div class="wave w2"></div>
-        <div class="wave w3"></div>
     </div>
 
     <div class="mainframe-container">
@@ -242,15 +275,20 @@
 
         <!-- Cabecera de Alto Rango -->
         <div class="header-shield">
-            <div class="sys-badge">✦ AUTENTICACIÓN MILITAR ✦</div>
-            <h1>ALTO MANDO GENERAL</h1>
+            <div class="sys-badge">✦ AUTENTICACIÓN OFICIAL ✦</div>
+            <h1>ALTO MANDO GEBERAL DE MESA</h1>
         </div>
 
-        <!-- Formulario Táctico de Credenciales -->
+        <!-- Formulario Táctico con Menú de Selección Desplegable -->
         <form id="loginForm">
             <div class="form-group">
-                <label for="user">IDENTIFICADOR DE COMANDANTE</label>
-                <input type="text" class="form-input" id="user" required autocomplete="off" placeholder="EJ: lider_fuego">
+                <label for="user">SELECCIONAR FACCIÓN MILITAR</label>
+                <select class="form-input" id="user" required>
+                    <option value="" disabled selected>SELECCIONE SU DIVISIÓN</option>
+                    <option value="lider_fuego">Comando Táctico Fuego</option>
+                    <option value="lider_agua">Fuerzas Anfibias Agua</option>
+                    <option value="lider_tierra">Infantería Blindada Tierra</option>
+                </select>
             </div>
 
             <div class="form-group">
@@ -332,7 +370,7 @@
             e.preventDefault();
             initAudio();
 
-            const userVal = document.getElementById('user').value.trim();
+            const userVal = document.getElementById('user').value;
             const passVal = document.getElementById('pass').value;
             const errorDiv = document.getElementById('errorMessage');
             
@@ -348,7 +386,7 @@
             .then(data => {
                 if (data.success) {
                     playSuccessSound();
-                    // Breve retraso para oír el tono de éxito antes de la redirección al panel de control
+                    // Breve retraso para oír el tono de éxito antes de la redirección
                     setTimeout(() => { window.location.href = data.redirect; }, 120);
                 } else {
                     playFailureSound();
