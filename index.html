@@ -38,7 +38,7 @@
             touch-action: none; /* Bloquea el scroll elástico de iOS y rebotes de Android */
             position: relative;
             
-            /* Blindaje total contra resaltado de textos al presionar la pantalla */
+            /* Blindaje total contra resaltado de textos al presionar la pantalla o buscar */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -434,7 +434,7 @@
 
             <div class="boot-terminal" id="bootTerminal">
                 >> INICIANDO ARRANQUE...<br>
-                >> CONECTANDO CON CENTRAL MILITAR DE MESA...
+                >> ENLAZANDO CON CENTRAL MILITAR DE MESA...
             </div>
             
             <div class="boot-meta-status" id="bootMetaStatus">
@@ -513,7 +513,7 @@
             <span>ESCUDO_v4.2</span>
         </div>
     </div>
-        <!-- INGENIERÍA DE AUDIO MILITAR AVANZADO Y CONTROL DE SECUENCIA -->
+        <!-- INGENIERÍA DE CONTROL DE SESIÓN Y AUDIO SINTÉTICO FURTIVO -->
     <script>
         let audioCtx = null;
         let radarInterval = null;
@@ -528,6 +528,17 @@
             ">> CARGANDO INTERFAZ CENTRAL DEL MAINFRAME..."
         ];
 
+        // CONTROL DE PRIMER ARRANQUE EXCLUSIVO (EVITA REPETICIONES AL IR ATRÁS)
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('cmm_nucleo_inicializado') === 'true') {
+                const bootScreen = document.getElementById("bootScreen");
+                bootScreen.style.transition = "none";
+                bootScreen.style.opacity = "0";
+                bootScreen.style.visibility = "hidden";
+                initAudio();
+            }
+        });
+
         // INICIALIZACIÓN DE HARDWARE DE AUDIO (REQUISITO MÓVIL)
         function initAudio() {
             if (!audioCtx) {
@@ -535,6 +546,10 @@
             }
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
+            }
+            if (!radarInterval) {
+                playRadarPing(); 
+                radarInterval = setInterval(playRadarPing, 4000); // Bucle infinito cada 4 segundos
             }
         }
 
@@ -588,7 +603,7 @@
             const logInterval = setInterval(() => {
                 if (logIndex < logs.length) {
                     terminal.innerHTML += `<br>${logs[logIndex]}`;
-                    playLogBeep(); // Suena un clic por cada registro en español
+                    playLogBeep(); 
                     logIndex++;
                 } else {
                     clearInterval(logInterval);
@@ -617,6 +632,8 @@
                 bootScreen.style.opacity = "0";
                 setTimeout(() => {
                     bootScreen.style.visibility = "hidden";
+                    // ESCRIBIR MARCA DE INICIALIZACIÓN EN LA MEMORIA DE LA PESTAÑA
+                    sessionStorage.setItem('cmm_nucleo_inicializado', 'true');
                     // Arranca el loop infinito del radar de fondo
                     if (!radarInterval) {
                         playRadarPing(); 
