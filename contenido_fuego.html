@@ -2,25 +2,25 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Forzado de escala estricto para comportamiento tipo App nativa vertical sin zoom accidental -->
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MACROS DEL EQUIPO COBRA</title>
+    <title>ONESTATE REGLAS CHATS</title>
 
     <style>
     :root {
         --cobra-negro-selva: #0b110d;       /* Negro verdoso muy profundo */
         --cobra-bronce: #a48253;            /* Oro viejo / Bronce del emblema */
         --cobra-bronce-brillante: #d4af37;  /* Oro brillante para efectos activos */
-        --cobra-hover: rgba(164, 130, 83, 0.2); /* Brillo bronce al pasar el mouse */
+        --cobra-hover: rgba(164, 130, 83, 0.15); /* Brillo bronce al presionar */
         --cobra-texto-claro: #ffffff;       
-        --borde-tactico: rgba(164, 130, 83, 0.4); /* Bordes más visibles de cristal */
+        --borde-tactico: rgba(164, 130, 83, 0.3); /* Bordes de cristal ligeros */
         --laser-cyan: #00d9ff;
         --sub-slate: #56687a;
         --pure-light: #f1f5f9;
         --grid-line: rgba(164, 130, 83, 0.015);
     }
 
-    /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES */
+    /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES (60 FPS) */
     html, body {
         width: 100vw;
         height: 100vh;
@@ -31,10 +31,10 @@
     }
 
     body {
-        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         background: 
-            linear-gradient(rgba(11, 17, 13, 0.3), rgba(11, 17, 13, 0.5)),
-            url('cobra-fondo.png') no-repeat center center fixed; 
+            linear-gradient(rgba(11, 17, 13, 0.4), rgba(11, 17, 13, 0.6)),
+            url('cobra-fondo.png') no-repeat center center; 
         background-size: cover;
         color: #fff;
         display: flex;
@@ -43,7 +43,18 @@
         align-items: center;
         touch-action: none; /* Inmoviliza el scroll elástico de iOS y tirones de Android */
         position: relative;
+        
+        /* Blindaje total contra resaltar texto de forma accidental */
+        -webkit-user-select: none;
+        user-select: none;
     }
+    /* FORZADO DE RENDERIZADO POR HARDWARE DE GPU (ELIMINA TIRONES EN MÓVILES) */
+    .system-boot-screen, .mainframe-container, .parrafo, .boot-progress-fill {
+        -webkit-transform: translateZ(0);
+        transform: translateZ(0);
+        will-change: transform, opacity;
+    }
+
     /* PANTALLA DE CARGA DE FACCIÓN CON MARCOS DE BRONCE TÁCTICO */
     .system-boot-screen {
         position: fixed;
@@ -54,17 +65,17 @@
         flex-direction: column;
         justify-content: center;
         align-items: center;
-        transition: opacity 0.6s cubic-bezier(0.1, 0.8, 0.3, 1), visibility 0.6s;
+        transition: opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.4s;
     }
 
     .boot-box {
         width: 86vw;
         max-width: 360px;
-        background: rgba(11, 17, 13, 0.65);
+        background: rgba(11, 17, 13, 0.9); /* Removido blur pesado por fondo sólido ultraligero */
         border: 1px solid rgba(164, 130, 83, 0.25);
         padding: 25px 20px;
         position: relative;
-        box-shadow: 0 0 30px rgba(164, 130, 83, 0.05);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
         text-align: center;
     }
 
@@ -78,8 +89,7 @@
     .b-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
     .b-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
     .b-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-
-    .boot-terminal {
+        .boot-terminal {
         width: 100%;
         font-family: monospace;
         font-size: 11px;
@@ -142,218 +152,188 @@
         background: linear-gradient(90deg, var(--cobra-bronce-brillante), #fff);
         box-shadow: 0 0 10px var(--cobra-bronce-brillante);
     }
-            /* FONDO ANIMADO DE LA PÁGINA PRINCIPAL */
-        .dynamic-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-image: 
-                linear-gradient(var(--grid-line) 1px, transparent 1px),
-                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 50px 50px;
-            background-position: center;
-            z-index: 1;
-        }
 
+    /* FONDO ANIMADO DE LA PÁGINA DE REGLAS */
+    .dynamic-bg {
+        position: absolute;
+        top: 0; left: 0; width: 100%; height: 100%;
+        background-image: 
+            linear-gradient(var(--grid-line) 1px, transparent 1px),
+            linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+        background-size: 50px 50px;
+        background-position: center;
+        z-index: 1;
+    }
         /* FONDO ANIMADO 2: Círculos concéntricos con pulso suave de radar */
-        .radar-wave-hub {
-            position: absolute;
-            width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 2;
-            pointer-events: none;
-        }
+    .radar-wave-hub {
+        position: absolute;
+        width: 100%; height: 100%;
+        display: flex; justify-content: center; align-items: center;
+        z-index: 2;
+        pointer-events: none;
+    }
 
-        .wave {
-            position: absolute;
-            border: 1px solid rgba(164, 130, 83, 0.05);
-            border-radius: 50%;
-            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
-            opacity: 0;
-        }
-        .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
-        .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 2.5s; }
-        .w3 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 5s; }
+    .wave {
+        position: absolute;
+        border: 1px solid rgba(164, 130, 83, 0.05);
+        border-radius: 50%;
+        animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+        opacity: 0;
+    }
+    .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
+    .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 2.5s; }
+    .w3 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 5s; }
 
-        @keyframes node-pulse {
-            0% { transform: scale(0.6); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: scale(3.5); opacity: 0; border-color: rgba(164, 130, 83, 0.01); }
-        }
+    @keyframes node-pulse {
+        0% { transform: scale(0.6); opacity: 0; }
+        15% { opacity: 1; }
+        100% { transform: scale(3.5); opacity: 0; border-color: rgba(164, 130, 83, 0.01); }
+    }
 
-        /* CONSOLA CENTRAL COMPRIMIDA VERTICALMENTE */
-        .mainframe-container {
-            background: rgba(11, 17, 13, 0.65);
-            border: 1px solid rgba(164, 130, 83, 0.2);
-            padding: 20px 18px;
-            width: 88vw;
-            max-width: 420px;
-            max-height: 85vh; /* Previene desbordes en terminales cortas */
-            box-sizing: border-box;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
-            position: relative;
-            z-index: 5;
-            border-radius: 4px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
+    /* CONSOLA CENTRAL COMPRIMIDA VERTICALMENTE */
+    .mainframe-container {
+        background: #090e0b; 
+        border: 1px solid rgba(164, 130, 83, 0.2);
+        padding: 20px 18px;
+        width: 88vw;
+        max-width: 420px;
+        max-height: 85vh; 
+        box-sizing: border-box;
+        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+        position: relative;
+        z-index: 5;
+        border-radius: 4px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
 
-        /* CORREDOR LÁSER PERIMETRAL EN BRONCE */
-        .laser-border {
-            position: absolute;
-            background: linear-gradient(90deg, transparent, var(--cobra-bronce), transparent);
-            z-index: 6;
-        }
-        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
-        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
+    /* CORREDOR LÁSER PERIMETRAL EN BRONCE */
+    .laser-border {
+        position: absolute;
+        background: linear-gradient(90deg, transparent, var(--cobra-bronce), transparent);
+        z-index: 6;
+    }
+    .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
+    .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
+    
+    @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+    @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+    /* Esquinas Fijas con Ángulos de Titanio */
+    .corner-bracket {
+        position: absolute;
+        width: 14px; height: 14px;
+        border: 2px solid rgba(164, 130, 83, 0.3);
+        z-index: 7;
+    }
+    .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+    .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+    .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+        /* CONTENEDOR DE LA PORTADA REAJUSTADO */
+    .portada-container {
+        width: 100%;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+    }
+
+    .portada-imagen {
+        width: 100%;
+        height: auto;
+        display: block;
+        border: 1px solid var(--cobra-bronce);
+        border-radius: 2px;
+    }
+
+    /* CONTENEDOR PRINCIPAL FLUIDO CON SCROLL ACELERADO */
+    .contenedor {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto; 
+        -webkit-overflow-scrolling: touch; /* Habilita el scroll con inercia nativa fluida en celulares */
+        max-height: 45vh;
+        padding-right: 2px;
+        box-sizing: border-box;
+    }
+
+    /* BLOQUES DE MACROS OPTIMIZADOS PARA RENDIMIENTO 60FPS */
+    .parrafo {
+        background: rgba(164, 130, 83, 0.04); 
+        border-left: 4px solid var(--cobra-bronce); 
+        border-top: 1px solid var(--borde-tactico);
+        border-right: 1px solid var(--borde-tactico);
+        border-bottom: 1px solid var(--borde-tactico);
+        padding: 14px 12px;
+        margin: 6px 0;
+        cursor: pointer;
+        font-size: 11px;
+        font-family: monospace;
+        letter-spacing: 0.5px;
+        clip-path: polygon(0% 0%, 95% 0%, 100% 18%, 100% 100%, 5% 100%, 0% 82%);
+        box-sizing: border-box;
         
-        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
-        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+        /* Animación directa ultra ligera mediante transiciones de color sencillas */
+        transition: background-color 0.1s linear, border-color 0.1s linear;
+        -webkit-tap-highlight-color: transparent;
+    }
 
-        /* Esquinas Fijas con Ángulos de Titanio */
-        .corner-bracket {
-            position: absolute;
-            width: 14px; height: 14px;
-            border: 2px solid rgba(164, 130, 83, 0.3);
-            z-index: 7;
-        }
-        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-                /* CONTENEDOR DE LA PORTADA REAJUSTADO */
-        .portada-container {
-            width: 100%;
-            margin-bottom: 10px;
-            box-sizing: border-box;
-        }
+    /* Estado de activación táctil físico e instantáneo */
+    .parrafo:active {
+        background-color: rgba(164, 130, 83, 0.18);
+        border-color: var(--cobra-bronce-brillante);
+    }
 
-        .portada-imagen {
-            width: 100%;
-            height: auto;
-            display: block;
-            border: 1px solid var(--cobra-bronce);
-            border-radius: 2px;
-            box-shadow: 0 0 15px rgba(164, 130, 83, 0.2);
-        }
+    /* Inyección por JS al copiar de forma veloz */
+    .copiado {
+        background-color: var(--cobra-bronce) !important;
+        border-color: #ffffff !important;
+        color: #000000 !important; 
+        font-weight: bold !important;
+    }
 
-        /* CONTENEDOR PRINCIPAL FLUIDO */
-        .contenedor {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto; /* Permite scroll interno de macros en celulares cortos */
-            max-height: 45vh;
-            padding-right: 2px;
-            box-sizing: border-box;
-        }
+    /* BOTÓN DE DESCONEXIÓN SEGURO EN ROJO MILITAR */
+    .btn-exit {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        margin-top: 15px;
+        background: rgba(255, 74, 74, 0.02);
+        border: 1px dashed rgba(255, 74, 74, 0.25);
+        color: #ff4a4a;
+        text-align: center;
+        text-decoration: none;
+        font-size: 10px;
+        font-family: monospace;
+        font-weight: 600;
+        letter-spacing: 2px;
+        box-sizing: border-box;
+        border-radius: 2px;
+        transition: background-color 0.15s ease;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-exit:active {
+        background-color: rgba(255, 74, 74, 0.12);
+    }
 
-        .parrafo {
-            background: rgba(11, 17, 13, 0.45); 
-            border-left: 4px solid var(--cobra-bronce); 
-            border-top: 1px solid var(--borde-tactico);
-            border-right: 1px solid var(--borde-tactico);
-            border-bottom: 1px solid var(--borde-tactico);
-            padding: 14px 12px;
-            margin: 8px 0;
-            cursor: pointer;
-            backdrop-filter: blur(3px); 
-            -webkit-backdrop-filter: blur(3px);
-            font-size: 11px;
-            font-family: monospace;
-            letter-spacing: 0.5px;
-            clip-path: polygon(0% 0%, 95% 0%, 100% 18%, 100% 100%, 5% 100%, 0% 82%);
-            box-sizing: border-box;
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
+    footer {
+        text-align: center;
+        padding-top: 12px;
+        font-size: 9px;
+        color: var(--cobra-bronce-brillante);
+        opacity: 0.6;
+        font-family: monospace;
+        letter-spacing: 1px;
+        border-top: 1px solid rgba(255, 255, 255, 0.04);
+    }
 
-        .parrafo:active {
-            background: var(--cobra-hover);
-            border-color: var(--cobra-bronce-brillante);
-            padding-left: 18px;
-        }
-
-        .copiado {
-            background: linear-gradient(135deg, var(--cobra-bronce), var(--cobra-bronce-brillante)) !important;
-            border-color: #fff !important;
-            color: #000 !important; 
-            font-weight: 900;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6) !important; 
-        }
-
-        /* AVISO NOTIFICACIÓN FLOTANTE MEJORADO */
-        .notificacion-tactica {
-            position: absolute;
-            top: 15px;
-            left: 50%;
-            transform: translateX(-50%) translateY(-60px);
-            background: rgba(11, 17, 13, 0.95);
-            color: var(--cobra-bronce-brillante);
-            border: 1px solid var(--cobra-bronce);
-            padding: 10px 20px;
-            font-weight: bold;
-            letter-spacing: 1px;
-            box-shadow: 0 0 15px rgba(164, 130, 83, 0.4);
-            z-index: 99;
-            pointer-events: none;
-            opacity: 0;
-            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
-            font-family: monospace;
-            text-transform: uppercase;
-            font-size: 10px;
-            width: max-content;
-        }
-
-        .notificacion-tactica.mostrar {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-
-        /* BOTÓN DE RETORNO / DESCONEXIÓN SEGURO */
-        .btn-exit {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            margin-top: 15px;
-            background: rgba(255, 74, 74, 0.02);
-            border: 1px dashed rgba(255, 74, 74, 0.25);
-            color: #ff4a4a;
-            text-align: center;
-            text-decoration: none;
-            font-size: 10px;
-            font-family: monospace;
-            font-weight: 600;
-            letter-spacing: 2px;
-            box-sizing: border-box;
-            border-radius: 2px;
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .btn-exit:active {
-            background: rgba(255, 74, 74, 0.1);
-            border-color: #ff4a4a;
-        }
-
-        footer {
-            text-align: center;
-            padding-top: 12px;
-            font-size: 9px;
-            color: var(--cobra-bronce-brillante);
-            opacity: 0.6;
-            font-family: monospace;
-            letter-spacing: 1px;
-            border-top: 1px solid rgba(255, 255, 255, 0.04);
-        }
-
-        * {
-            -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
-        }
+    * {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
     </style>
 </head>
 <body>
@@ -397,6 +377,12 @@
         <div class="laser-border lb-top"></div>
         <div class="laser-border lb-bottom"></div>
 
+        <!-- Ángulos de titanio fijados -->
+        <div class="corner-bracket tl"></div>
+        <div class="corner-bracket tr"></div>
+        <div class="corner-bracket bl"></div>
+        <div class="corner-bracket br"></div>
+
         <!-- Encabezado de Portada Cobra -->
         <div class="portada-container">
             <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
@@ -428,7 +414,7 @@
             ">> ESTABLECIENDO CONEXIÓN SEGURA CON TERMINAL."
         ];
 
-        // CONTROL PERSISTENTE DE INTRO DE SESIÓN
+        // CONTROL PERSISTENTE DE INTRO DE SESIÓN (PANTALLA DE CARGA ÚNICA)
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('cmm_bunker_reglas_inicializado') === 'true') {
                 const bootScreen = document.getElementById("bootScreen");
@@ -439,7 +425,7 @@
             }
         });
 
-        // DESBLOQUEO DE HARDWARE DE AUDIO TÁCTIL
+        // DESBLOQUEO DE HARDWARE DE AUDIO TÁCTIL (REQUISITO PARA MÓVILES)
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -449,7 +435,7 @@
             }
             if (!radarInterval) {
                 playRadarPing(); 
-                radarInterval = setInterval(playRadarPing, 4000); // Bucle cada 4 segundos
+                radarInterval = setInterval(playRadarPing, 4000); // Bucle infinito cada 4 segundos
             }
         }
 
@@ -484,7 +470,7 @@
             osc.stop(audioCtx.currentTime + 0.8);
         }
 
-        // Tono 3: Clic de copia rápida (Pulso metálico de frecuencia entrelazada)
+        // Tono 3: Clic de copia rápida (Pulso metálico de frecuencia entrelazada sin lag)
         function playCopySound() {
             if (!audioCtx) return;
             let osc = audioCtx.createOscillator();
@@ -514,8 +500,7 @@
             osc.start();
             osc.stop(audioCtx.currentTime + 0.14);
         }
-
-        // CONTROLADOR DE ACCIONAMIENTO DE ARRANQUE CON AUDIO SINK
+                // CONTROLADOR DE ACCIONAMIENTO DE ARRANQUE CON AUDIO SINK
         document.getElementById('btnStartBoot').addEventListener('click', function() {
             initAudio();
             this.style.display = "none";
@@ -585,19 +570,19 @@
             } catch (err) {}
         }
 
-             // LÓGICA DE COPIA RÁPIDA LIMPIA (SIN VENTANA FLOTANTE)
+        // LÓGICA ULTRA FLUDA DE COPIA RÁPIDA (SIN NOTIFICACIONES FLOTANTES CON RETRASO)
         const parrafos = document.querySelectorAll('.parrafo');
 
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
                 initAudio();
-                playCopySound(); // Pitido táctico de confirmación
+                playCopySound(); 
                 const textoLimpio = p.innerText.trim();
                 
                 navigator.clipboard.writeText(textoLimpio).then(() => {
-                    // Animación de color en el bloque presionado
                     p.classList.add('copiado');
-                    setTimeout(() => { p.classList.remove('copiado'); }, 400);
+                    // Retraso optimizado a 150ms para una respuesta visual instantánea bajo el dedo
+                    setTimeout(() => { p.classList.remove('copiado'); }, 150); 
                 }).catch(err => {
                     console.error('Falla al transferir al portapapeles: ', err);
                 });
