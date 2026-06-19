@@ -4,38 +4,34 @@
     <meta charset="UTF-8">
     <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>MACROS UNIDAD COBRA</title>
+    <title>MACROS DE LA UNIDAD COBRA</title>
 
     <style>
     :root {
-        --cobra-negro-selva: #0b110d;       /* Negro verdoso muy profundo */
+        --stealth-dark: #020407; /* Negro absoluto del búnker principal */
+        --glass-core: rgba(11, 17, 13, 0.75); /* Cristal ahumado verdoso de alta tecnología */
         --cobra-bronce: #a48253;            /* Oro viejo / Bronce del emblema */
         --cobra-bronce-brillante: #d4af37;  /* Oro brillante para efectos activos */
         --cobra-hover: rgba(164, 130, 83, 0.15); /* Brillo bronce al presionar */
-        --cobra-texto-claro: #ffffff;       
-        --borde-tactico: rgba(164, 130, 83, 0.3); /* Bordes de cristal ligeros */
+        --borde-tactico: rgba(164, 130, 83, 0.25); /* Bordes de cristal ligeros */
         --laser-cyan: #00d9ff;
         --sub-slate: #56687a;
         --pure-light: #f1f5f9;
         --grid-line: rgba(164, 130, 83, 0.015);
     }
 
-    /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES (60 FPS) */
+    /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES (60 FPS NO-LAG) */
     html, body {
         width: 100vw;
         height: 100vh;
         margin: 0;
         padding: 0;
         overflow: hidden; /* Corta desplazamientos o rebotes elásticos fuera de foco */
-        background-color: var(--cobra-negro-selva);
+        background-color: var(--stealth-dark);
     }
 
     body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        background: 
-            linear-gradient(rgba(11, 17, 13, 0.4), rgba(11, 17, 13, 0.6)),
-            url('cobra-fondo.png') no-repeat center center; 
-        background-size: cover;
         color: #fff;
         display: flex;
         flex-direction: column;
@@ -59,7 +55,7 @@
     .system-boot-screen {
         position: fixed;
         top: 0; left: 0; width: 100vw; height: 100vh;
-        background-color: var(--cobra-negro-selva);
+        background-color: var(--stealth-dark);
         z-index: 100;
         display: flex;
         flex-direction: column;
@@ -153,7 +149,7 @@
         box-shadow: 0 0 10px var(--cobra-bronce-brillante);
     }
 
-    /* FONDO ANIMADO DE LA PÁGINA DE REGLAS */
+    /* FONDO RECOPLILADO: Rejilla modular nativa de alta fluidez (Sin imágenes pesadas) */
     .dynamic-bg {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -164,7 +160,7 @@
         background-position: center;
         z-index: 1;
     }
-        /* FONDO ANIMADO 2: Círculos concéntricos con pulso suave de radar */
+        /* FONDO DE TEXTURA 2: Círculos concéntricos con pulso suave de radar */
     .radar-wave-hub {
         position: absolute;
         width: 100%; height: 100%;
@@ -190,7 +186,7 @@
         100% { transform: scale(3.5); opacity: 0; border-color: rgba(164, 130, 83, 0.01); }
     }
 
-    /* CONSOLA CENTRAL COMPRIMIDA VERTICALMENTE */
+    /* CONSOLA CENTRAL COMPRIMIDA EN VERTICAL FLUIDA */
     .mainframe-container {
         background: #090e0b; 
         border: 1px solid rgba(164, 130, 83, 0.2);
@@ -253,13 +249,13 @@
         display: flex;
         flex-direction: column;
         overflow-y: auto; 
-        -webkit-overflow-scrolling: touch; /* Habilita el scroll con inercia nativa fluida en celulares */
+        -webkit-overflow-scrolling: touch; /* Scroll fluido nativo */
         max-height: 45vh;
         padding-right: 2px;
         box-sizing: border-box;
     }
 
-    /* BLOQUES DE MACROS OPTIMIZADOS PARA RENDIMIENTO 60FPS */
+    /* BLOQUES DE MACROS OPTIMIZADOS (RESPUESTA INSTANTÁNEA 60FPS) */
     .parrafo {
         background: rgba(164, 130, 83, 0.04); 
         border-left: 4px solid var(--cobra-bronce); 
@@ -275,18 +271,18 @@
         clip-path: polygon(0% 0%, 95% 0%, 100% 18%, 100% 100%, 5% 100%, 0% 82%);
         box-sizing: border-box;
         
-        /* Animación directa ultra ligera mediante transiciones de color sencillas */
+        /* Transición de hardware lineal directa para evitar saltos gráficos */
         transition: background-color 0.1s linear, border-color 0.1s linear;
         -webkit-tap-highlight-color: transparent;
     }
 
-    /* Estado de activación táctil físico e instantáneo */
+    /* Estado de presión táctil física inmediata */
     .parrafo:active {
         background-color: rgba(164, 130, 83, 0.18);
         border-color: var(--cobra-bronce-brillante);
     }
 
-    /* Inyección por JS al copiar de forma veloz */
+    /* Resaltado veloz inyectado por JS tras copiar */
     .copiado {
         background-color: var(--cobra-bronce) !important;
         border-color: #ffffff !important;
@@ -338,7 +334,7 @@
 </head>
 <body>
 
-    <!-- PANTALLA DE INICIO DE FACCIÓN CON PORCENTAJE NUMÉRICO -->
+    <!-- PANTALLA DE INICIO DE FACCIÓN CON PORCENTAJE NUMÉRICO (SESIÓN ÚNICA) -->
     <div class="system-boot-screen" id="bootScreen">
         <div class="boot-box" id="bootBox">
             <div class="boot-corner b-tl"></div>
@@ -364,7 +360,7 @@
         </div>
     </div>
 
-    <!-- Red de blindaje de fondo -->
+    <!-- Red de blindaje de fondo vectorizada -->
     <div class="dynamic-bg"></div>
     <div class="radar-wave-hub">
         <div class="wave w1"></div>
@@ -383,12 +379,12 @@
         <div class="corner-bracket bl"></div>
         <div class="corner-bracket br"></div>
 
-        <!-- Encabezado de Portada Cobra -->
+        <!-- Encabezado de Portada Cobra Centralizado -->
         <div class="portada-container">
             <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
         </div>
 
-        <!-- Bloque de Comandos de Chat (Macros) -->
+        <!-- Bloque de Comandos de Chat Saneados (Macros) -->
         <div class="contenedor">
             <div class="parrafo">/flobby GRUPO COBRA TODOS A PUNTO DE ENCUENTRO.</div>
         </div>
@@ -414,7 +410,7 @@
             ">> ESTABLECIENDO CONEXIÓN SEGURA CON TERMINAL."
         ];
 
-        // CONTROL PERSISTENTE DE INTRO DE SESIÓN (PANTALLA DE CARGA ÚNICA)
+        // CONTROL PERSISTENTE DE INTRO DE SESIÓN (EVITA REPETICIONES)
         window.addEventListener('DOMContentLoaded', () => {
             if (sessionStorage.getItem('cmm_bunker_reglas_inicializado') === 'true') {
                 const bootScreen = document.getElementById("bootScreen");
@@ -425,7 +421,7 @@
             }
         });
 
-        // DESBLOQUEO DE HARDWARE DE AUDIO TÁCTIL (REQUISITO PARA MÓVILES)
+        // DESBLOQUEO DE HARDWARE DE AUDIO TÁCTIL (REQUISITO MÓVIL)
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -435,7 +431,7 @@
             }
             if (!radarInterval) {
                 playRadarPing(); 
-                radarInterval = setInterval(playRadarPing, 4000); // Bucle infinito cada 4 segundos
+                radarInterval = setInterval(playRadarPing, 4000); 
             }
         }
 
@@ -500,7 +496,8 @@
             osc.start();
             osc.stop(audioCtx.currentTime + 0.14);
         }
-                // CONTROLADOR DE ACCIONAMIENTO DE ARRANQUE CON AUDIO SINK
+
+        // CONTROLADOR DE ACCIONAMIENTO DE ARRANQUE CON AUDIO SINK
         document.getElementById('btnStartBoot').addEventListener('click', function() {
             initAudio();
             this.style.display = "none";
@@ -570,18 +567,18 @@
             } catch (err) {}
         }
 
-        // LÓGICA ULTRA FLUDA DE COPIA RÁPIDA (SIN NOTIFICACIONES FLOTANTES CON RETRASO)
+        // LÓGICA ULTRA FLUDA DE COPIA RÁPIDA SANEADA (CERO BASURA PARA ONESTATE)
         const parrafos = document.querySelectorAll('.parrafo');
 
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
                 initAudio();
                 playCopySound(); 
-                const textoLimpio = p.innerText.trim();
+                const textoLimpio = p.innerText.trim(); // Rastrilla y elimina saltos de línea ocultos
                 
                 navigator.clipboard.writeText(textoLimpio).then(() => {
                     p.classList.add('copiado');
-                    // Retraso optimizado a 150ms para una respuesta visual instantánea bajo el dedo
+                    // Retraso optimizado a 150ms para máxima fluidez y velocidad bajo el dedo
                     setTimeout(() => { p.classList.remove('copiado'); }, 150); 
                 }).catch(err => {
                     console.error('Falla al transferir al portapapeles: ', err);
