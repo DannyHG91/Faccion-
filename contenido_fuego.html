@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Forzado de escala estricto para comportamiento tipo App nativa vertical sin zoom accidental -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>ONESTATE REGLAS CHATS</title>
 
     <style>
@@ -13,283 +14,606 @@
         --cobra-hover: rgba(164, 130, 83, 0.2); /* Brillo bronce al pasar el mouse */
         --cobra-texto-claro: #ffffff;       
         --borde-tactico: rgba(164, 130, 83, 0.4); /* Bordes más visibles de cristal */
+        --laser-cyan: #00d9ff;
+        --sub-slate: #56687a;
+        --pure-light: #f1f5f9;
+        --grid-line: rgba(164, 130, 83, 0.015);
+    }
+
+    /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES */
+    html, body {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+        padding: 0;
+        overflow: hidden; /* Corta desplazamientos o rebotes elásticos fuera de foco */
+        background-color: var(--cobra-negro-selva);
     }
 
     body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
         background: 
-            linear-gradient(rgba(11, 17, 13, 0.1), rgba(11, 17, 13, 0.2)),
+            linear-gradient(rgba(11, 17, 13, 0.3), rgba(11, 17, 13, 0.5)),
             url('cobra-fondo.png') no-repeat center center fixed; 
         background-size: cover;
         color: #fff;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        touch-action: none; /* Inmoviliza el scroll elástico de iOS y tirones de Android */
+        position: relative;
+    }
+    /* PANTALLA DE CARGA DE FACCIÓN CON MARCOS DE BRONCE TÁCTICO */
+    .system-boot-screen {
+        position: fixed;
+        top: 0; left: 0; width: 100vw; height: 100vh;
         background-color: var(--cobra-negro-selva);
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: opacity 0.6s cubic-bezier(0.1, 0.8, 0.3, 1), visibility 0.6s;
+    }
+
+    .boot-box {
+        width: 86vw;
+        max-width: 360px;
+        background: rgba(11, 17, 13, 0.65);
+        border: 1px solid rgba(164, 130, 83, 0.25);
+        padding: 25px 20px;
         position: relative;
-        min-height: 100vh;
-        overflow-x: hidden;
+        box-shadow: 0 0 30px rgba(164, 130, 83, 0.05);
+        text-align: center;
     }
 
-    /* CONTENEDOR DE LA PORTADA */
-    .portada-container {
-        width: 100%;
-        max-width: 900px;
-        margin: 20px auto 0 auto;
-        padding: 0 20px;
-        box-sizing: border-box;
-        opacity: 0;
-        animation: presentacionDesdeArriba 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        animation-delay: 1.5s;
-    }
-
-    .portada-imagen {
-        width: 100%;
-        height: auto;
-        display: block;
+    /* Esquinas de la precarga en Bronce */
+    .boot-corner {
+        position: absolute;
+        width: 10px; height: 10px;
         border: 2px solid var(--cobra-bronce);
-        border-radius: 4px;
-        box-shadow: 0 0 25px rgba(164, 130, 83, 0.3);
     }
+    .b-tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+    .b-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+    .b-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+    .b-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-    /* ENCABEZADO */
-    header {
-        text-align: center;
-        padding: 35px 15px;
-        background: rgba(11, 17, 13, 0.5); 
-        backdrop-filter: blur(8px);
-        border-bottom: 3px solid var(--cobra-bronce);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); 
-        position: relative;
-        z-index: 3; 
-        
-        opacity: 0;
-        animation: presentacionDesdeArriba 1s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        animation-delay: 2s; 
-    }
-
-    header h1 {
-        margin: 0;
-        font-size: 2.4rem;
-        letter-spacing: 4px; 
-        text-transform: uppercase; 
-        text-shadow: 2px 2px 8px rgba(0,0,0,0.9), 0 0 15px rgba(164, 130, 83, 0.6); 
-    }
-
-    header p {
-        margin-top: 8px;
-        color: var(--cobra-bronce-brillante); 
-        font-size: 1.1rem;
-        letter-spacing: 2px;
-        text-transform: uppercase;
-        font-weight: 600;
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
-    }
-
-    /* CONTENEDOR PRINCIPAL */
-    .contenedor {
-        max-width: 900px;
-        margin: auto;
-        padding: 20px;
-        position: relative; 
-        z-index: 2; 
-        
-        opacity: 0;
-        animation: presentacionDesdeAbajo 1.2s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-        animation-delay: 2.4s; 
-    }
-
-    .parrafo {
-        background: rgba(11, 17, 13, 0.35); 
-        border-left: 5px solid var(--cobra-bronce); 
-        border-top: 1px solid var(--borde-tactico);
-        border-right: 1px solid var(--borde-tactico);
-        border-bottom: 1px solid var(--borde-tactico);
-        padding: 18px;
-        margin: 16px 0;
-        cursor: pointer;
-        backdrop-filter: blur(3px); 
-        -webkit-backdrop-filter: blur(3px);
-        clip-path: polygon(0% 0%, 96% 0%, 100% 18%, 100% 100%, 4% 100%, 0% 82%);
-        
-        transition: transform 0.25s ease, background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-        will-change: transform, box-shadow;
-    }
-
-    .parrafo:hover {
-        background: var(--cobra-hover);
-        border-color: var(--cobra-bronce-brillante);
-        transform: scale(1.015) translateX(3px); 
-        box-shadow: -5px 0px 15px rgba(164, 130, 83, 0.4), inset 0 0 15px rgba(164, 130, 83, 0.2); 
-    }
-
-    .copiado {
-        background: linear-gradient(135deg, var(--cobra-bronce), var(--cobra-bronce-brillante)) !important;
-        border-color: #fff !important;
-        color: #000; 
-        font-weight: 900;
-        letter-spacing: 1px;
-        box-shadow: 0 0 25px rgba(212, 175, 55, 0.8) !important; 
-        transform: scale(1.025) !important;
-    }
-
-    /* AVISO NOTIFICACIÓN FLOTANTE */
-    .notificacion-tactica {
-        text-align: center;
-        position: relative;
-        top: 10px;
-        left: 50%;
-        transform: translateX(-50%) translateY(-100px);
-        background: rgba(11, 17, 13, 0.95);
+    .boot-terminal {
+        width: 100%;
+        font-family: monospace;
+        font-size: 11px;
         color: var(--cobra-bronce-brillante);
-        border: 2px solid var(--cobra-bronce);
-        padding: 12px 25px;
-        border-radius: 4px;
+        text-align: left;
+        margin-bottom: 25px;
+        line-height: 1.6;
+        letter-spacing: 1px;
+        height: 110px;
+        overflow: hidden;
+        display: none; /* Se revela tras presionar sincronizar */
+    }
+
+    /* Botón de activación mandatorio de enlace */
+    .btn-boot-start {
+        padding: 16px 24px;
+        background: linear-gradient(135deg, rgba(164, 130, 83, 0.03), rgba(164, 130, 83, 0.08));
+        border: 1px solid var(--cobra-bronce);
+        color: var(--cobra-bronce-brillante);
+        font-family: monospace;
+        font-size: 11px;
         font-weight: bold;
+        letter-spacing: 2px;
+        cursor: pointer;
+        box-shadow: 0 0 15px rgba(164, 130, 83, 0.1);
+        transition: all 0.2s ease;
+        margin: 20px 0;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-boot-start:active {
+        background: var(--cobra-bronce);
+        color: #000;
+        box-shadow: 0 0 25px var(--cobra-bronce);
+    }
+
+    .boot-meta-status {
+        display: none;
+        justify-content: space-between;
+        align-items: center;
+        font-family: monospace;
+        font-size: 10px;
+        color: var(--sub-slate);
+        margin-bottom: 8px;
         letter-spacing: 1px;
-        box-shadow: 0 0 20px rgba(164, 130, 83, 0.6);
-        z-index: 9999;
-        pointer-events: none;
-        opacity: 0;
-        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
-        font-family: 'Segoe UI', sans-serif;
-        text-transform: uppercase;
-        font-size: 0.9rem;
     }
 
-    .notificacion-tactica.mostrar {
-        transform: translateX(-50%) translateY(0);
-        opacity: 1;
-    }
-
-    footer {
-        text-align: center;
-        padding: 30px;
-        font-size: 0.9rem;
-        color: var(--cobra-bronce-brillante);
-        text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+    .boot-progress-bar {
+        display: none;
+        width: 100%;
+        height: 3px;
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid rgba(164, 130, 83, 0.15);
         position: relative;
-        z-index: 3;
-        letter-spacing: 1px;
+        overflow: hidden;
+    }
+
+    .boot-progress-fill {
+        height: 100%;
+        width: 0%;
+        background: linear-gradient(90deg, var(--cobra-bronce-brillante), #fff);
+        box-shadow: 0 0 10px var(--cobra-bronce-brillante);
+    }
+            /* FONDO ANIMADO DE LA PÁGINA PRINCIPAL */
+        .dynamic-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* FONDO ANIMADO 2: Círculos concéntricos con pulso suave de radar */
+        .radar-wave-hub {
+            position: absolute;
+            width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .wave {
+            position: absolute;
+            border: 1px solid rgba(164, 130, 83, 0.05);
+            border-radius: 50%;
+            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            opacity: 0;
+        }
+        .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
+        .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 2.5s; }
+        .w3 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 5s; }
+
+        @keyframes node-pulse {
+            0% { transform: scale(0.6); opacity: 0; }
+            15% { opacity: 1; }
+            100% { transform: scale(3.5); opacity: 0; border-color: rgba(164, 130, 83, 0.01); }
+        }
+
+        /* CONSOLA CENTRAL COMPRIMIDA VERTICALMENTE */
+        .mainframe-container {
+            background: rgba(11, 17, 13, 0.65);
+            border: 1px solid rgba(164, 130, 83, 0.2);
+            padding: 20px 18px;
+            width: 88vw;
+            max-width: 420px;
+            max-height: 85vh; /* Previene desbordes en terminales cortas */
+            box-sizing: border-box;
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+            position: relative;
+            z-index: 5;
+            border-radius: 4px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* CORREDOR LÁSER PERIMETRAL EN BRONCE */
+        .laser-border {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--cobra-bronce), transparent);
+            z-index: 6;
+        }
+        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
+        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
         
-        opacity: 0;
-        animation: fadeInSimple 1s ease forwards;
-        animation-delay: 3.2s;
-    }
+        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
 
-    /* ANIMACIONES */
-    @keyframes presentacionDesdeArriba {
-        0% {
-            opacity: 0;
-            transform: translateY(-50px);
+        /* Esquinas Fijas con Ángulos de Titanio */
+        .corner-bracket {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(164, 130, 83, 0.3);
+            z-index: 7;
         }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+                /* CONTENEDOR DE LA PORTADA REAJUSTADO */
+        .portada-container {
+            width: 100%;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
-    }
 
-    @keyframes presentacionDesdeAbajo {
-        0% {
-            opacity: 0;
-            transform: translateY(40px);
+        .portada-imagen {
+            width: 100%;
+            height: auto;
+            display: block;
+            border: 1px solid var(--cobra-bronce);
+            border-radius: 2px;
+            box-shadow: 0 0 15px rgba(164, 130, 83, 0.2);
         }
-        100% {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    }
 
-    @keyframes fadeInSimple {
-        0% { opacity: 0; }
-        100% { opacity: 0.6; }
-    }
-
-    /* Responsive */
-    @media (max-width: 600px) {
-        header h1 {
-            font-size: 1.8rem;
+        /* CONTENEDOR PRINCIPAL FLUIDO */
+        .contenedor {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto; /* Permite scroll interno de macros en celulares cortos */
+            max-height: 45vh;
+            padding-right: 2px;
+            box-sizing: border-box;
         }
 
         .parrafo {
-            font-size: 0.95rem;
-            padding: 14px;
-            clip-path: polygon(0% 0%, 94% 0%, 100% 15%, 100% 100%, 6% 100%, 0% 85%);
+            background: rgba(11, 17, 13, 0.45); 
+            border-left: 4px solid var(--cobra-bronce); 
+            border-top: 1px solid var(--borde-tactico);
+            border-right: 1px solid var(--borde-tactico);
+            border-bottom: 1px solid var(--borde-tactico);
+            padding: 14px 12px;
+            margin: 8px 0;
+            cursor: pointer;
+            backdrop-filter: blur(3px); 
+            -webkit-backdrop-filter: blur(3px);
+            font-size: 11px;
+            font-family: monospace;
+            letter-spacing: 0.5px;
+            clip-path: polygon(0% 0%, 95% 0%, 100% 18%, 100% 100%, 5% 100%, 0% 82%);
+            box-sizing: border-box;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
         }
-    }
-    
-    /* Bloquea el resaltado y la selección nativa en toda la interfaz */
-* {
-    -webkit-tap-highlight-color: transparent; /* Elimina el cuadro azul/negro al presionar botones en Android */
-    user-select: none;                       /* Impide que el usuario mantenga presionado y resalte el texto */
-    -webkit-user-select: none;               /* Compatibilidad con navegadores basados en Safari/Chrome */
-}
 
-/* PERMISO EXCLUSIVO: Solo permitimos seleccionar el Token generado para que el botón de copia funcione */
-.token-text, #resToken {
-    user-select: text !important;
-    -webkit-user-select: text !important;
-}
+        .parrafo:active {
+            background: var(--cobra-hover);
+            border-color: var(--cobra-bronce-brillante);
+            padding-left: 18px;
+        }
 
-    
+        .copiado {
+            background: linear-gradient(135deg, var(--cobra-bronce), var(--cobra-bronce-brillante)) !important;
+            border-color: #fff !important;
+            color: #000 !important; 
+            font-weight: 900;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.6) !important; 
+        }
+
+        /* AVISO NOTIFICACIÓN FLOTANTE MEJORADO */
+        .notificacion-tactica {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-60px);
+            background: rgba(11, 17, 13, 0.95);
+            color: var(--cobra-bronce-brillante);
+            border: 1px solid var(--cobra-bronce);
+            padding: 10px 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(164, 130, 83, 0.4);
+            z-index: 99;
+            pointer-events: none;
+            opacity: 0;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+            font-family: monospace;
+            text-transform: uppercase;
+            font-size: 10px;
+            width: max-content;
+        }
+
+        .notificacion-tactica.mostrar {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        /* BOTÓN DE RETORNO / DESCONEXIÓN SEGURO */
+        .btn-exit {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background: rgba(255, 74, 74, 0.02);
+            border: 1px dashed rgba(255, 74, 74, 0.25);
+            color: #ff4a4a;
+            text-align: center;
+            text-decoration: none;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+            border-radius: 2px;
+            transition: all 0.2s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-exit:active {
+            background: rgba(255, 74, 74, 0.1);
+            border-color: #ff4a4a;
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 12px;
+            font-size: 9px;
+            color: var(--cobra-bronce-brillante);
+            opacity: 0.6;
+            font-family: monospace;
+            letter-spacing: 1px;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        * {
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
+        }
     </style>
 </head>
 <body>
 
-    <!-- Elemento para la notificación flotante -->
-    <div id="notificacion" class="notificacion-tactica">Copiado Exitosamente</div>
-
-    <div class="portada-container">
-        <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
-    </div>
-
-    <div class="contenedor">
-        <div class="parrafo">/flobby GRUPO COBRA TODOS A PUNTO DE ENCUENTRO.</div>
-        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN ZONA DE DISPARO.</div>
-        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN ZONA FÍSICA.</div>
-        <div class="parrafo">/flobby GRUPO COBRA EN ENTRENAMIENTO EN AP.</div>
-        <div class="parrafo">/flobby RECLUTAMIENTO EN EL EQUIPO COBRA DE LUNES A VIERNES DEBE SABERSE: Rp 9, Rp 13, Rp 14, Chat 1 y Abuse 1.</div>
-        <div class="parrafo">/me ME PRESENTÓ (NOMBRE) GENERAL FEDERAL ADJUNTO DE EL GRUPO COBRA A SUS ÓRDENES SEÑOR/SEÑORA.</div>
-        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 1 SEGURO Y PROTEGIDO.</div>
-        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 2 SEGURO Y PROTEGIDO.</div>
-        <div class="parrafo">/flobby GRUPO COBRA RETÉN DE PUNTO 3 SEGURO Y PROTEGIDO.</div>
-        <div class="parrafo">/flobby GRUPO COBRA DE SALIDA A RETENES EN PUNTO 1 , 2 Y 3.</div>
-        <div class="parrafo">/flobby GRUPO COBRA DE REGRESO A LA BASE PUNTO 1, 2 Y 3 SEGUROS Y PROTEGIDOS.</div>
-        <div class="parrafo">/flobby GRUPO COBRA DIRIGIÉNDOSE A PUNTO DE ENCUENTRO.</div>
-    </div>
-
-    <footer>
-        Sistema de macros tácticos | Click para copiar
-    </footer>
-
-<script>
-    const parrafos = document.querySelectorAll('.parrafo');
-    const notificacion = document.getElementById('notificacion');
-    let temporizadorNotificacion;
-
-    parrafos.forEach(p => {
-        p.addEventListener('click', () => {
-            const textoLimpio = p.innerText.trim();
+    <!-- PANTALLA DE INICIO DE FACCIÓN CON PORCENTAJE NUMÉRICO -->
+    <div class="system-boot-screen" id="bootScreen">
+        <div class="boot-box" id="bootBox">
+            <div class="boot-corner b-tl"></div>
+            <div class="boot-corner b-tr"></div>
+            <div class="boot-corner b-bl"></div>
+            <div class="boot-corner b-br"></div>
             
-            navigator.clipboard.writeText(textoLimpio).then(() => {
-                // Efecto visual en el botón
-                p.classList.add('copiado');
+            <button class="btn-boot-start" id="btnStartBoot">[ SINCRONIZAR TERMINAL COBRA ]</button>
+
+            <div class="boot-terminal" id="bootTerminal">
+                >> CONECTANDO CON EL ARCHIVO DIVISIONAL...<br>
+                >> CARGANDO BANCO DE DATOS SELECTIVO...
+            </div>
+            
+            <div class="boot-meta-status" id="bootMetaStatus">
+                <span>ESTADO: DESENCRIPTANDO MACROS</span>
+                <span id="bootPercent">0%</span>
+            </div>
+            
+            <div class="boot-progress-bar" id="bootProgressBar">
+                <div class="boot-progress-fill" id="bootProgressFill"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Red de blindaje de fondo -->
+    <div class="dynamic-bg"></div>
+    <div class="radar-wave-hub">
+        <div class="wave w1"></div>
+        <div class="wave w2"></div>
+        <div class="wave w3"></div>
+    </div>
+
+    <div class="mainframe-container">
+        <!-- Haz de luz perimetral animado -->
+        <div class="laser-border lb-top"></div>
+        <div class="laser-border lb-bottom"></div>
+
+        <!-- Encabezado de Portada Cobra -->
+        <div class="portada-container">
+            <img src="titulo-cobra.png" alt="Logotipo Grupo Militar Cobra" class="portada-imagen">
+        </div>
+
+        <!-- Bloque de Comandos de Chat (Macros) -->
+        <div class="contenedor">
+            <div class="parrafo">/flobby GRUPO COBRA TODOS A PUNTO DE ENCUENTRO.</div>
+        </div>
+
+        <!-- Botón Táctico de Retorno Seguro -->
+        <a href="/logout" class="btn-exit" id="btnDisconnect">[ CERRAR ENLACE SEGURO ]</a>
+
+        <footer>
+            Sistema de macros tácticos | Toque para copiar
+        </footer>
+    </div>
+        <!-- INGENIERÍA CONTROLADORA DE LOGS, PORTAPAPELES Y AUDIO SINTÉTICO -->
+    <script>
+        let audioCtx = null;
+        let radarInterval = null;
+
+        const logs = [
+            ">> COMPROBANDO INTEGRIDAD DEL ENLACE... OK",
+            ">> SINTETIZANDO OSCILADORES PROTEGIDOS... OK",
+            ">> DESENCRIPTANDO MACROS OPERATIVOS...",
+            ">> CARGANDO ARCHIVO: REGLAS DE CHATS... OK",
+            ">> PROTOCOLOS DE ACCESO EN VERTICAL COMPLETA...",
+            ">> ESTABLECIENDO CONEXIÓN SEGURA CON TERMINAL."
+        ];
+
+        // CONTROL PERSISTENTE DE INTRO DE SESIÓN
+        window.addEventListener('DOMContentLoaded', () => {
+            if (sessionStorage.getItem('cmm_bunker_reglas_inicializado') === 'true') {
+                const bootScreen = document.getElementById("bootScreen");
+                bootScreen.style.transition = "none";
+                bootScreen.style.opacity = "0";
+                bootScreen.style.visibility = "hidden";
+                initAudio();
+            }
+        });
+
+        // DESBLOQUEO DE HARDWARE DE AUDIO TÁCTIL
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            if (!radarInterval) {
+                playRadarPing(); 
+                radarInterval = setInterval(playRadarPing, 4000); // Bucle cada 4 segundos
+            }
+        }
+
+        // Tono 1: Pitido seco de log de carga (1050Hz)
+        function playLogBeep() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1050, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.03);
+        }
+
+        // Tono 2: Sincronización al 100% exitosa
+        function playSystemReadySound() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(560, audioCtx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(200, audioCtx.currentTime + 0.8);
+            gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.8);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.8);
+        }
+
+        // Tono 3: Clic de copia rápida (Pulso metálico de frecuencia entrelazada)
+        function playCopySound() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(1350, audioCtx.currentTime);
+            gain.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.04);
+        }
+
+        // Tono 4: Desconexión segura descendente
+        function playDisconnectSound() {
+            if (!audioCtx) return;
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(700, audioCtx.currentTime);
+            osc.frequency.linearRampToValueAtTime(180, audioCtx.currentTime + 0.14);
+            gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.14);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.14);
+        }
+
+        // CONTROLADOR DE ACCIONAMIENTO DE ARRANQUE CON AUDIO SINK
+        document.getElementById('btnStartBoot').addEventListener('click', function() {
+            initAudio();
+            this.style.display = "none";
+            document.getElementById("bootTerminal").style.display = "block";
+            document.getElementById("bootMetaStatus").style.display = "flex";
+            document.getElementById("bootProgressBar").style.display = "block";
+
+            let logIndex = 0;
+            const terminal = document.getElementById("bootTerminal");
+            const percentText = document.getElementById("bootPercent");
+            const progressFill = document.getElementById("bootProgressFill");
+            
+            const logInterval = setInterval(() => {
+                if (logIndex < logs.length) {
+                    terminal.innerHTML += `<br>${logs[logIndex]}`;
+                    playLogBeep(); 
+                    logIndex++;
+                } else {
+                    clearInterval(logInterval);
+                }
+            }, 380);
+
+            let currentPercent = 0;
+            const duration = 2600; 
+            const stepTime = duration / 100;
+
+            const countInterval = setInterval(() => {
+                if (currentPercent < 100) {
+                    currentPercent++;
+                    percentText.innerText = `${currentPercent}%`;
+                    progressFill.style.width = `${currentPercent}%`;
+                } else {
+                    clearInterval(countInterval);
+                    playSystemReadySound();
+                }
+            }, stepTime);
+
+            setTimeout(() => {
+                const bootScreen = document.getElementById("bootScreen");
+                bootScreen.style.opacity = "0";
                 setTimeout(() => {
-                    p.classList.remove('copiado');
-                }, 400);
+                    bootScreen.style.visibility = "hidden";
+                    sessionStorage.setItem('cmm_bunker_reglas_inicializado', 'true');
+                    if (!radarInterval) {
+                        playRadarPing(); 
+                        radarInterval = setInterval(playRadarPing, 4000); 
+                    }
+                }, 600);
+            }, duration + 200);
+        });
 
-                // Control del aviso flotante
-                clearTimeout(temporizadorNotificacion);
-                notificacion.classList.add('mostrar');
+        // Loop de Radar Furtivo Ambiental (Tono subgrave bronce profundo)
+        function playRadarPing() {
+            if (!audioCtx) return;
+            try {
+                let osc = audioCtx.createOscillator();
+                let gain = audioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(135, audioCtx.currentTime); 
+                osc.frequency.exponentialRampToValueAtTime(65, audioCtx.currentTime + 1.6);
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.8);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.8);
+            } catch (err) {}
+        }
+
+             // LÓGICA DE COPIA RÁPIDA LIMPIA (SIN VENTANA FLOTANTE)
+        const parrafos = document.querySelectorAll('.parrafo');
+
+        parrafos.forEach(p => {
+            p.addEventListener('click', () => {
+                initAudio();
+                playCopySound(); // Pitido táctico de confirmación
+                const textoLimpio = p.innerText.trim();
                 
-                temporizadorNotificacion = setTimeout(() => {
-                    notificacion.classList.remove('mostrar');
-                }, 1800);
-
-            }).catch(err => {
-                console.error('Error al copiar el texto: ', err);
+                navigator.clipboard.writeText(textoLimpio).then(() => {
+                    // Animación de color en el bloque presionado
+                    p.classList.add('copiado');
+                    setTimeout(() => { p.classList.remove('copiado'); }, 400);
+                }).catch(err => {
+                    console.error('Falla al transferir al portapapeles: ', err);
+                });
             });
         });
-    });
-</script>
 
+        // DESCONEXIÓN CON RETRASO DE HARDWARE SÓNICO
+        document.getElementById('btnDisconnect').addEventListener('click', function(e) {
+            e.preventDefault();
+            const destinationUrl = this.getAttribute('href');
+            playDisconnectSound();
+            setTimeout(() => { window.location.href = destinationUrl; }, 130);
+        });
+
+        document.body.addEventListener('touchstart', initAudio, {passive: true});
+        document.body.addEventListener('click', initAudio);
+    </script>
 </body>
 </html>
