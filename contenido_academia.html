@@ -322,6 +322,12 @@
         letter-spacing: 1px;
         border-top: 1px solid rgba(255, 255, 255, 0.04);
     }
+
+    * {
+        -webkit-tap-highlight-color: transparent;
+        user-select: none;
+        -webkit-user-select: none;
+    }
     </style>
 </head>
 <body>
@@ -334,7 +340,7 @@
             <div class="boot-corner b-bl"></div>
             <div class="boot-corner b-br"></div>
             
-            <button class="btn-boot-start" id="btnStartBoot">[ INICIAR CONEXIÓN ACADEMIA ]</button>
+            <button class="btn-boot-start" id="btnStartBoot">[ SINCRONIZAR TERMINAL ACADEMICO ]</button>
 
             <div class="boot-terminal" id="bootTerminal">
                 >> ENLAZANDO CON EL CENTRO DE INSTRUCCIÓN...<br>
@@ -373,21 +379,59 @@
 
         <!-- Encabezado de Portada Cobra Centralizado -->
         <div class="portada-container">
-            <img src="academia-portada.jpg" alt="Logotipo academia militar" class="portada-imagen">
+            <img src="academia-portada.jpg" alt="Logotipo" class="portada-imagen">
         </div>
 
-        <!-- Bloque de Comandos de Chat Saneados (Macros de la Academia) -->
+        <!-- CONTENEDOR PRINCIPAL ACELERADO: Aloja tus macros oficiales para evitar desbordes -->
         <div class="contenedor">
-            <div class="parrafo">/flobby GRUPO COBRA EN FORMACIÓN DENTRO DEL PATIO DE ARMAS.</div>
-            <div class="parrafo">/f RECLUTA REPORTE SU ESTADO DE INSTRUCCIÓN DE INMEDIATO.</div>
-            <div class="parrafo">/me Saca un mapa estratégico del búnker y procede a señalar las rutas.</div>
+            <div class="parrafo">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
+            <div class="parrafo">/do TASER TASER TASER!! ¡Te he taserizado para tomar el control de la situación.</div>
+            <div class="parrafo">/do Saca el arma y dispara al miembro de la banda/intruso para protegerme a mí y a los soldados!!</div>
+            <div class="parrafo">/me 10-4</div>
+            <div class="parrafo">/flobby (rango) entrada.</div>
+            <div class="parrafo">/flobby (rango) salida.</div>
+            <div class="parrafo">/freg 10-4</div>
+            <div class="parrafo">/flobby 10-4</div>
+            <div class="parrafo">/me Hola señor/a, mi nombre es (name)_ del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?</div>
+            <div class="parrafo">/me Le dice a la banda/civil… "¡FUERA DEL CONCRETO!" ¡o se usará el Taser!!!</div>
+            <div class="parrafo">/me Por favor estacione su vehículo en la hierba/tierra, apáguelo y salga sin armas en las manos!!</div>
+            <div class="parrafo">/me Para unirse al EJÉRCITO WCSA: Ser nivel 6, tener 18 años o más, micrófono funcional, su nombre de RP debe coincidir con el de Discord , debe hablar Español. Saberse el reglamento RP13 - RP14. 23:00h del servidor de lunes a viernes.</div>
+            <div class="parrafo">/do SI NO NECESITA NINGÚN TIPO DE INFORMACIÓN, RETIRESE. SE ENCUENTRA EN UNA ZONA RESTRINGIDA. SI HACE CASO OMISO SERÁ ABATIDO!!!.</div>
+            <div class="parrafo">/do Estamos autorizados a emplear fuerza letal si no cumplen.</div>
+            <div class="parrafo">/do SE LE HA PROPORCIONADO LA INFORMACIÓN. ESTA ES UN ÁREA RESTRINGIDA. ¡TIENE 5 SEGUNDOS PARA MARCHARSE!!!</div>
+            <div class="parrafo">/me 5!</div>
+            <div class="parrafo">/me 4!</div>
+            <div class="parrafo">/me 3!</div>
+            <div class="parrafo">/me 2!</div>
+            <div class="parrafo">/me 1!</div>
+            <div class="parrafo">/do i0 disparos al intruso!</div>
+            <div class="parrafo">/do ¡ENCIENDE LA CÁMARA CORPORAL!!</div>
+            <div class="parrafo">/do ¡APAGA LA CÁMARA CORPORAL!!</div>
+            <div class="parrafo">/do ¡BALA PERDIDA!</div>
+            <div class="parrafo">/flobby AP -- Seguro y protegido.</div>
+            <div class="parrafo">/flobby ZN -- Seguro y Protegido.</div>
+            <div class="parrafo">/flobby TUNEL-- Seguro y protegido.</div>
+            <div class="parrafo">/flobby ZS -- Seguro y protegido.</div>
+            <div class="parrafo">/flobby CAMPO DE ENTRENAMIENTO -- Seguro y protegido.</div>
+            <div class="parrafo">/flobby Mitad -- Seguro y protegido.</div>
+            <div class="parrafo">/flobby ¡INTRUSO desde ZS, se dirige a mid!!!</div>
+            <div class="parrafo">/flobby ¡INTRUSO desde AP, se dirige a mid!!!</div>
+            <div class="parrafo">/flobby ¡INTRUSO desde ZN, se dirige a mid!!!</div>
+            <div class="parrafo">/flobby ¡INTRUSO desde TUNEL, se dirige a mid!!!</div>
+            <div class="parrafo">/flobby ¡INTRUSO EN SEDE CENTRAL!!!</div>
+            <div class="parrafo">/flobby ¡INTRUSO EN RT!!!</div>
+            <div class="parrafo">/flobby En misión de negocios con el General/coronel.</div>
+            <div class="parrafo">/flobby De regreso de la misión de negocio con el General/coronel.</div>
+            <div class="parrafo">/flobby SOLICITÓ PERMISO PARA SACAR VEHÍCULO PARA LA MISIÓN DIARIA.</div>
+            <div class="parrafo">/flobby SOLICITÓ PERMISO PARA HACER VIGILIA.</div>
+            <div class="parrafo">/flobby VIGILIA FINALIZADA.</div>
         </div>
 
         <!-- Botón Táctico de Retorno Seguro -->
-        <a href="/logout" class="btn-exit" id="btnDisconnect">[ ABORTAR ENLACE DE INSTRUCCIÓN ]</a>
+        <a href="/logout" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
 
         <footer>
-            Academia Militar Cobra | Toque para copiar macros sin lag
+            Academia Militar del Ejército| Sistema de macros tácticos.
         </footer>
     </div>
         <!-- INGENIERÍA CONTROLADORA DE LOGS, PORTAPAPELES Y AUDIO SINTÉTICO CIAN -->
@@ -401,7 +445,7 @@
             ">> DECODIFICANDO DIRECTIVAS DE ADIESTRAMIENTO...",
             ">> CARGANDO ARCHIVO: MANUAL DE COMBATE CHATS... OK",
             ">> PROTOCOLOS DE FLUIDEZ DE RED A 60 FPS... OK",
-            ">> TRANSMISIÓN SEGURA ESTABLECIDO CON LA ACADEMIA."
+            ">> TRANSMISIÓN SEGURA ESTABLECIDA CON LA ACADEMIA."
         ];
 
         // CONTROL PERSISTENTE DE INTRO DE SESIÓN (PANTALLA DE CARGA ÚNICA)
@@ -560,22 +604,76 @@
             } catch (err) {}
         }
 
-        // LÓGICA ULTRA FLUDA DE COPIA SANEADA (CERO BASURA PARA CHAT DE ONESTATE)
+        // PUENTE DE COPIADO FORZADO HÍBRIDO (ELIMINA EL BLOQUEO DE NAVEGADORES MÓVILES)
+        function forzarCopiadoMovil(texto) {
+            return new Promise((resolve, reject) => {
+                // Saneamiento de cadenas: destruye espacios o saltos invisibles nativos
+                const stringSaneado = texto.trim();
+                
+                // Intento Principal 1: API moderna del portapapeles
+                if (navigator.clipboard && window.isSecureContext) {
+                    navigator.clipboard.writeText(stringSaneado)
+                        .then(() => resolve())
+                        .catch(() => intentarMetodoRespaldo(stringSaneado, resolve, reject));
+                } else {
+                    intentarMetodoRespaldo(stringSaneado, resolve, reject);
+                }
+            });
+        }
+
+        // Intento Secundario de Respaldo: Inyección en caja fantasma (Garantiza ejecución en Android/iOS)
+        function intentarMetodoRespaldo(stringSaneado, resolve, reject) {
+            try {
+                const elementoFantasma = document.createElement('textarea');
+                elementoFantasma.value = stringSaneado;
+                
+                // Posicionamiento fuera de foco visual
+                elementoFantasma.style.position = 'fixed';
+                elementoFantasma.style.top = '0';
+                elementoFantasma.style.left = '0';
+                elementoFantasma.style.width = '2em';
+                elementoFantasma.style.height = '2em';
+                elementoFantasma.style.padding = '0';
+                elementoFantasma.style.border = 'none';
+                elementoFantasma.style.outline = 'none';
+                elementoFantasma.style.boxShadow = 'none';
+                elementoFantasma.style.background = 'transparent';
+                
+                document.body.appendChild(elementoFantasma);
+                elementoFantasma.focus();
+                elementoFantasma.select();
+                elementoFantasma.setSelectionRange(0, 99999); // Máximo rango para dispositivos táctiles
+                
+                const exito = document.execCommand('copy');
+                document.body.removeChild(elementoFantasma);
+                
+                if (exito) resolve();
+                else reject();
+            } catch (err) {
+                reject(err);
+            }
+        }
+
+        // VINCULACIÓN ULTRA FLUDA DE EVENTOS TÁCTILES
         const parrafos = document.querySelectorAll('.parrafo');
 
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
                 initAudio();
                 playCopySound(); 
-                const textoLimpio = p.innerText.trim(); // Limpia saltos de línea invisibles nativos del navegador
                 
-                navigator.clipboard.writeText(textoLimpio).then(() => {
-                    p.classList.add('copiado');
-                    // Retraso optimizado a 150ms para máxima fluidez táctil
-                    setTimeout(() => { p.classList.remove('copiado'); }, 150); 
-                }).catch(err => {
-                    console.error('Falla al transferir al portapapeles: ', err);
-                });
+                // Extraemos el texto puro del nodo
+                const contenidoMacro = p.innerText;
+                
+                // Ejecutamos el puente de inyección forzado
+                forzarCopiadoMovil(contenidoMacro)
+                    .then(() => {
+                        p.classList.add('copiado');
+                        setTimeout(() => { p.classList.remove('copiado'); }, 150); 
+                    })
+                    .catch(err => {
+                        console.error('Mainframe bloqueó la API del portapapeles: ', err);
+                    });
             });
         });
 
