@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ COBRA CYBERNETIC MANAGEMENT ]</title>
     <style>
         /* Variables de Sistema de Nueva Generación */
@@ -17,20 +18,32 @@
             --grid-line: rgba(0, 217, 255, 0.015);
         }
 
-        body {
-            background-color: var(--stealth-dark);
-            color: var(--pure-light);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA */
+        html, body {
+            width: 100vw;
+            height: 100vh;
             margin: 0;
             padding: 0;
+            overflow: hidden; /* Corta desplazamientos fuera de foco */
+            background-color: var(--stealth-dark);
+        }
+
+        body {
+            color: var(--pure-light);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none; /* Bloquea el scroll elástico de iOS y rebotes de Android */
             position: relative;
-              }
+            
+            /* Blindaje total contra resaltado de textos al presionar la pantalla */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
 
         /* FONDO ANIMADO 1: Cuadrícula con pulso de escaneo de satélite */
         .dynamic-bg {
@@ -60,30 +73,34 @@
             animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
             opacity: 0;
         }
-        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
-        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
-        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
+        .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
+        .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 2.5s; }
+        .w3 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 5s; }
 
         @keyframes node-pulse {
             0% { transform: scale(0.6); opacity: 0; }
             15% { opacity: 1; }
-            100% { transform: scale(3.2); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
+            100% { transform: scale(3.5); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
         }
-        /* CONSOLA CENTRAL BLINDADA MODERNA */
+        /* CONSOLA CENTRAL BLINDADA EN DISEÑO VERTICAL FLUIDO */
         .mainframe-container {
             background: var(--glass-core);
             border: 1px solid rgba(0, 217, 255, 0.12);
-            padding: 40px 30px;
-            width: 92%;
-            max-width: 440px;
+            padding: 30px 22px;
+            width: 88vw;
+            max-width: 400px;
+            max-height: 85vh; /* Previene desbordes en terminales compactas */
             box-sizing: border-box;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
             position: relative;
             z-index: 5;
             border-radius: 4px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         /* CORREDOR LÁSER PERIMETRAL ANIMADO */
@@ -113,7 +130,7 @@
         /* CABECERA CON MÉTRICAS EN MOVIMIENTO */
         .header-shield {
             text-align: left;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
             position: relative;
         }
 
@@ -135,9 +152,9 @@
         @keyframes soft-blink { to { opacity: 0.2; } }
 
         h1 {
-            font-size: 25px;
+            font-size: 20px;
             font-weight: 800;
-            margin: 8px 0 0 0;
+            margin: 6px 0 0 0;
             letter-spacing: 1px;
             text-transform: uppercase;
             background: linear-gradient(180deg, #fff 60%, var(--sub-slate));
@@ -147,12 +164,12 @@
 
         /* SECCIÓN ALTO MANDO: Máximo Rango Superior */
         .supreme-command-zone {
-            margin-bottom: 30px;
+            margin-bottom: 20px;
         }
 
         .btn-lider {
             display: block;
-            padding: 18px;
+            padding: 16px;
             background: linear-gradient(135deg, rgba(220, 174, 59, 0.02), rgba(220, 174, 59, 0.06));
             border: 1px solid var(--gold-prestige);
             border-radius: 3px;
@@ -180,7 +197,7 @@
 
         .rank-title {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 800;
             letter-spacing: 4px;
             text-align: center;
@@ -190,7 +207,7 @@
             display: block;
             font-size: 9px;
             color: rgba(220, 174, 59, 0.6);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             font-family: monospace;
             text-align: center;
             margin-top: 4px;
@@ -207,9 +224,9 @@
             font-size: 9px;
             font-family: monospace;
             color: var(--sub-slate);
-            letter-spacing: 2px;
+            letter-spacing: 1.5px;
             text-transform: uppercase;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -217,7 +234,7 @@
 
         .bar-loader-static {
             height: 2px;
-            width: 80px;
+            width: 60px;
             background: rgba(255, 255, 255, 0.05);
             position: relative;
             overflow: hidden;
@@ -237,8 +254,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 18px 20px;
-            margin: 10px 0;
+            padding: 16px 18px;
+            margin: 8px 0;
             background: rgba(255, 255, 255, 0.01);
             color: var(--pure-light);
             border: 1px solid rgba(255, 255, 255, 0.05);
@@ -285,9 +302,9 @@
 
         /* PANEL INFERIOR DE RED CON MARCADOR FLUIDO */
         .status-footer {
-            margin-top: 30px;
+            margin-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 15px;
+            padding-top: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -305,7 +322,7 @@
 </head>
 <body>
 
-    <!-- Capas animadas del búnker -->
+    <!-- Capas animadas del búnker en vertical absoluta -->
     <div class="dynamic-bg"></div>
     <div class="radar-wave-hub">
         <div class="wave w1"></div>
@@ -324,7 +341,7 @@
         <div class="corner-bracket bl"></div>
         <div class="corner-bracket br"></div>
 
-        <!-- Cabecera Operativa -->
+        <!-- Cabecera Operativa Personalizada -->
         <div class="header-shield">
             <div class="live-data-stream">
                 <span>SYSTEM ID // DATA CENTER-MESA</span>
@@ -336,7 +353,7 @@
         <!-- SECCIÓN ALTO MANDO: Máxima jerarquía y respeto -->
         <div class="supreme-command-zone">
             <a class="btn-lider" id="btnLiderCommand" href="/altomando/login">
-                <span class="rank-title">✦ ALTO MANDO✦</span>
+                <span class="rank-title">✦ ALTO MANDO ✦</span>
                 <span class="rank-subtitle">[ACCESO SOLO PERSONAL AUTORIZADO]</span>
             </a>
         </div>
@@ -349,18 +366,20 @@
         </div>
 
         <!-- Accesos de Destacamento -->
-        <a class="btn-faction btn-ops" href="/fuego/login">
-            <span>Comando Táctico Fuego</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="btn-faction btn-ops" href="/agua/login">
-            <span>Fuerzas Anfibias Agua</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="btn-faction btn-ops" href="/tierra/login">
-            <span>Infantería Blindada Tierra</span>
-            <span class="arrow">→</span>
-        </a>
+        <div style="display: flex; flex-direction: column;">
+            <a class="btn-faction btn-ops" href="/fuego/login">
+                <span>Comando Táctico Fuego</span>
+                <span class="arrow">→</span>
+            </a>
+            <a class="btn-faction btn-ops" href="/agua/login">
+                <span>Fuerzas Anfibias Agua</span>
+                <span class="arrow">→</span>
+            </a>
+            <a class="btn-faction btn-ops" href="/tierra/login">
+                <span>Infantería Blindada Tierra</span>
+                <span class="arrow">→</span>
+            </a>
+        </div>
 
         <!-- Pie de Monitoreo de Datos -->
         <div class="status-footer">
@@ -369,7 +388,7 @@
         </div>
     </div>
 
-    <!-- AUDIO SINTÉTICO: LOOP DE RADAR AUTOMÁTICO Y EFECTOS TÁCTILES -->
+    <!-- INGENIERÍA DE AUDIO SINTÉTICO MILITAR FURTIVO CON RADAR CONTINUO -->
     <script>
         let audioCtx = null;
         let radarInterval = null;
@@ -381,14 +400,14 @@
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
-            // Iniciar el sonido continuo del radar de forma automática tras el primer toque
+            // Inicializador del radar de fondo automático en el primer toque táctil
             if (!radarInterval) {
-                playRadarPing(); // Primer pitido inmediato
-                radarInterval = setInterval(playRadarPing, 4000); // Se repite infinitamente cada 4 segundos
+                playRadarPing(); 
+                radarInterval = setInterval(playRadarPing, 4000); // Bucle infinito cada 4 segundos
             }
         }
 
-        // Pitido de fondo del Radar (Sonar Ping Profundo)
+        // Radar Militar Avanzado: Onda subgrave pura amortiguada (Textura sónica)
         function playRadarPing() {
             if (!audioCtx) return;
             try {
@@ -396,24 +415,23 @@
                 let gain = audioCtx.createGain();
                 
                 osc.type = 'sine';
-                // Tono de sonar clásico de centro de mando militar
-                osc.frequency.setValueAtTime(440, audioCtx.currentTime); 
-                osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 1.8); 
+                osc.frequency.setValueAtTime(140, audioCtx.currentTime); // Frecuencia subgrave profunda
+                osc.frequency.exponentialRampToValueAtTime(70, audioCtx.currentTime + 1.6);
                 
-                // Volumen muy tenue y sutil para que funcione de fondo sin molestar
-                gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 2.0);
+                // Volumen extremadamente bajo para simular un ambiente táctico silencioso
+                gain.gain.setValueAtTime(0.03, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.8);
                 
                 osc.connect(gain);
                 gain.connect(audioCtx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + 2.0);
+                osc.stop(audioCtx.currentTime + 1.8);
             } catch (err) {
-                console.log("Falla de audio temporal");
+                console.log("Falla de audio de hardware");
             }
         }
 
-        // Clic electrónico para botones comunes (Reclutas)
+        // Clic de Reclutas: Pulso metálico seco de decaimiento logarítmico rápido
         function playOpsClick(e) {
             initAudio();
             e.preventDefault();
@@ -421,76 +439,66 @@
 
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
+            
             osc.type = 'sine';
-            osc.frequency.setValueAtTime(1200, audioCtx.currentTime);
+            osc.frequency.setValueAtTime(1400, audioCtx.currentTime); // Pulso seco estilo sonar activo
 
-            gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+            gain.gain.setValueAtTime(0.04, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
             osc.start();
-            osc.stop(audioCtx.currentTime + 0.05);
+            osc.stop(audioCtx.currentTime + 0.04);
 
-            setTimeout(() => { window.location.href = targetUrl; }, 60);
+            // Redirección con retraso corto para procesar el clic físico
+            setTimeout(() => { window.location.href = targetUrl; }, 50);
         }
 
-        // Clic de confirmación doble de alta jerarquía (Alto Mando)
+        // Clic de Alto Mando: Frecuencias entrelazadas de doble respuesta instantánea
         function playLiderClick(e) {
             initAudio();
             e.preventDefault();
             const targetUrl = this.getAttribute('href');
 
+            // Canal 1 - Tono Base Compuesto
             let osc1 = audioCtx.createOscillator();
             let gain1 = audioCtx.createGain();
             osc1.type = 'sine';
-            osc1.frequency.setValueAtTime(1500, audioCtx.currentTime);
-            gain1.gain.setValueAtTime(0.08, audioCtx.currentTime);
-            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+            osc1.frequency.setValueAtTime(1600, audioCtx.currentTime);
+            gain1.gain.setValueAtTime(0.05, audioCtx.currentTime);
+            gain1.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
             osc1.connect(gain1);
             gain1.connect(audioCtx.destination);
             osc1.start();
-            osc1.stop(audioCtx.currentTime + 0.04);
+            osc1.stop(audioCtx.currentTime + 0.03);
 
+            // Canal 2 - Tono Armónico Secundario (Retrasado 35ms)
             setTimeout(() => {
                 let osc2 = audioCtx.createOscillator();
                 let gain2 = audioCtx.createGain();
                 osc2.type = 'sine';
-                osc2.frequency.setValueAtTime(1900, audioCtx.currentTime);
-                gain2.gain.setValueAtTime(0.08, audioCtx.currentTime);
-                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.04);
+                osc2.frequency.setValueAtTime(2100, audioCtx.currentTime); // Frecuencia de éxito autorizada
+                gain2.gain.setValueAtTime(0.05, audioCtx.currentTime);
+                gain2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.03);
                 osc2.connect(gain2);
                 gain2.connect(audioCtx.destination);
                 osc2.start();
-                osc2.stop(audioCtx.currentTime + 0.04);
-            }, 50);
+                osc2.stop(audioCtx.currentTime + 0.03);
+            }, 35);
 
-            setTimeout(() => { window.location.href = targetUrl; }, 120);
+            setTimeout(() => { window.location.href = targetUrl; }, 100);
         }
 
-        // Captura el primer toque en pantallas de celulares para arrancar el radar de fondo
+        // Eventos táctiles obligatorios para navegadores móviles
         document.body.addEventListener('touchstart', initAudio, {passive: true});
         document.body.addEventListener('click', initAudio);
 
-        // Vinculación de eventos
+        // Enlace de triggers
         document.querySelectorAll('.btn-ops').forEach(btn => {
             btn.addEventListener('click', playOpsClick);
         });
         document.getElementById('btnLiderCommand').addEventListener('click', playLiderClick);
-
-   /* Bloquea el resaltado y la selección nativa en toda la interfaz */
-* {
-    -webkit-tap-highlight-color: transparent; /* Elimina el cuadro azul/negro al presionar botones en Android */
-    user-select: none;                       /* Impide que el usuario mantenga presionado y resalte el texto */
-    -webkit-user-select: none;               /* Compatibilidad con navegadores basados en Safari/Chrome */
-}
-
-/* PERMISO EXCLUSIVO: Solo permitimos seleccionar el Token generado para que el botón de copia funcione */
-.token-text, #resToken {
-    user-select: text !important;
-    -webkit-user-select: text !important;
-}
-
     </script>
 </body>
 </html>
