@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname), {
 const ARCHIVO_USUARIOS = path.join(__dirname, 'usuarios.json');
 
 const lideresPorDefecto = [
-    { user: "lider_academia", pass: "academia123", faction: "academia", role: "Lider" },
+    { user: "lider_academia", pass: "academia", faction: "academia", role: "Lider" },
     { user: "lider_fuego", pass: "fuego123", faction: "Fuego", role: "Lider" },
     { user: "lider_agua", pass: "agua123", faction: "Agua", role: "Lider" },
     { user: "lider_tierra", pass: "tierra123", faction: "Tierra", role: "Lider" }
