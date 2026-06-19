@@ -30,6 +30,11 @@
             overflow: hidden;
             touch-action: manipulation;
             position: relative;
+/* ◄ AÑADE ESTAS CUATRO LÍNEAS PARA ELIMINAR EL RESALTADO TÁCTIL */
+    -webkit-user-select: none;  /* Safari en iOS y Mac */
+    -moz-user-select: none;     /* Firefox */
+    -ms-user-select: none;      /* Internet Explorer/Edge antiguos */
+    user-select: none;          /* Estándar moderno para Chrome y Android */
         }
 
         /* FONDO ANIMADO 1: Cuadrícula con pulso de escaneo de satélite */
