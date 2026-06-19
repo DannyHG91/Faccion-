@@ -84,7 +84,7 @@ app.post('/api/login-lideres', (req, res) => {
 });
 
 app.get('/:faccion/login', (req, res) => {
-    if (['fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
+    if (['academia','fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
         res.sendFile(path.join(__dirname, 'login_facciosos.html'));
     } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
 });
