@@ -206,6 +206,13 @@
 
     .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
     .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+    
+    /* NUEVA GUÍA OPERATIVA PARA EL RECLUTA */    
+.ultima-copiada {
+    border-color: var(--laser-intel) !important;
+    background: rgba(0, 217, 255, 0.12) !important;
+    box-shadow: 0 0 8px var(--intel-glow);
+}
 
     .btn-exit {
         display: block;
@@ -248,18 +255,30 @@
         <div class="portada-container">
             <img src="academia-portada.jpg" alt="Logotipo" class="portada-imagen">
         </div>
+        
+                <!-- PANEL DE IDENTIFICACIÓN OPERATIVA -->
+        <div style="padding: 10px; margin-bottom: 12px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); border-radius: 2px;">
+            <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">ASIENTE SU IDENTIDAD Y RANGO</div>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
+                <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
+            </div>
+        </div>
+       
                 <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
-        <div class="contenedor">
-            <div class="parrafo">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
+                       <div class="contenedor">
+            <div class="parrafo" data-original="/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
             <div class="parrafo">/do TASER TASER TASER!! ¡Te he taserizado para tomar el control de la situación.</div>
             <div class="parrafo">/do Saca el arma y dispara al miembro de la banda/intruso para protegerme a mí y a los soldados!!</div>
             <div class="parrafo">/flobby 10-4</div>
             
             <div class="parrafo">/freg 10-4</div>
             <div class="parrafo">/me 10-4</div>
-<div class="parrafo">/flobby (rango) entrada.</div>
-            <div class="parrafo">/flobby (rango) salida.</div>
-            <div class="parrafo">/me Hola señor/a, mi nombre es (name)_ del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?</div>
+            <div class="parrafo" data-original="/flobby (RANGO ACTUAL) entrada.">/flobby (RANGO ACTUAL) entrada.</div>
+            <div class="parrafo" data-original="/flobby (RANGO ACTUAL) salida.">/flobby (RANGO ACTUAL) salida.</div>
+            <div class="parrafo" data-original="/me Hola señor/a, mi nombre es (NOMBRE) del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?">/me Hola señor/a, mi nombre es (NOMBRE) del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?</div>
+
+
             <div class="parrafo">/me Le dice a la banda/civil… "¡FUERA DEL CONCRETO!" ¡o se usará el Taser!!!</div>
             <div class="parrafo">/me Por favor estacione su vehículo en la hierba/tierra, apáguelo y salga sin armas en las manos!!</div>
             <div class="parrafo">/me Para unirse al EJÉRCITO WCSA: Ser nivel 6, tener 18 años o más, micrófono funcional, su nombre de RP debe coincidir con el de Discord , debe hablar Español. Saberse el reglamento RP13 - RP14. 23:00h del servidor de lunes a viernes.</div>
@@ -294,8 +313,9 @@
             <div class="parrafo">/flobby VIGILIA FINALIZADA.</div>
         </div>
 
-        <!-- Botón Táctico de Retorno Seguro -->
-        <a href="/logout" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
+      <!-- Botón Táctico de Retorno Seguro Corregido -->
+<a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
+
         <footer>Academia Militar del Ejército | Sistema de macros tácticos.</footer>
     </div>
         <!-- INGENIERÍA CONTROLADORA DE CARGA AUTOMÁTICA Y PORTAPAPELES DE ALTA VELOCIDAD -->
@@ -407,26 +427,64 @@
             }
         }
 
-        // VINCULACIÓN ULTRA FLUDA DE EVENTOS DE COPIA
+                // VINCULACIÓN ULTRA FLUDA DE EVENTOS DE COPIA (CON FILTRO DE SEGURIDAD ANTIESPACIOS)
         const parrafos = document.querySelectorAll('.parrafo');
 
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
-                const contenidoMacro = p.innerText;
+                // .trim() elimina espacios en blanco, tabulaciones y caracteres invisibles al inicio y final
+                const contenidoMacro = p.innerText.trim(); 
                 
                 forzarCopiadoMovil(contenidoMacro)
                     .then(() => {
+                        // Quitar el resaltado de guía de cualquier otra macro copiada antes
+                        parrafos.forEach(otro => otro.classList.remove('ultima-copiada'));
+
+                        // Aplicar flash instantáneo de copiado exitoso
                         p.classList.add('copiado');
-                        // Transición ágil de 150ms bajo el dedo del recluta
-                        setTimeout(() => { p.classList.remove('copiado'); }, 150); 
+                        
+                        // Dejar la guía visual fija tras el flash de 150ms
+                        setTimeout(() => { 
+                            p.classList.remove('copiado'); 
+                            p.className = 'parrafo ultima-copiada'; // Forzado limpio de clases operativas
+                        }, 150); 
                     })
                     .catch(err => {
                         console.error('Falla crítica de transferencia: ', err);
                     });
             });
         });
-    </script>
-    
+   
+   
+   
+                          // MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO PRESERVADO
+        function actualizarMacros() {
+            // .toUpperCase() transforma instantáneamente todo el texto ingresado a mayúsculas
+            const nombreIngresado = document.getElementById('inputNombre').value.trim().toUpperCase();
+            const rangoIngresado = document.getElementById('inputRango').value.trim().toUpperCase();
+            
+            // Si hay texto, lo pone entre corchetes/paréntesis. Si está vacío, mantiene el indicador por defecto.
+            const nombreFinal = nombreIngresado ? `[${nombreIngresado}]` : "[NOMBRE]";
+            const rangoFinal = rangoIngresado ? `(${rangoIngresado})` : "(RANGO ACTUAL)";
+            
+            const macrosDinamicas = document.querySelectorAll('.parrafo[data-original]');
+            
+            macrosDinamicas.forEach(p => {
+                let textoBase = p.getAttribute('data-original');
+                
+                let textoProcesado = textoBase
+                    .replace(/\[NOMBRE\]/g, nombreFinal)
+                    .replace(/\(NOMBRE\)/g, nombreIngresado ? `(${nombreIngresado})` : "(NOMBRE)")
+                    .replace(/\(RANGO ACTUAL\)/g, rangoFinal);
+                
+                p.innerText = textoProcesado;
+            });
+        }
+
+        
+ 
+         </script>
+   
     <!-- DIRECTIVAS FINALES DE RESPALDO: ACELERACIÓN PURA POR ENTORNO -->
     <style>
         .system-boot-screen, .mainframe-container, .boot-box {
