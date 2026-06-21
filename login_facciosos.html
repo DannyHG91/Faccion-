@@ -2,79 +2,136 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ COBRA SECURITY GATEWAY - RECRUIT VERIFICATION ]</title>
+
     <style>
         /* Variables de Sistema de Nueva Generación */
         :root {
             --stealth-dark: #020407;
             --glass-core: rgba(7, 13, 22, 0.72);
             --laser-cyan: #00d9ff;
+            --gold-prestige: #dcae3b;
             --sub-slate: #56687a;
             --pure-light: #f1f5f9;
             --alert-red: #ff4a4a;
             --grid-line: rgba(0, 217, 255, 0.015);
         }
 
+        html, body {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Corta desplazamientos fuera de foco */
+            background-color: var(--stealth-dark);
+        }
+
         body {
             background-color: var(--stealth-dark);
             color: var(--pure-light);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            margin: 0;
-            padding: 0;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            touch-action: manipulation;
+            touch-action: none; /* Bloquea el scroll elástico de iOS y rebotes de Android */
             position: relative;
-        }
-
-        /* FONDO ANIMADO 1: Cuadrícula satelital */
-        .dynamic-bg {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
             background-size: 50px 50px;
             background-position: center;
-            z-index: 1;
+            
+            /* Blindaje total contra resaltar textos al presionar la pantalla */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
-        /* FONDO ANIMADO 2: Radar cuántico */
-        .radar-wave-hub {
+        /* DIRECTIVA DE REDISTRIBUCIÓN GPU PARA RENDIMIENTO MÁXIMO DE 60 FPS */
+        .mainframe-container, .laser-border, .radar-sweep, .radar-blip, .alert-box {
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            will-change: transform, opacity;
+        }
+        /* CAPA DEL RADAR MILITAR EN AZUL CIAN (60 FPS) */
+        .radar-container {
             position: absolute;
-            width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 2;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .wave {
-            position: absolute;
-            border: 1px solid rgba(0, 217, 255, 0.04);
+        /* Chasis Circular del Sonar Sincronizado en Cian */
+        .radar-screen {
+            width: 92vw; height: 92vw;
+            max-width: 440px; max-height: 440px;
             border-radius: 50%;
-            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            border: 2px solid rgba(0, 217, 255, 0.25); /* Sincronizado con --laser-cyan */
+            box-shadow: 0 0 50px rgba(0, 217, 255, 0.08);
+            position: relative;
+            background: 
+                radial-gradient(circle, transparent 30%, rgba(0, 217, 255, 0.06) 31%, transparent 32%, 
+                                transparent 60%, rgba(0, 217, 255, 0.06) 61%, transparent 62%);
+        }
+
+        /* Ejes de Coordenadas Cruzadas en Azul Láser */
+        .radar-screen::before, .radar-screen::after {
+            content: '';
+            position: absolute;
+            background-color: rgba(0, 217, 255, 0.15); /* Sincronizado con --laser-cyan */
+        }
+        .radar-screen::before { top: 0; left: 50%; width: 1.5px; height: 100%; }
+        .radar-screen::after { top: 50%; left: 0; width: 100%; height: 1.5px; }
+
+        /* Haz de Luz Giratorio de 360 Grados en degradado Cian */
+        .radar-sweep {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--laser-cyan) 0deg, rgba(0, 217, 255, 0.25) 12deg, transparent 60deg);
+            animation: radar-spin 4s infinite linear;
+            z-index: 3;
+        }
+
+        @keyframes radar-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* OBJETIVOS EN MOVIMIENTO (BLIPS TÁCTICOS CIAN ALTO CONTRASTE) */
+        .radar-blip {
+            position: absolute;
+            width: 6px; height: 6px;
+            background-color: #fff; /* Blanco núcleo para destellar en el fondo azul */
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--laser-cyan), 0 0 20px var(--laser-cyan);
+            z-index: 4;
             opacity: 0;
         }
-        .w1 { width: 300px; height: 300px; animation-delay: 0s; }
-        .w2 { width: 300px; height: 300px; animation-delay: 2.5s; }
-        .w3 { width: 300px; height: 300px; animation-delay: 5s; }
 
-        @keyframes node-pulse {
-            0% { transform: scale(0.6); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: scale(3.2); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
+        /* Animaciones asíncronas para simular escaneo en tiempo real */
+        .target-alpha { top: 25%; left: 30%; animation: target-glow 4s infinite ease-in-out; }
+        .target-bravo { top: 65%; left: 75%; animation: target-glow 4s infinite ease-in-out 1.2s; }
+        .target-charlie { top: 15%; left: 68%; animation: target-glow 4s infinite ease-in-out 2.5s; }
+
+        @keyframes target-glow {
+            0%, 100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
+            40%, 60% { opacity: 0.9; transform: scale3d(1.1, 1.1, 1); }
         }
-        /* CONSOLA CENTRAL DE VERIFICACIÓN */
+                /* CONSOLA CENTRAL DE VERIFICACIÓN (INTERFAZ GIGANTE) */
         .mainframe-container {
-            background: var(--glass-core);
+            background: rgba(7, 13, 22, 0.65); /* Opacidad de cristal para revelar el radar de fondo */
             border: 1px solid rgba(0, 217, 255, 0.12);
-            padding: 40px 30px;
-            width: 92%;
-            max-width: 440px;
+            padding: 30px 20px;
+            width: 96vw;          /* Ajustado al 96% del ancho del navegador */
+            max-width: 460px;
+            height: 94vh;         /* Estirado al 94% del alto vertical útil */
+            max-height: 94vh;
             box-sizing: border-box;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -83,9 +140,12 @@
             z-index: 5;
             border-radius: 4px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        /* CORREDOR LÁSER PERIMETRAL ANIMADO */
+        /* CORREDOR LÁSER PERIMETRAL ANIMADO A 60 FPS */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--laser-cyan), transparent);
@@ -93,9 +153,9 @@
         }
         .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4s infinite linear; }
         .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4s infinite linear; }
-        
-        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
-        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+
+        @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         /* Esquinas de Titanio */
         .corner-bracket {
@@ -112,7 +172,7 @@
         /* CABECERA OPERATIVA */
         .header-shield {
             text-align: left;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         .live-data-stream {
@@ -146,7 +206,7 @@
 
         /* CAMPO DE ENTRADA (INPUT) DEL TOKEN */
         .token-group {
-            margin: 25px 0 15px 0;
+            margin: 15px 0;
             text-align: left;
         }
 
@@ -186,7 +246,7 @@
         .btn-submit {
             display: block;
             width: 100%;
-            padding: 16px;
+            padding: 18px;
             background: rgba(255, 255, 255, 0.01);
             color: var(--pure-light);
             border: 1px solid rgba(255, 255, 255, 0.08);
@@ -206,9 +266,10 @@
             border-color: var(--laser-cyan);
             color: var(--laser-cyan);
             box-shadow: 0 0 20px rgba(0, 217, 255, 0.2);
+            transform: scale3d(0.99, 0.99, 1);
         }
 
-        /* CUADRO DE NOTIFICACIÓN DE ERROR */
+        /* CUADRO DE NOTIFICACIÓN DE ERROR (60 FPS) */
         .alert-box {
             display: none;
             margin-top: 15px;
@@ -221,6 +282,12 @@
             padding: 12px;
             text-align: left;
             line-height: 1.4;
+            animation: pane-appear 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes pane-appear {
+            from { opacity: 0; transform: translate3d(0, 5px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
 
         .btn-back {
@@ -230,7 +297,7 @@
             font-family: monospace;
             color: var(--sub-slate);
             text-decoration: none;
-            margin-top: 20px;
+            margin-top: 15px;
             letter-spacing: 1px;
         }
         .btn-back:active { color: var(--laser-cyan); }
@@ -238,13 +305,18 @@
 </head>
 <body>
 
-    <!-- Capas animadas del búnker de reclutamiento -->
-    <div class="dynamic-bg"></div>
-    <div class="radar-wave-hub">
-        <div class="wave w1"></div>
-        <div class="wave w2"></div>
-        <div class="wave w3"></div>
+    <!-- CAPA DEL RADAR MILITAR DE AVIACIÓN SINCRONIZADO EN AZUL CIAN -->
+    <div class="radar-container">
+        <div class="radar-screen">
+            <div class="radar-sweep"></div>
+            <div class="radar-blip target-alpha"></div>
+            <div class="radar-blip target-bravo"></div>
+            <div class="radar-blip target-charlie"></div>
+        </div>
     </div>
+
+    <!-- Capa de cuadrícula de fondo satelital -->
+    <div class="dynamic-bg"></div>
 
     <div class="mainframe-container">
         <!-- Haz de luz perimetral -->
@@ -266,7 +338,7 @@
             <h1>VERIFICACIÓN DE RECLUTA</h1>
             <div class="faction-badge" id="factionDisplay">DIVISIÓN: DETECTANDO...</div>
         </div>
-        
+
         <!-- Formulario Táctico de Acceso -->
         <form id="tokenForm">
             <div class="token-group">
@@ -282,8 +354,7 @@
 
         <a href="/" class="btn-back">← ABORTAR VERIFICACIÓN / VOLVER AL PANEL</a>
     </div>
-
-    <!-- CONTROLADOR JAVASCRIPT MODERNO Y SINTETIZADOR DE AUDIO -->
+        <!-- CONTROLADOR JAVASCRIPT MODERNO Y SINTETIZADOR DE AUDIO -->
     <script>
         let audioCtx = null;
 
@@ -327,8 +398,10 @@
             e.preventDefault();
             playClickSound();
 
+            // .trim() purga espacios en blanco accidentales que dañan la validación en OneState
             const tokenValue = document.getElementById('tokenInput').value.trim();
             const errorDiv = document.getElementById('errorMessage');
+            errorDiv.style.opacity = "0";
             errorDiv.style.display = "none";
             errorDiv.innerText = "";
 
