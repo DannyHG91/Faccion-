@@ -5,6 +5,14 @@
     <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ MAINFRAME C.M.M. - INICIO DE SISTEMA ]</title>
+    
+    <!-- Configuración PWA para comportamiento de aplicación nativa independiente -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="C.M.M. Mainframe">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+
     <style>
         /* Variables de Sistema de Nueva Generación */
         :root {
@@ -38,11 +46,18 @@
             touch-action: none; /* Bloquea el scroll elástico de iOS y rebotes de Android */
             position: relative;
             
-            /* Blindaje total contra resaltado de textos al presionar la pantalla o buscar */
+            /* Blindaje total contra resaltar textos al presionar la pantalla */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+        }
+
+        /* DIRECTIVA DE REDISTRIBUCIÓN GPU PARA RENDIMIENTO MÁXIMO DE 60 FPS */
+        .system-boot-screen, .mainframe-container, .wave, .laser-border, .bar-loader-static::after, .boot-progress-fill {
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            will-change: transform, opacity;
         }
         /* PANTALLA DE CARGA MILITAR ULTRA MODERNA CON ELEMENTOS HUD */
         .system-boot-screen {
@@ -89,9 +104,9 @@
             margin-bottom: 25px;
             line-height: 1.6;
             letter-spacing: 1px;
-            height: 110px;
+            height: 140px;
             overflow: hidden;
-            display: none; /* Oculto inicialmente hasta presionar arrancar */
+            display: none; 
         }
 
         /* Botón de activación mandatorio para móviles */
@@ -108,6 +123,7 @@
             box-shadow: 0 0 15px rgba(0, 217, 255, 0.1);
             transition: all 0.2s ease;
             margin: 20px 0;
+            border-radius: 2px;
             -webkit-tap-highlight-color: transparent;
         }
         .btn-boot-start:active {
@@ -116,9 +132,8 @@
             box-shadow: 0 0 25px var(--laser-cyan);
         }
 
-        /* Módulo numérico y barra */
         .boot-meta-status {
-            display: none; /* Oculto hasta presionar arrancar */
+            display: none; 
             justify-content: space-between;
             align-items: center;
             font-family: monospace;
@@ -129,7 +144,7 @@
         }
 
         .boot-progress-bar {
-            display: none; /* Oculto hasta presionar arrancar */
+            display: none; 
             width: 100%;
             height: 3px;
             background: rgba(255, 255, 255, 0.02);
@@ -144,7 +159,8 @@
             background: linear-gradient(90deg, var(--laser-cyan), #fff);
             box-shadow: 0 0 10px var(--laser-cyan);
         }
-                /* FONDO ANIMADO DE LA PÁGINA PRINCIPAL */
+
+        /* FONDO ANIMADO DE LA PÁGINA PRINCIPAL */
         .dynamic-bg {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -177,19 +193,19 @@
         .w3 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 5s; }
 
         @keyframes node-pulse {
-            0% { transform: scale(0.6); opacity: 0; }
+            0% { transform: scale3d(0.6, 0.6, 1); opacity: 0; }
             15% { opacity: 1; }
-            100% { transform: scale(3.5); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
+            100% { transform: scale3d(3.5, 3.5, 1); opacity: 0; border-color: rgba(0, 217, 255, 0.01); }
         }
-
-        /* CONSOLA CENTRAL BLINDADA EN DISEÑO VERTICAL FLUIDO */
+        /* CONSOLA CENTRAL BLINDADA EN DISEÑO VERTICAL FLUIDO (INTERFAZ GIGANTE) */
         .mainframe-container {
             background: var(--glass-core);
             border: 1px solid rgba(0, 217, 255, 0.12);
-            padding: 30px 22px;
-            width: 88vw;
-            max-width: 400px;
-            max-height: 85vh;
+            padding: 24px 16px;
+            width: 96vw;          
+            max-width: 460px;
+            height: 94vh;         
+            max-height: 94vh;
             box-sizing: border-box;
             backdrop-filter: blur(25px);
             -webkit-backdrop-filter: blur(25px);
@@ -203,7 +219,7 @@
             justify-content: space-between;
         }
 
-        /* CORREDOR LÁSER PERIMETRAL ANIMADO */
+        /* CORREDOR LÁSER PERIMETRAL ANIMADO A 60 FPS */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--laser-cyan), transparent);
@@ -212,8 +228,8 @@
         .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4s infinite linear; }
         .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4s infinite linear; }
         
-        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
-        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+        @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
         /* Esquinas Fijas con Ángulos de Titanio */
         .corner-bracket {
@@ -224,9 +240,10 @@
         }
         .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
         .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-                /* CABECERA CON MÉTRICAS EN MOVIMIENTO */
+        .bl { bottom: -1px; left: -1px; border-right: none; top: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; top: none; border-top: none; }
+        
+        /* CABECERA CON MÉTRICAS EN MOVIMIENTO */
         .header-shield {
             text-align: left;
             margin-bottom: 20px;
@@ -290,8 +307,8 @@
             animation: gold-pulse-border 3s infinite ease-in-out;
         }
         @keyframes gold-pulse-border {
-            0%, 100% { transform: scale(1); opacity: 0.3; }
-            50% { transform: scale(1.02); opacity: 0; }
+            0%, 100% { transform: scale3d(1, 1, 1); opacity: 0.3; }
+            50% { transform: scale3d(1.02, 1.02, 1); opacity: 0; }
         }
 
         .rank-title {
@@ -315,7 +332,7 @@
         .btn-lider:active {
             background: rgba(220, 174, 59, 0.12);
             box-shadow: 0 0 25px rgba(220, 174, 59, 0.25);
-            transform: scale(0.99);
+            transform: scale3d(0.99, 0.99, 1);
         }
 
         /* DIVISOR TÁCTICO CON BARRA DE PROGRESO DE RED */
@@ -346,7 +363,7 @@
             background: var(--laser-cyan);
             animation: fluid-load 3s infinite linear;
         }
-        @keyframes fluid-load { 0% { left: -100%; } 100% { left: 100%; } }
+        @keyframes fluid-load { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(200%, 0, 0); } }
 
         /* BOTONES DE LAS DIVISIONES ACCESIBLES */
         .btn-faction {
@@ -365,7 +382,7 @@
             box-sizing: border-box;
             border-radius: 3px;
             position: relative;
-            transition: all 0.2s ease;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -395,7 +412,7 @@
             transform: scaleY(1);
         }
         .btn-faction:active .arrow {
-            transform: translateX(3px);
+            transform: translate3d(3px, 0, 0);
             color: var(--laser-cyan);
         }
 
@@ -493,11 +510,10 @@
 
         <!-- Accesos de Destacamento -->
         <div style="display: flex; flex-direction: column;">
-           <a class="btn-faction btn-ops" href="/academia/login">
-        <span>Academia Militar</span>
-        <span class="arrow">→</span>
-    </a>
-
+            <a class="btn-faction btn-ops" href="/academia/login">
+                <span>Academia Militar</span>
+                <span class="arrow">→</span>
+            </a>
             <a class="btn-faction btn-ops" href="/fuego/login">
                 <span>Operación de datos en desarrollo 🚧</span>
                 <span class="arrow">→</span>
@@ -518,7 +534,7 @@
             <span>ESCUDO_v4.2</span>
         </div>
     </div>
-        <!-- INGENIERÍA DE CONTROL DE SESIÓN Y AUDIO SINTÉTICO FURTIVO -->
+    <!-- INGENIERÍA DE CONTROL DE SESIÓN Y AUDIO SINTÉTICO FURTIVO -->
     <script>
         let audioCtx = null;
         let radarInterval = null;
@@ -554,7 +570,7 @@
             }
             if (!radarInterval) {
                 playRadarPing(); 
-                radarInterval = setInterval(playRadarPing, 4000); // Bucle infinito cada 4 segundos
+                radarInterval = setInterval(playRadarPing, 4000); 
             }
         }
 
@@ -591,9 +607,8 @@
 
         // DISPARADOR DE LA SECUENCIA DE ARRANQUE CON AUDIO SINK
         document.getElementById('btnStartBoot').addEventListener('click', function() {
-            initAudio(); // Libera el hardware sónico
+            initAudio(); 
             
-            // Ocultar botón y revelar los módulos HUD de la intro
             this.style.display = "none";
             document.getElementById("bootTerminal").style.display = "block";
             document.getElementById("bootMetaStatus").style.display = "flex";
@@ -604,7 +619,6 @@
             const percentText = document.getElementById("bootPercent");
             const progressFill = document.getElementById("bootProgressFill");
             
-            // Intervalo de impresión de logs + pitido sónico
             const logInterval = setInterval(() => {
                 if (logIndex < logs.length) {
                     terminal.innerHTML += `<br>${logs[logIndex]}`;
@@ -615,7 +629,6 @@
                 }
             }, 380);
 
-            // Contador numérico lineal de porcentaje (0% a 100%)
             let currentPercent = 0;
             const duration = 2600; 
             const stepTime = duration / 100;
@@ -627,19 +640,16 @@
                     progressFill.style.width = `${currentPercent}%`;
                 } else {
                     clearInterval(countInterval);
-                    playSystemReadySound(); // Detona el pulso expansivo al llegar al 100%
+                    playSystemReadySound(); 
                 }
             }, stepTime);
 
-            // Desvanecimiento suave de la cortina de carga
             setTimeout(() => {
                 const bootScreen = document.getElementById("bootScreen");
                 bootScreen.style.opacity = "0";
                 setTimeout(() => {
                     bootScreen.style.visibility = "hidden";
-                    // ESCRIBIR MARCA DE INICIALIZACIÓN EN LA MEMORIA DE LA PESTAÑA
                     sessionStorage.setItem('cmm_nucleo_inicializado', 'true');
-                    // Arranca el loop infinito del radar de fondo
                     if (!radarInterval) {
                         playRadarPing(); 
                         radarInterval = setInterval(playRadarPing, 4000); 
