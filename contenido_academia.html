@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ ACADEMIA MILITAR - CENTRO DE INSTRUCCIÓN ]</title>
 
+    <!-- Configuración para comportamiento de App Nativa (PWA) si deciden agregarla a inicio -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Academia Militar">
+    <meta name="mobile-web-app-capable" content="yes">
+    <link rel="manifest" href="manifest.json">
+
     <style>
     :root {
         --stealth-dark: #020407;             /* Negro absoluto del búnker principal */
@@ -41,6 +48,7 @@
         -webkit-user-select: none;
         user-select: none;
     }
+    
     /* FORZADO DE RENDIMIENTO POR HARDWARE DE GPU */
     .system-boot-screen, .mainframe-container, .parrafo, .boot-progress-fill {
         -webkit-transform: translate3d(0,0,0);
@@ -91,7 +99,7 @@
         margin-bottom: 20px;
         line-height: 1.6;
         letter-spacing: 1px;
-        height: 110px;
+        height: 125px;
         overflow: hidden;
     }
 
@@ -119,7 +127,8 @@
         width: 0%;
         background: linear-gradient(90deg, var(--laser-intel), #fff);
     }
-        /* Fondo de rejilla digital purgado y estático */
+    
+    /* Fondo de rejilla digital purgado y estático */
     .dynamic-bg {
         position: absolute;
         top: 0; left: 0; width: 100%; height: 100%;
@@ -131,14 +140,15 @@
         z-index: 1;
     }
 
-    /* CONTENEDOR CENTRAL DE MÁXIMO RENDIMIENTO */
+    /* CONTENEDOR CENTRAL EXPANSIÓN MÁXIMA (INTERFAZ GIGANTE) */
     .mainframe-container {
         background: #090e14; 
         border: 1px solid rgba(0, 217, 255, 0.2);
-        padding: 20px 18px;
-        width: 88vw;
-        max-width: 420px;
-        max-height: 85vh; 
+        padding: 15px 12px;
+        width: 96vw;
+        max-width: 480px;
+        height: 94vh;
+        max-height: 94vh; 
         box-sizing: border-box;
         box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         position: relative;
@@ -171,17 +181,19 @@
     .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
     .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
     .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-        .portada-container { width: 100%; margin-bottom: 10px; box-sizing: border-box; }
+    
+    .portada-container { width: 100%; margin-bottom: 8px; box-sizing: border-box; }
     .portada-imagen { width: 100%; height: auto; display: block; border: 1px solid var(--laser-intel); border-radius: 2px; }
 
-    /* SCROLL INTERNO VELOZ ACELERADO POR HARDWARE */
+    /* SCROLL INTERNO AMPLIADO DE MÁXIMO RENDIMIENTO */
     .contenedor {
         width: 100%;
         display: flex;
         flex-direction: column;
         overflow-y: auto; 
         -webkit-overflow-scrolling: touch; 
-        max-height: 48vh;
+        flex: 1;
+        margin-bottom: 8px;
         padding-right: 2px;
         box-sizing: border-box;
     }
@@ -192,33 +204,35 @@
         border-top: 1px solid var(--borde-tactico);
         border-right: 1px solid var(--borde-tactico);
         border-bottom: 1px solid var(--borde-tactico);
-        padding: 14px 12px;
+        padding: 16px 14px;
         margin: 6px 0;
         cursor: pointer;
-        font-size: 11px;
+        font-size: 12px;
         font-family: monospace;
+        font-weight: 600;
         letter-spacing: 0.5px;
-        clip-path: polygon(0% 0%, 95% 0%, 100% 18%, 100% 100%, 5% 100%, 0% 82%);
+        clip-path: polygon(0% 0%, 96% 0%, 100% 15%, 100% 100%, 4% 100%, 0% 85%);
         box-sizing: border-box;
-        transition: background-color 0.08s linear; /* Respuesta instantánea táctil */
+        transition: background-color 0.08s linear;
         -webkit-tap-highlight-color: transparent;
     }
 
     .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
-    .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
     
-    /* NUEVA GUÍA OPERATIVA PARA EL RECLUTA */    
-.ultima-copiada {
-    border-color: var(--laser-intel) !important;
-    background: rgba(0, 217, 255, 0.12) !important;
-    box-shadow: 0 0 8px var(--intel-glow);
-}
+    .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+
+    /* NUEVA GUÍA OPERATIVA PARA EL RECLUTA */
+    .ultima-copiada {
+        border-color: var(--laser-intel) !important;
+        background: rgba(0, 217, 255, 0.12) !important;
+        box-shadow: 0 0 8px var(--intel-glow);
+    }
 
     .btn-exit {
         display: block;
         width: 100%;
         padding: 12px;
-        margin-top: 15px;
+        margin-top: 8px;
         background: rgba(255, 74, 74, 0.02);
         border: 1px dashed rgba(255, 74, 74, 0.25);
         color: #ff4a4a;
@@ -231,12 +245,13 @@
         box-sizing: border-box;
         border-radius: 2px;
     }
-    footer { text-align: center; padding-top: 12px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+    
+    footer { text-align: center; padding-top: 10px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de carga simplificada automatizada sin botones -->
+    <!-- Pantalla de carga simplificada automatizada -->
     <div class="system-boot-screen" id="bootScreen">
         <div class="boot-box" id="bootBox">
             <div class="boot-corner b-tl"></div><div class="boot-corner b-tr"></div><div class="boot-corner b-bl"></div><div class="boot-corner b-br"></div>
@@ -250,35 +265,30 @@
 
     <div class="mainframe-container">
         <div class="laser-border lb-top"></div><div class="laser-border lb-bottom"></div>
-        <div class="corner-bracket tl"></div><div class="corner-bracket tr"></div><div class="corner-bracket bl"></div><div class="corner-bracket br"></div>
-
         <div class="portada-container">
             <img src="academia-portada.jpg" alt="Logotipo" class="portada-imagen">
         </div>
-        
-                <!-- PANEL DE IDENTIFICACIÓN OPERATIVA -->
-        <div style="padding: 10px; margin-bottom: 12px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); border-radius: 2px;">
-            <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">ASIENTE SU IDENTIDAD Y RANGO</div>
+
+        <!-- PANEL DE IDENTIFICACIÓN OPERATIVA -->
+        <div style="padding: 10px; margin-bottom: 8px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); border-radius: 2px;">
+            <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">DIGITE SU NOMBRE Y RANGO:</div>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
                 <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
             </div>
         </div>
-       
-                <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
-                       <div class="contenedor">
+        
+        <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
+        <div class="contenedor">
             <div class="parrafo" data-original="/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
             <div class="parrafo">/do TASER TASER TASER!! ¡Te he taserizado para tomar el control de la situación.</div>
             <div class="parrafo">/do Saca el arma y dispara al miembro de la banda/intruso para protegerme a mí y a los soldados!!</div>
             <div class="parrafo">/flobby 10-4</div>
-            
             <div class="parrafo">/freg 10-4</div>
             <div class="parrafo">/me 10-4</div>
             <div class="parrafo" data-original="/flobby (RANGO ACTUAL) entrada.">/flobby (RANGO ACTUAL) entrada.</div>
             <div class="parrafo" data-original="/flobby (RANGO ACTUAL) salida.">/flobby (RANGO ACTUAL) salida.</div>
             <div class="parrafo" data-original="/me Hola señor/a, mi nombre es (NOMBRE) del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?">/me Hola señor/a, mi nombre es (NOMBRE) del Ejército WCSA. Esta es un área restringida, ¿En qué puedo ayudarle?</div>
-
-
             <div class="parrafo">/me Le dice a la banda/civil… "¡FUERA DEL CONCRETO!" ¡o se usará el Taser!!!</div>
             <div class="parrafo">/me Por favor estacione su vehículo en la hierba/tierra, apáguelo y salga sin armas en las manos!!</div>
             <div class="parrafo">/me Para unirse al EJÉRCITO WCSA: Ser nivel 6, tener 18 años o más, micrófono funcional, su nombre de RP debe coincidir con el de Discord , debe hablar Español. Saberse el reglamento RP13 - RP14. 23:00h del servidor de lunes a viernes.</div>
@@ -313,12 +323,11 @@
             <div class="parrafo">/flobby VIGILIA FINALIZADA.</div>
         </div>
 
-      <!-- Botón Táctico de Retorno Seguro Corregido -->
-<a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
-
+        <!-- Botón Táctico de Retorno Seguro Corregido -->
+        <a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
         <footer>Academia Militar del Ejército | Sistema de macros tácticos.</footer>
     </div>
-        <!-- INGENIERÍA CONTROLADORA DE CARGA AUTOMÁTICA Y PORTAPAPELES DE ALTA VELOCIDAD -->
+    <!-- INGENIERÍA CONTROLADORA DE ACCESO DIRECTO Y PORTAPAPELES -->
     <script>
         const logs = [
             ">> COMPROBANDO INTEGRIDAD DEL ENLACE... OK",
@@ -328,24 +337,18 @@
             ">> TRANSMISIÓN SEGURA ESTABLECIDA CON LA ACADEMIA."
         ];
 
-        // DISPARADOR AUTOMÁTICO DE LA SECUENCIA DE ARRANQUE (SIN FILTROS DE AUDIO PERDIDOS)
         window.addEventListener('DOMContentLoaded', () => {
-            const bootScreen = document.getElementById("bootScreen");
+            ejecutarCargaLineal();
+        });
 
-            // CONTROL PERSISTENTE DE INTRO DE SESIÓN (EVITA REPETICIONES)
-            if (sessionStorage.getItem('cmm_bunker_academia_inicializado') === 'true') {
-                bootScreen.style.transition = "none";
-                bootScreen.style.opacity = "0";
-                bootScreen.style.visibility = "hidden";
-                return;
-            }
-
-            // Si es el primer ingreso de la pestaña, corre la carga automática lineal
+        function ejecutarCargaLineal() {
             let logIndex = 0;
             const terminal = document.getElementById("bootTerminal");
             const percentText = document.getElementById("bootPercent");
             const progressFill = document.getElementById("bootProgressFill");
+            const bootScreen = document.getElementById("bootScreen");
             
+            // Simulación rápida de líneas de terminal cada 300ms
             const logInterval = setInterval(() => {
                 if (logIndex < logs.length) {
                     terminal.innerHTML += `<br>${logs[logIndex]}`;
@@ -355,115 +358,30 @@
                 }
             }, 300);
 
+            // Incremento lineal del porcentaje en 2 segundos
             let currentPercent = 0;
-            const duration = 2000; // Reducido a 2 segundos para dar máxima agilidad de entrada
+            const duration = 2000; 
             const stepTime = duration / 100;
 
             const countInterval = setInterval(() => {
                 if (currentPercent < 100) {
                     currentPercent++;
-                    percentText.innerText = `${currentPercent}%`;
-                    progressFill.style.width = `${currentPercent}%`;
+                    percentText.innerText = currentPercent + "%";
+                    progressFill.style.width = currentPercent + "%";
                 } else {
                     clearInterval(countInterval);
+                    // Ocultar pantalla de carga instantáneamente al terminar
+                    bootScreen.style.opacity = "0";
+                    bootScreen.style.visibility = "hidden";
                 }
             }, stepTime);
-
-            // Desvanecimiento alfa fluido de la cortina
-            setTimeout(() => {
-                bootScreen.style.opacity = "0";
-                setTimeout(() => {
-                    bootScreen.style.visibility = "hidden";
-                    sessionStorage.setItem('cmm_bunker_academia_inicializado', 'true');
-                }, 400);
-            }, duration + 100);
-        });
-
-        // PUENTE DE COPIADO FORZADO HÍBRIDO (ANULA BLOQUEOS Y BOTAS CARACTERES BASURA)
-        function forzarCopiadoMovil(texto) {
-            return new Promise((resolve, reject) => {
-                // Saneamiento de cadenas: destruye espacios o saltos invisibles nativos
-                const stringSaneado = texto.trim();
-                
-                if (navigator.clipboard && window.isSecureContext) {
-                    navigator.clipboard.writeText(stringSaneado)
-                        .then(() => resolve())
-                        .catch(() => intentarMetodoRespaldo(stringSaneado, resolve, reject));
-                } else {
-                    intentarMetodoRespaldo(stringSaneado, resolve, reject);
-                }
-            });
         }
 
-        // Método de Respaldo Forzado mediante caja fantasma invisible (Garantiza ejecución en Android/iOS)
-        function intentarMetodoRespaldo(stringSaneado, resolve, reject) {
-            try {
-                const elementoFantasma = document.createElement('textarea');
-                elementoFantasma.value = stringSaneado;
-                
-                elementoFantasma.style.position = 'fixed';
-                elementoFantasma.style.top = '0';
-                elementoFantasma.style.left = '0';
-                elementoFantasma.style.width = '2em';
-                elementoFantasma.style.height = '2em';
-                elementoFantasma.style.padding = '0';
-                elementoFantasma.style.border = 'none';
-                elementoFantasma.style.outline = 'none';
-                elementoFantasma.style.boxShadow = 'none';
-                elementoFantasma.style.background = 'transparent';
-                
-                document.body.appendChild(elementoFantasma);
-                elementoFantasma.focus();
-                elementoFantasma.select();
-                elementoFantasma.setSelectionRange(0, 99999); 
-                
-                const exito = document.execCommand('copy');
-                document.body.removeChild(elementoFantasma);
-                
-                if (exito) resolve();
-                else reject();
-            } catch (err) {
-                reject(err);
-            }
-        }
-
-                // VINCULACIÓN ULTRA FLUDA DE EVENTOS DE COPIA (CON FILTRO DE SEGURIDAD ANTIESPACIOS)
-        const parrafos = document.querySelectorAll('.parrafo');
-
-        parrafos.forEach(p => {
-            p.addEventListener('click', () => {
-                // .trim() elimina espacios en blanco, tabulaciones y caracteres invisibles al inicio y final
-                const contenidoMacro = p.innerText.trim(); 
-                
-                forzarCopiadoMovil(contenidoMacro)
-                    .then(() => {
-                        // Quitar el resaltado de guía de cualquier otra macro copiada antes
-                        parrafos.forEach(otro => otro.classList.remove('ultima-copiada'));
-
-                        // Aplicar flash instantáneo de copiado exitoso
-                        p.classList.add('copiado');
-                        
-                        // Dejar la guía visual fija tras el flash de 150ms
-                        setTimeout(() => { 
-                            p.classList.remove('copiado'); 
-                            p.className = 'parrafo ultima-copiada'; // Forzado limpio de clases operativas
-                        }, 150); 
-                    })
-                    .catch(err => {
-                        console.error('Falla crítica de transferencia: ', err);
-                    });
-            });
-        });
-   
-   
-   
-                          // MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO PRESERVADO
+        // MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO INTEGRAL MÓVIL
         function actualizarMacros() {
-            // .toUpperCase() transforma instantáneamente todo el texto ingresado a mayúsculas
             const nombreIngresado = document.getElementById('inputNombre').value.trim().toUpperCase();
             const rangoIngresado = document.getElementById('inputRango').value.trim().toUpperCase();
             
-            // Si hay texto, lo pone entre corchetes/paréntesis. Si está vacío, mantiene el indicador por defecto.
             const nombreFinal = nombreIngresado ? `[${nombreIngresado}]` : "[NOMBRE]";
             const rangoFinal = rangoIngresado ? `(${rangoIngresado})` : "(RANGO ACTUAL)";
             
@@ -471,20 +389,57 @@
             
             macrosDinamicas.forEach(p => {
                 let textoBase = p.getAttribute('data-original');
-                
                 let textoProcesado = textoBase
                     .replace(/\[NOMBRE\]/g, nombreFinal)
                     .replace(/\(NOMBRE\)/g, nombreIngresado ? `(${nombreIngresado})` : "(NOMBRE)")
                     .replace(/\(RANGO ACTUAL\)/g, rangoFinal);
-                
                 p.innerText = textoProcesado;
             });
         }
 
-        
- 
-         </script>
-   
+        // FUNCIÓN TÁCTICA DE COPIADO ULTRA COMPATIBLE (FILTRADO DE RESIDUOS BLINDADO)
+        function forzarCopiadoMovil(texto) {
+            if (navigator.clipboard && window.isSecureContext) {
+                return navigator.clipboard.writeText(texto);
+            } else {
+                return new Promise((resolve, reject) => {
+                    const textArea = document.createElement("textarea");
+                    textArea.value = texto;
+                    textArea.style.position = "fixed";
+                    textArea.style.opacity = "0";
+                    document.body.appendChild(textArea);
+                    textArea.focus();
+                    textArea.select();
+                    try {
+                        if (document.execCommand('copy')) resolve();
+                        else reject(new Error('Falla en execCommand'));
+                    } catch (err) { reject(err); }
+                    document.body.removeChild(textArea);
+                });
+            }
+        }
+
+        // VINCULACIÓN ULTRA FLUDA DE EVENTOS CON HISTORIAL RESALTADO DE MEMORIA
+        const parrafos = document.querySelectorAll('.parrafo');
+        parrafos.forEach(p => {
+            p.addEventListener('click', () => {
+                // .trim() limpia cualquier espacio o carácter fantasma antes de mandar a OneState
+                const contenidoMacro = p.innerText.trim();
+                
+                forzarCopiadoMovil(contenidoMacro)
+                    .then(() => {
+                        parrafos.forEach(otro => otro.classList.remove('ultima-copiada'));
+                        p.classList.add('copiado');
+                        setTimeout(() => { 
+                            p.classList.remove('copiado'); 
+                            p.className = 'parrafo ultima-copiada'; 
+                        }, 150); 
+                    })
+                    .catch(err => console.error('Error crítico al copiar macro: ', err));
+            });
+        });
+    </script>
+    
     <!-- DIRECTIVAS FINALES DE RESPALDO: ACELERACIÓN PURA POR ENTORNO -->
     <style>
         .system-boot-screen, .mainframe-container, .boot-box {
