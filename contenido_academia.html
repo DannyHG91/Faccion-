@@ -2,17 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Forzado de escala estricto para comportamiento tipo App nativa vertical sin zoom accidental -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ ACADEMIA MILITAR - CENTRO DE INSTRUCCIÓN ]</title>
 
-    <!-- Configuración para comportamiento de App Nativa (PWA) independiente en pantallas móviles -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Academia Militar">
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
-
 
     <style>
         /* Variables de Sistema de Inteligencia: Cian Zafiro y Negro Sigilo */
@@ -61,7 +58,7 @@
             transform: translate3d(0,0,0);
             will-change: transform, opacity;
         }
-                /* PANTALLA DE CARGA LIVIANA SIN COMPONENTE DE AUDIO (60 FPS) */
+        /* PANTALLA DE CARGA LIVIANA SIN COMPONENTE DE AUDIO (60 FPS) */
         .system-boot-screen {
             position: fixed;
             top: 0; left: 0; width: 100vw; height: 100dvh; /* Adaptación elástica dvh */
@@ -132,7 +129,7 @@
             width: 0%;
             background: linear-gradient(90deg, var(--laser-intel), #fff);
         }
-                /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED CIAN (60 FPS) */
+        /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED CIAN (60 FPS) */
         .telemetry-bg-container {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100dvh;
@@ -174,27 +171,27 @@
         .mainframe-container {
             background: rgba(7, 13, 22, 0.55);
             border: 1px solid rgba(0, 217, 255, 0.15);
-            padding: 20px 16px;
+            padding: 14px 12px;
             width: 96vw;
             max-width: 440px;
-            height: 90dvh;         /* Forzado dinámico contra recortes de barras */
-            max-height: 90dvh;
+            height: 96dvh; /* Mayor aprovechamiento de espacio en ventanas */
+            max-height: 96dvh;
             box-sizing: border-box;
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
             box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 30px var(--intel-glow);
-            
+
             /* CORTE POLIGONAL ASIMÉTRICO MODERNO DE QUINTA GENERACIÓN */
             clip-path: polygon(0% 0%, 92% 0%, 100% 8%, 100% 100%, 8% 100%, 0% 92%);
-            
+
             position: relative;
             z-index: 5;
             display: flex;
             flex-direction: column;
-            justify-content: center; 
-            gap: 10px;              
+            justify-content: flex-start; /* Evita tirones de alineación */
+            gap: 8px;              
         }
-                /* LÁSER PERIMETRAL DE INTERCEPCIÓN EN MODO VAIVÉN (60 FPS) */
+        /* LÁSER PERIMETRAL DE INTERCEPCIÓN EN MODO VAIVÉN (60 FPS) */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--laser-intel), transparent);
@@ -219,8 +216,8 @@
         .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
         .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-        .portada-container { width: 100%; box-sizing: border-box; }
-        .portada-imagen { width: 100%; height: auto; display: block; border: 1px solid var(--laser-intel); border-radius: 2px; }
+        .portada-container { width: 100%; box-sizing: border-box; flex-shrink: 0; }
+        .portada-imagen { width: 100%; height: auto; max-height: 80px; object-fit: cover; display: block; border: 1px solid var(--laser-intel); border-radius: 2px; }
 
         /* SCROLL INTERNO AMPLIADO DE MÁXIMO RENDIMIENTO */
         .contenedor {
@@ -230,26 +227,26 @@
             overflow-y: auto;
             -webkit-overflow-scrolling: touch;
             flex: 1;
-            margin-bottom: 5px;
+            margin-bottom: 2px;
             padding-right: 2px;
             box-sizing: border-box;
             counter-reset: macro-index; /* Inicializa la matriz de contadores */
         }
-                /* BLOQUES DE MACROS INTERACTIVOS CON SEPARACIÓN ESTRICTA DE CARRIL */
+        /* BLOQUES DE MACROS INTERACTIVOS CON SEPARACIÓN ESTRICTA DE CARRIL */
         .parrafo {
             background: rgba(0, 217, 255, 0.04);
             border-left: 4px solid var(--laser-intel);
             border-top: 1px solid var(--borde-tactico);
             border-right: 1px solid var(--borde-tactico);
             border-bottom: 1px solid var(--borde-tactico);
-            padding: 16px 14px 16px 54px; /* Separación simétrica para la celda del índice */
-            margin: 6px 0;
+            padding: 12px 10px 12px 46px; /* Empaquetado más optimizado */
+            margin: 4px 0;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 11px;
             font-family: monospace;
             font-weight: 600;
             letter-spacing: 0.5px;
-            
+
             /* Biselado asimétrico moderno */
             clip-path: polygon(0% 0%, 96% 0%, 100% 15%, 100% 100%, 4% 100%, 0% 85%);
             box-sizing: border-box;
@@ -259,36 +256,32 @@
         }
         .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
 
-        /* EL NÚMERO (OBJETIVO DETECTADO): Destella en sincronía con el pulso sónico */
+        /* EL NÚMERO (OBJETIVO DETECTADO) */
         .parrafo::before {
             counter-increment: macro-index;
             content: counter(macro-index, decimal-leading-zero);
             position: absolute;
             top: -1px; left: -1px;
-            width: 38px; height: calc(100% + 2px);
+            width: 34px; height: calc(100% + 2px);
             background: #020407; /* Celda oscura aislada */
             border-right: 1px solid var(--borde-tactico);
-            font-family: monospace; font-size: 11px; font-weight: 900;
+            font-family: monospace; font-size: 10px; font-weight: 900;
             display: flex; align-items: center; justify-content: center;
             z-index: 3; /* Por encima de la onda expansiva */
-
-            /* ANIMACIÓN DOPPLER RESIDUAL: Brillo de fósforo militar */
             animation: sonar-target-blink 3s infinite ease-out;
         }
 
-        /* LA ONDA EXPANSIVA DEL SONAR: Nace del núcleo central de la celda */
+        /* LA ONDA EXPANSIVA DEL SONAR */
         .parrafo::after {
             content: '';
             position: absolute;
-            top: 50%; left: 19px; /* Centro exacto del carril izquierdo de 38px */
-            width: 30px; height: 30px;
-            margin-top: -15px; margin-left: -15px;
+            top: 50%; left: 17px;
+            width: 24px; height: 24px;
+            margin-top: -12px; margin-left: -12px;
             border: 1px solid var(--laser-intel);
             border-radius: 50%;
             z-index: 2; /* Corre por detrás del número */
             opacity: 0;
-            
-            /* ANIMACIÓN RADIAL: Expansión por hardware de GPU */
             animation: sonar-wave-burst 3s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
         }
 
@@ -301,46 +294,48 @@
 
         @keyframes sonar-target-blink {
             0%, 100% { color: rgba(0, 217, 255, 0.35); text-shadow: none; }
-            20% { color: #ffffff; text-shadow: 0 0 8px var(--laser-intel), 0 0 15px var(--laser-intel); } /* Impacto sónico */
+            20% { color: #ffffff; text-shadow: 0 0 8px var(--laser-intel), 0 0 15px var(--laser-intel); } 
             60% { color: var(--laser-intel); text-shadow: 0 0 4px var(--intel-glow); }
         }
-                .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+        
+        .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
         .ultima-copiada { border-color: var(--laser-intel) !important; background: rgba(0, 217, 255, 0.12) !important; box-shadow: 0 0 8px var(--intel-glow); }
 
         /* BOTÓN TÁCTICO DE SALIDA CON BISEL */
         .btn-exit {
             display: block;
             width: 100%;
-            padding: 14px;
-            margin-top: 5px;
+            padding: 10px;
+            margin-top: 2px;
             background: rgba(255, 74, 74, 0.02);
             border: 1px dashed rgba(255, 74, 74, 0.25);
             color: #ff4a4a;
             text-align: center;
             text-decoration: none;
-            font-size: 11px;
+            font-size: 10px;
             font-family: monospace;
             font-weight: 600;
             letter-spacing: 2px;
             box-sizing: border-box;
             clip-path: polygon(0% 0%, 96% 0%, 100% 20%, 100% 100%, 4% 100%, 0% 80%);
             transition: background-color 0.15s linear;
+            flex-shrink: 0; /* Impide que la ventana flotante lo aplaste */
         }
         .btn-exit:active { background: rgba(255, 74, 74, 0.12); }
 
-        footer { text-align: center; padding-top: 10px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        footer { text-align: center; padding-top: 6px; font-size: 8px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); flex-shrink: 0; }
 
-        /* TELEMETRÍA PERIMETRAL AJUSTADA AL DINÁMICO DEL MENÚ MÓVIL */
+        /* TELEMETRÍA PERIMETRAL */
         .hud-frame-telemetry {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100dvh; 
             pointer-events: none;
             z-index: 3; 
             box-sizing: border-box;
-            padding: 15px;
+            padding: 10px;
             font-family: monospace;
             font-size: 8px;
-            color: rgba(0, 217, 255, 0.25); 
+            color: rgba(0, 217, 255, 0.15); 
             letter-spacing: 1px;
             display: flex;
             flex-direction: column;
@@ -351,126 +346,100 @@
 
         .hud-bracket {
             position: absolute;
-            width: 20px; height: 20px;
-            border: 1px solid rgba(0, 217, 255, 0.12);
+            width: 14px; height: 14px;
+            border: 1px solid rgba(0, 217, 255, 0.08);
         }
-        .h-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
-        .h-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
-        .h-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
-        .h-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+        .h-tl { top: 6px; left: 6px; border-right: none; border-bottom: none; }
+        .h-tr { top: 6px; right: 6px; border-left: none; border-bottom: none; }
+        .h-bl { bottom: 6px; left: 6px; border-right: none; border-top: none; }
+        .h-br { bottom: 6px; right: 6px; border-left: none; border-top: none; }
 
         .hud-crosshair {
             position: absolute;
             top: 50%; left: 50%;
             transform: translate3d(-50%, -50%, 0);
-            width: 30px; height: 30px;
+            width: 20px; height: 20px;
             pointer-events: none;
             z-index: 1;
-            opacity: 0.15;
+            opacity: 0.1;
         }
         .hud-crosshair::before, .hud-crosshair::after { content: ''; position: absolute; background-color: var(--laser-intel); }
-        .hud-crosshair::before { top: 14px; left: 0; width: 100%; height: 1px; }
-        .hud-crosshair::after { top: 0; left: 14px; width: 1px; height: 100%; }
+        .hud-crosshair::before { top: 9px; left: 0; width: 100%; height: 1px; }
+        .hud-crosshair::after { top: 0; left: 9px; width: 1px; height: 100%; }
 
-        /* BARRAS VERTICALES DE CARGA SATELITAL CONTRA EXTREMOS VACÍOS */
         .hud-v-bar {
             position: absolute;
-            top: 35dvh; width: 3px; height: 30dvh; 
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(0, 217, 255, 0.08);
+            top: 35dvh; width: 2px; height: 30dvh; 
+            background: rgba(255, 255, 255, 0.01);
+            border: 1px solid rgba(0, 217, 255, 0.05);
             z-index: 3;
             pointer-events: none;
         }
-        .bar-left { left: 15px; }
-        .bar-right { right: 15px; }
-        .hud-v-bar-fill {
-            width: 100%; height: 65%; 
-            background: var(--laser-intel);
-            box-shadow: 0 0 8px var(--laser-intel);
-        }
-        
-                /* ======================================================= */
-        /* INGENIERÍA ADAPTATIVA PARA PANTALLA DIVIDIDA / HORIZONTAL*/
-        /* ======================================================= */
-        
-        /* Se activa automáticamente si la ventana flotante o dividida se vuelve más ancha que alta */
+        .bar-left { left: 6px; }
+        .bar-right { right: 6px; }
+        .hud-v-bar-fill { width: 100%; height: 65%; background: var(--laser-intel); }
+
+        /* ======================================================================= */
+        /* SISTEMA ADAPTATIVO EXTREMO: VENTANAS FLOTANTES, MINI-WIDGETS Y MODOS SPLIT */
+        /* ======================================================================= */
+
+        /* Optimización para modo horizontal o ventanas divididas apaisadas */
         @media (orientation: landscape) and (max-height: 480px) {
-            
-            /* Ajusta el chasis central para abarcar más ancho y no desbordar el alto */
             .mainframe-container {
                 width: 98vw;
-                max-width: 640px; /* Se expande horizontalmente */
+                max-width: 640px;
                 height: 96dvh;
                 max-height: 96dvh;
-                padding: 10px 12px;
-                gap: 6px; /* Compacta el espaciado interno */
-                
-                /* Cambia la arquitectura interna a dos columnas (Lado a Lado) */
+                padding: 8px;
+                gap: 6px;
                 display: grid;
-                grid-template-columns: 140px 1fr;
+                grid-template-columns: 120px 1fr;
                 grid-template-rows: auto 1fr auto;
                 grid-template-areas: 
                     "header inputs"
                     "header container"
                     "footer exit";
             }
-
-            /* Redirecciona los componentes nativos a sus nuevas celdas de la cuadrícula */
             .portada-container { grid-area: header; display: flex; align-items: center; }
-            .portada-imagen { max-height: 120px; width: auto; margin: 0 auto; }
-            
-            /* El panel de Nombre y Rango se compacta al máximo en la parte superior derecha */
+            .portada-imagen { max-height: 90px; width: 100%; }
             .mainframe-container > div[style*="background"] { 
                 grid-area: inputs; 
                 margin-bottom: 0 !important; 
-                padding: 6px 10px !important;
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                gap: 10px;
+                padding: 6px !important;
             }
-            .mainframe-container > div[style*="background"] > div:first-child { display: none; /* Oculta el texto guía para ganar espacio */ }
-            .mainframe-container > div[style*="background"] > div:last-child { flex: 1; }
+            .contenedor { grid-area: container; height: 100%; max-height: 100%; }
+            .btn-exit { grid-area: exit; margin-top: 0; padding: 6px; }
+            footer { grid-area: footer; border-top: none; padding-top: 0; display: flex; align-items: center; }
+        }
+
+        /* AJUSTE PARA MODO VENTANA FLOTANTE ESTRECHA (Menos de 340px de ancho) */
+        @media (max-width: 340px) {
+            .portada-container { display: none; /* Oculta logo para dar espacio crítico a las macros */ }
+            .mainframe-container { height: 98dvh; max-height: 98dvh; width: 98vw; padding: 8px 6px; }
+            .parrafo { font-size: 10px; padding: 10px 6px 10px 38px; }
+            .parrafo::before { width: 28px; font-size: 9px; }
+            .parrafo::after { left: 14px; width: 18px; height: 18px; margin-top: -9px; margin-left: -9px; }
+            .mainframe-container > div[style*="background"] { padding: 6px !important; }
             .mainframe-container > div[style*="background"] input { padding: 6px !important; font-size: 10px !important; }
-
-            /* El contenedor con scroll de macros toma todo el carril central derecho */
-            .contenedor { 
-                grid-area: container; 
-                height: 100%;
-                max-height: 100%;
-            }
-            
-            .parrafo { padding: 10px 10px 10px 48px; font-size: 11px; margin: 4px 0; }
-            .parrafo::before { width: 34px; font-size: 9px; }
-            .parrafo::after { left: 17px; }
-
-            /* El botón de salida y el pie de página se alinean en la base */
-            .btn-exit { grid-area: exit; margin-top: 0; padding: 8px; font-size: 10px; }
-            footer { grid-area: footer; border-top: none; padding-top: 0; text-align: left; display: flex; align-items: center; font-size: 8px; }
+            .hud-v-bar, .hud-frame-telemetry { display: none; /* Oculta HUD exterior para limpiar interfaz */ }
         }
 
-        /* Soporte extremo para ventanas flotantes ultra pequeñas (Estilo Widget flotante cuadrado) */
-        @media (max-width: 280px) {
-            h1 { font-size: 14px !important; }
-            .portada-container { display: none; /* Oculta la imagen si la ventana es diminuta */ }
-            .parrafo { font-size: 10px !important; padding-left: 42px; }
-            .parrafo::before { width: 28px; }
-            .parrafo::after { left: 14px; }
+        /* MODO CRÍTICO: Ventanas flotantes ultra pequeñas (Estilo mini-widget o OneState colapsado) */
+        @media (max-width: 260px) or (max-height: 320px) {
+            .mainframe-container > div[style*="background"] { display: none; /* Remueve inputs si el espacio físico es mínimo */ }
+            footer { display: none; }
+            .btn-exit { padding: 4px; font-size: 9px; }
         }
-        
     </style>
 </head>
 <body>
 
-    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA DE MARCOS) -->
     <div class="telemetry-bg-container">
-        <!-- Columna Izquierda Furtiva -->
         <div class="telemetry-column col-left">
             <div class="telemetry-stream-feed">
                 A4F9B2C8<br>D3E710F5<br>6B8C9D0E<br>1A2F34BC<br>78DE90F1<br>2345ABCD<br>EF678901<br>BCDE2345<br>FFA01234<br>A4F9B2C8<br>D3E710F5<br>6B8C9D0E
             </div>
         </div>
-        <!-- Columna Derecha Furtiva -->
         <div class="telemetry-column col-right">
             <div class="telemetry-stream-feed">
                 90F12345<br>ABCDEF67<br>8901BCDE<br>2345FFA0<br>1234A4F9<br>B2C8D3E7<br>10F56B8C<br>9D0E1A2F<br>34BC78DE<br>90F12345<br>ABCDEF67<br>8901BCDE
@@ -478,7 +447,6 @@
         </div>
     </div>
 
-    <!-- PANTALLA DE CARGA SIMPLIFICADA AUTOMATIZADA -->
     <div class="system-boot-screen" id="bootScreen">
         <div class="boot-box" id="bootBox">
             <div class="boot-corner b-tl"></div><div class="boot-corner b-tr"></div><div class="boot-corner b-bl"></div><div class="boot-corner b-br"></div>
@@ -488,16 +456,13 @@
         </div>
     </div>
 
-    <!-- MIRA DE CENTRADO TÁCTICO HUD -->
     <div class="hud-crosshair"></div>
 
-    <!-- TELEMETRÍA Y MARCAS DIGITALES PERIMETRALES -->
     <div class="hud-bracket h-tl"></div>
     <div class="hud-bracket h-tr"></div>
     <div class="hud-bracket h-bl"></div>
     <div class="hud-bracket h-br"></div>
-    
-    <!-- BARRAS SATELITALES LATERALES CONTRA MARCOS VACÍOS -->
+
     <div class="hud-v-bar bar-left"><div class="hud-v-bar-fill"></div></div>
     <div class="hud-v-bar bar-right"><div class="hud-v-bar-fill" style="height: 40%;"></div></div>
 
@@ -513,25 +478,22 @@
     </div>
 
     <div class="mainframe-container">
-        <!-- Haz de luz perimetral en cian con vaivén alterno -->
         <div class="laser-border lb-top"></div><div class="laser-border lb-bottom"></div>
-        
-        <!-- Ángulos estructurales fijados -->
+
         <div class="corner-bracket tl"></div><div class="corner-bracket tr"></div><div class="corner-bracket bl"></div><div class="corner-bracket br"></div>
 
         <div class="portada-container">
             <img src="academia-portada.jpg" alt="Logotipo" class="portada-imagen">
         </div>
 
-        <!-- PANEL DE IDENTIFICACIÓN OPERATIVA CON INPUTS MONO-ESTILIZADOS -->
-        <div style="padding: 10px; margin-bottom: 4px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%);">
+        <div style="padding: 10px; margin-bottom: 4px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%); flex-shrink: 0;">
             <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">DIGITE SU NOMBRE Y RANGO:</div>
             <div style="display: flex; gap: 8px;">
                 <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
                 <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
             </div>
         </div>
-                <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
+
         <div class="contenedor">
             <div class="parrafo" data-original="/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
             <div class="parrafo">/do TASER TASER TASER!! ¡Te he taserizado para tomar el control de la situación.</div>
@@ -576,11 +538,10 @@
             <div class="parrafo">/flobby VIGILIA FINALIZADA.</div>
         </div>
 
-        <!-- Botón Táctico de Retorno Seguro -->
         <a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
         <footer>Academia Militar del Ejército | Sistema de macros tácticos.</footer>
     </div>
-        <!-- INGENIERÍA CONTROLADORA DE ACCESO DIRECTO Y PORTAPAPELES -->
+
     <script>
         const logs = [
             ">> COMPROBANDO INTEGRIDAD DEL ENLACE... OK",
@@ -615,7 +576,7 @@
             let currentPercent = 0;
             const duration = 2000;
             const stepTime = duration / 100;
-            
+
             const countInterval = setInterval(() => {
                 if (currentPercent < 100) {
                     currentPercent++;
@@ -636,10 +597,10 @@
         function actualizarMacros() {
             const nombreIngresado = document.getElementById('inputNombre').value.trim().toUpperCase();
             const rangoIngresado = document.getElementById('inputRango').value.trim().toUpperCase();
-            
+
             const nombreFinal = nombreIngresado ? `[${nombreIngresado}]` : "[NOMBRE]";
             const rangoFinal = rangoIngresado ? `(${rangoIngresado})` : "(RANGO ACTUAL)";
-            
+
             const macrosDinamicas = document.querySelectorAll('.parrafo[data-original]');
             macrosDinamicas.forEach(p => {
                 let textoBase = p.getAttribute('data-original');
@@ -677,7 +638,6 @@
         const parrafos = document.querySelectorAll('.parrafo');
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
-                // .trim() limpia cualquier espacio o carácter fantasma antes de mandar a OneState
                 const contenidoMacro = p.innerText.trim();
                 forzarCopiadoMovil(contenidoMacro)
                     .then(() => {
