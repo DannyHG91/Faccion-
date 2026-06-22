@@ -2,16 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[LOGIN LÍDERES]</title>
     <style>
-        /* Variables de Sistema del Alto Mando: Oro de Prestigio y Negro Sigilo */
+        /* Variables de Sistema del Alto Mando: Oro de Prestigio Moderno y Negro Sigilo */
         :root {
             --stealth-dark: #020407;
-            --glass-core: rgba(14, 21, 31, 0.85);
+            --glass-core: rgba(10, 16, 26, 0.65); /* Cristal más translúcido y limpio */
             --gold-prestige: #dcae3b;
-            --gold-glow: rgba(220, 174, 59, 0.25);
+            --gold-glow: rgba(220, 174, 59, 0.18); /* Iluminación ambiental de fibra óptica */
             --laser-cyan: #00d9ff;
             --sub-slate: #56687a;
             --pure-light: #f1f5f9;
@@ -41,65 +41,115 @@
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-size: 40px 40px; /* Rejilla más fina y moderna */
             background-position: center;
 
-            /* Bloqueo estricto de resaltado para simular comportamiento de App Nativa */
+            /* Bloqueo estricto de resaltado para comportamiento de App Nativa */
             -webkit-user-select: none;
             user-select: none;
         }
 
-        /* FORZADO DE RENDERIZADO POR GPU */
-        .mainframe-container, .form-input, .btn-submit, .wave {
-            -webkit-transform: translateZ(0);
-            transform: translateZ(0);
+        /* FORZADO DE RENDERIZADO POR GPU PARA VELOCIDAD ESTRICTA DE 60 FPS */
+        .mainframe-container, .form-input, .btn-submit, .radar-sweep, .radar-blip, .alert-box, .hud-v-bar-fill {
+            -webkit-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
             will-change: transform, opacity;
         }
-
-        /* FONDO ANIMADO: Radar cuántico en tono áureo */
-        .radar-wave-hub {
+        /* CAPA DEL RADAR MILITAR MODERNO EN ORO PRESTIGIO (60 FPS) */
+        .radar-container {
             position: absolute;
-            width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             z-index: 2;
             pointer-events: none;
+            overflow: hidden;
         }
 
-        .wave {
-            position: absolute;
-            border: 1px solid rgba(220, 174, 59, 0.04);
+        /* Chasis Circular del Sonar con Líneas Áureas de Alta Definición */
+        .radar-screen {
+            width: 92vw; height: 92vw;
+            max-width: 440px; max-height: 440px;
             border-radius: 50%;
-            animation: node-pulse 8s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+            border: 2px solid rgba(220, 174, 59, 0.25); /* Línea externa reforzada */
+            box-shadow: 0 0 50px rgba(220, 174, 59, 0.08);
+            position: relative;
+            background: 
+                radial-gradient(circle, transparent 30%, rgba(220, 174, 59, 0.06) 31%, transparent 32%, 
+                                transparent 60%, rgba(220, 174, 59, 0.06) 61%, transparent 62%);
+        }
+
+        /* Ejes de Coordenadas Cruzadas Vectoriales */
+        .radar-screen::before, .radar-screen::after {
+            content: '';
+            position: absolute;
+            background-color: rgba(220, 174, 59, 0.15);
+        }
+        .radar-screen::before { top: 0; left: 50%; width: 1.5px; height: 100%; }
+        .radar-screen::after { top: 50%; left: 0; width: 100%; height: 1.5px; }
+
+        /* Haz de Luz Giratorio de 360 Grados de Fibra Óptica */
+        .radar-sweep {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(from 0deg, var(--gold-prestige) 0deg, rgba(220, 174, 59, 0.25) 12deg, transparent 60deg);
+            animation: radar-spin 4s infinite linear;
+            z-index: 3;
+        }
+
+        @keyframes radar-spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* OBJETIVOS MILITARES (BLIPS TÁCTICOS CIAN ALTO CONTRASTE) */
+        .radar-blip {
+            position: absolute;
+            width: 6px; height: 6px;
+            background-color: #fff; /* Blanco núcleo para destellar en pantallas modernas */
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--laser-cyan), 0 0 20px var(--laser-cyan);
+            z-index: 4;
             opacity: 0;
         }
-        .w1 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 0s; }
-        .w2 { width: 80vw; height: 80vw; max-width: 320px; max-height: 320px; animation-delay: 3s; }
 
-        @keyframes node-pulse {
-            0% { transform: scale(0.6); opacity: 0; }
-            15% { opacity: 1; }
-            100% { transform: scale(3.5); opacity: 0; border-color: rgba(220, 174, 59, 0.01); }
+        /* Animaciones asíncronas para simular escaneo en tiempo real */
+        .target-alpha { top: 25%; left: 30%; animation: target-glow 4s infinite ease-in-out; }
+        .target-bravo { top: 65%; left: 75%; animation: target-glow 4s infinite ease-in-out 1.2s; }
+        .target-charlie { top: 15%; left: 68%; animation: target-glow 4s infinite ease-in-out 2.5s; }
+
+        @keyframes target-glow {
+            0%, 100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
+            40%, 60% { opacity: 0.9; transform: scale3d(1.1, 1.1, 1); }
         }
-        /* CONSOLA CENTRAL DE AUTENTICACIÓN RESTRINGIDA */
+                /* CONSOLA CENTRAL CON BISELES ASIMÉTRICOS POLIGONALES (ESTILO STEALTH DE VANGUARDIA) */
         .mainframe-container {
-            background: var(--glass-core);
+            background: rgba(7, 13, 22, 0.55); /* Cristal de búnker moderno más translúcido */
             border: 1px solid rgba(220, 174, 59, 0.25);
-            padding: 35px 24px;
-            width: 88vw;
-            max-width: 400px;
-            max-height: 85vh; 
+            padding: 30px 24px;
+            width: 96vw;          
+            max-width: 440px;
+            height: 94vh;         
+            max-height: 94vh; 
             box-sizing: border-box;
-            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.85);
+            
+            /* Sombra difusa holográfica estilo fibra óptica */
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.9), 0 0 30px var(--gold-glow);
+            
+            /* CORTE POLIGONAL ASIMÉTRICO MODERNO DE QUINTA GENERACIÓN */
+            clip-path: polygon(0% 0%, 92% 0%, 100% 8%, 100% 100%, 8% 100%, 0% 92%);
+            
             position: relative;
             z-index: 5;
-            border-radius: 4px;
-            overflow: hidden;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: center; 
+            gap: 14px;              
         }
 
-        /* LÁSER PERIMETRAL DE AUTORIDAD */
+        /* LÁSER PERIMETRAL DE AUTORIDAD A 60 FPS */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--gold-prestige), transparent);
@@ -107,11 +157,11 @@
         }
         .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
         .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
-        
-        @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
-        @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
 
-        /* Biseles de Esquina de Oro Militar */
+        @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
+
+        /* Ángulos de Titanio para el Enfoque de Retícula */
         .corner-bracket {
             position: absolute;
             width: 14px; height: 14px;
@@ -123,10 +173,10 @@
         .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
         .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-        /* CABECERA PRIVADA */
+        /* CABECERA PRIVADA SANITIZADA */
         .header-shield {
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 5px;
             border-bottom: 1px solid rgba(220, 174, 59, 0.15);
             padding-bottom: 12px;
         }
@@ -148,9 +198,9 @@
             color: var(--pure-light);
         }
 
-        /* CAMPOS DEL FORMULARIO HUD MILITAR */
+        /* CAMPOS DEL FORMULARIO HUD MILITAR CON FUENTES MONO-ESTILIZADAS */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             text-align: left;
         }
 
@@ -160,27 +210,28 @@
             font-family: monospace;
             color: var(--sub-slate);
             margin-bottom: 8px;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             text-transform: uppercase;
         }
 
-        /* ELEMENTO SELECTOR Y CAMPO DE TEXTO SIN LAG */
+        /* ELEMENTO SELECTOR Y CAMPO DE TEXTO SIN LAG BAJO ESTRESO */
         .form-input {
             width: 100%;
             padding: 16px;
             background: #020407; 
             border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 3px;
+            border-radius: 2px;
             color: var(--pure-light);
-            font-size: 14px;
+            font-size: 13px;
+            font-family: monospace;
+            letter-spacing: 1px;
             box-sizing: border-box;
             outline: none;
             transition: border-color 0.15s linear, box-shadow 0.15s linear;
-            -webkit-appearance: none; /* Elimina estilos nativos feos en iOS/Android */
+            -webkit-appearance: none; 
             appearance: none;
         }
 
-        /* Variante específica para el menú desplegable (añade flecha táctica discreta) */
         select.form-input {
             cursor: pointer;
             background-image: linear-gradient(45deg, transparent 50%, var(--gold-prestige) 50%), linear-gradient(135deg, var(--gold-prestige) 50%, transparent 50%);
@@ -189,7 +240,6 @@
             background-repeat: no-repeat;
         }
 
-        /* Estilos de las opciones internas del desplegable */
         select.form-input option {
             background-color: #0c121b;
             color: var(--pure-light);
@@ -201,7 +251,7 @@
             box-shadow: 0 0 15px rgba(220, 174, 59, 0.15);
         }
 
-        /* BOTÓN DE VALIDACIÓN ACCELERADO POR GPU */
+        /* BOTÓN DE VALIDACIÓN MODERNO CON CORTE GEOMÉTRICO ASIMÉTRICO */
         .btn-submit {
             display: block;
             width: 100%;
@@ -210,26 +260,29 @@
             border: 1px solid var(--gold-prestige);
             color: var(--gold-prestige);
             font-size: 12px;
+            font-family: monospace;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
             box-sizing: border-box;
-            border-radius: 3px;
-            transition: background-color 0.15s linear, color 0.15s linear;
+            margin-top: 10px;
             -webkit-tap-highlight-color: transparent;
-            margin-top: 20px;
+            
+            /* Bisel moderno a juego con el chasis */
+            clip-path: polygon(0% 0%, 94% 0%, 100% 25%, 100% 100%, 6% 100%, 0% 75%);
+            transition: background-color 0.15s linear, color 0.15s linear;
         }
 
         .btn-submit:active {
             background: var(--gold-prestige);
             color: var(--stealth-dark);
+            transform: scale3d(0.99, 0.99, 1);
         }
 
-        /* CUADRO DE NOTIFICACIÓN DE ERROR */
         .alert-box {
             display: none;
-            margin-top: 15px;
+            margin-top: 5px;
             background: rgba(255, 74, 74, 0.04);
             border: 1px solid var(--alert-red);
             border-left: 3px solid var(--alert-red);
@@ -239,6 +292,12 @@
             padding: 12px;
             text-align: left;
             line-height: 1.4;
+            animation: alert-appear 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes alert-appear {
+            from { opacity: 0; transform: translate3d(0, 5px, 0); }
+            to { opacity: 1; transform: translate3d(0, 0, 0); }
         }
 
         .btn-back {
@@ -248,18 +307,105 @@
             font-family: monospace;
             color: var(--sub-slate);
             text-decoration: none;
-            margin-top: 18px;
+            margin-top: 5px;
             letter-spacing: 1px;
         }
         .btn-back:active { color: var(--laser-cyan); }
+
+        /* MICRO-GRÁFICOS DE TELEMETRÍA Y COORDENADAS DIGITALES PERIMETRALES */
+        .hud-frame-telemetry {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 3; 
+            box-sizing: border-box;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 8px;
+            color: rgba(220, 174, 59, 0.25); 
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hud-row { display: flex; justify-content: space-between; width: 100%; }
+
+        .hud-bracket {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 1px solid rgba(220, 174, 59, 0.12);
+        }
+        .h-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .h-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .h-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .h-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .hud-crosshair {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            width: 30px; height: 30px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        .hud-crosshair::before, .hud-crosshair::after { content: ''; position: absolute; background-color: var(--gold-prestige); }
+        .hud-crosshair::before { top: 14px; left: 0; width: 100%; height: 1px; }
+        .hud-crosshair::after { top: 0; left: 14px; width: 1px; height: 100%; }
+
+        /* BARRAS VERTICALES DE CARGA SATELITAL (LLEVAN LOS LATERALES VACÍOS) */
+        .hud-v-bar {
+            position: absolute;
+            top: 35vh; width: 3px; height: 30vh;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(220, 174, 59, 0.08);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .bar-left { left: 15px; }
+        .bar-right { right: 15px; }
+        .hud-v-bar-fill {
+            width: 100%; height: 65%; /* Nivel estático simulando actividad binaria */
+            background: var(--gold-prestige);
+            box-shadow: 0 0 8px var(--gold-prestige);
+        }
     </style>
 </head>
 <body>
 
-    <!-- Capas animadas del búnker del Alto Mando -->
-    <div class="radar-wave-hub">
-        <div class="wave w1"></div>
-        <div class="wave w2"></div>
+    <!-- CAPA DEL RADAR MILITAR MEJORADO EN ORO PRESTIGIO -->
+    <div class="radar-container">
+        <div class="radar-screen">
+            <div class="radar-sweep"></div>
+            <div class="radar-blip target-alpha"></div>
+            <div class="radar-blip target-bravo"></div>
+            <div class="radar-blip target-charlie"></div>
+        </div>
+    </div>
+
+    <!-- MIRA DE CENTRADO TÁCTICO HUD -->
+    <div class="hud-crosshair"></div>
+
+    <!-- TELEMETRÍA Y MARCAS DIGITALES PERIMETRALES -->
+    <div class="hud-bracket h-tl"></div>
+    <div class="hud-bracket h-tr"></div>
+    <div class="hud-bracket h-bl"></div>
+    <div class="hud-bracket h-br"></div>
+    
+    <!-- BARRAS SATELITALES LATERALES CONTRA MARCOS VACÍOS -->
+    <div class="hud-v-bar bar-left"><div class="hud-v-bar-fill"></div></div>
+    <div class="hud-v-bar bar-right"><div class="hud-v-bar-fill" style="height: 40%;"></div></div>
+
+    <div class="hud-frame-telemetry">
+        <div class="hud-row">
+            <span>SYS_LOC: MAINFRAME_BUNKER_01</span>
+            <span>GRID_SEC: [22-06-26]</span>
+        </div>
+        <div class="hud-row">
+            <span>ALT_MANDO // CALIBRATION_MODE</span>
+            <span>SECURE_LINK // TRK_ACTV</span>
+        </div>
     </div>
 
     <div class="mainframe-container">
@@ -275,8 +421,8 @@
 
         <!-- Cabecera de Alto Rango -->
         <div class="header-shield">
-            <div class="sys-badge">✦ AUTENTICACIÓN OFICIAL ✦</div>
-            <h1>ALTO MANDO GEBERAL DE MESA</h1>
+            <div class="sys-badge">✦ AUTENTICACIÓN OPERATIVA ✦</div>
+            <h1>ALTO MANDO GENERAL DE MESA</h1>
         </div>
 
         <!-- Formulario Táctico con Menú de Selección Desplegable -->
@@ -285,7 +431,6 @@
                 <label for="user">SELECCIONAR FACCIÓN MILITAR</label>
                 <select class="form-input" id="user" required>
                     <option value="" disabled selected>SELECCIONE SU DIVISIÓN</option>
-
                     <option value="lider_academia">Academia Militar</option>
                     <option value="lider_fuego">Comando Táctico Fuego</option>
                     <option value="lider_agua">Fuerzas Anfibias Agua</option>
@@ -306,8 +451,7 @@
 
         <a href="/" class="btn-back">← ABORTAR OPERACIÓN / VOLVER AL INICIO</a>
     </div>
-
-    <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
+        <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
     <script>
         let audioCtx = null;
 
@@ -373,9 +517,11 @@
             initAudio();
 
             const userVal = document.getElementById('user').value;
-            const passVal = document.getElementById('pass').value;
+            // El uso de .trim() purga espacios invisibles accidentales al escribir la clave
+            const passVal = document.getElementById('pass').value.trim();
             const errorDiv = document.getElementById('errorMessage');
-            
+
+            errorDiv.style.opacity = "0";
             errorDiv.style.display = "none";
             errorDiv.innerText = "";
 
