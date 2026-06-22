@@ -26,7 +26,6 @@
             --pure-light: #f1f5f9;
             --grid-line: rgba(0, 217, 255, 0.015);
         }
-
         /* INGENIERÍA DE ALTO RENDIMIENTO (ADAPTABLE A BARRAS DE NAVEGACIÓN MÓVIL) */
         html, body {
             width: 100vw;
@@ -132,8 +131,7 @@
             width: 0%;
             background: linear-gradient(90deg, var(--laser-intel), #fff);
         }
-
-        /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED CIAN (60 FPS) */
+                /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED CIAN (60 FPS) */
         .telemetry-bg-container {
             position: absolute;
             top: 0; left: 0; width: 100vw; height: 100dvh;
@@ -170,7 +168,8 @@
             0% { transform: translate3d(0, 0, 0); }
             100% { transform: translate3d(0, -33.33%, 0); }
         }
-                /* CONTENEDOR CENTRAL EXPANSIÓN MÁXIMA AUTOADAPTABLE */
+
+        /* CONTENEDOR CENTRAL EXPANSIÓN MÁXIMA AUTOADAPTABLE */
         .mainframe-container {
             background: rgba(7, 13, 22, 0.55);
             border: 1px solid rgba(0, 217, 255, 0.15);
@@ -194,8 +193,7 @@
             justify-content: center; 
             gap: 10px;              
         }
-
-        /* LÁSER PERIMETRAL DE INTERCEPCIÓN EN MODO VAIVÉN (60 FPS) */
+                /* LÁSER PERIMETRAL DE INTERCEPCIÓN EN MODO VAIVÉN (60 FPS) */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--laser-intel), transparent);
@@ -234,16 +232,16 @@
             margin-bottom: 5px;
             padding-right: 2px;
             box-sizing: border-box;
+            counter-reset: macro-index; /* Inicializa la matriz de contadores */
         }
-
-        /* BLOQUES DE MACROS INTERACTIVOS CON CORTE POLIGONAL ASIMÉTRICO */
+                /* BLOQUES DE MACROS INTERACTIVOS CON SEPARACIÓN ESTRICTA DE CARRIL */
         .parrafo {
             background: rgba(0, 217, 255, 0.04);
             border-left: 4px solid var(--laser-intel);
             border-top: 1px solid var(--borde-tactico);
             border-right: 1px solid var(--borde-tactico);
             border-bottom: 1px solid var(--borde-tactico);
-            padding: 16px 14px;
+            padding: 16px 14px 16px 54px; /* Separación simétrica para la celda del índice */
             margin: 6px 0;
             cursor: pointer;
             font-size: 12px;
@@ -256,10 +254,56 @@
             box-sizing: border-box;
             transition: background-color 0.08s linear;
             -webkit-tap-highlight-color: transparent;
+            position: relative; /* Anclaje mandatorio para el índice */
         }
         .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
 
-        .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+        /* EL NÚMERO (OBJETIVO DETECTADO): Destella en sincronía con el pulso sónico */
+        .parrafo::before {
+            counter-increment: macro-index;
+            content: counter(macro-index, decimal-leading-zero);
+            position: absolute;
+            top: -1px; left: -1px;
+            width: 38px; height: calc(100% + 2px);
+            background: #020407; /* Celda oscura aislada */
+            border-right: 1px solid var(--borde-tactico);
+            font-family: monospace; font-size: 11px; font-weight: 900;
+            display: flex; align-items: center; justify-content: center;
+            z-index: 3; /* Por encima de la onda expansiva */
+
+            /* ANIMACIÓN DOPPLER RESIDUAL: Brillo de fósforo militar */
+            animation: sonar-target-blink 3s infinite ease-out;
+        }
+
+        /* LA ONDA EXPANSIVA DEL SONAR: Nace del núcleo central de la celda */
+        .parrafo::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 19px; /* Centro exacto del carril izquierdo de 38px */
+            width: 30px; height: 30px;
+            margin-top: -15px; margin-left: -15px;
+            border: 1px solid var(--laser-intel);
+            border-radius: 50%;
+            z-index: 2; /* Corre por detrás del número */
+            opacity: 0;
+            
+            /* ANIMACIÓN RADIAL: Expansión por hardware de GPU */
+            animation: sonar-wave-burst 3s infinite cubic-bezier(0.1, 0.8, 0.3, 1);
+        }
+
+        /* MOTORES DE ANIMACIÓN HIDROFÓNICA EN ALTA DEFINICIÓN */
+        @keyframes sonar-wave-burst {
+            0% { transform: scale3d(0.1, 0.1, 1); opacity: 0.8; box-shadow: inset 0 0 8px rgba(0, 217, 255, 0.4); }
+            50% { opacity: 0.3; }
+            100% { transform: scale3d(1.8, 1.8, 1); opacity: 0; }
+        }
+
+        @keyframes sonar-target-blink {
+            0%, 100% { color: rgba(0, 217, 255, 0.35); text-shadow: none; }
+            20% { color: #ffffff; text-shadow: 0 0 8px var(--laser-intel), 0 0 15px var(--laser-intel); } /* Impacto sónico */
+            60% { color: var(--laser-intel); text-shadow: 0 0 4px var(--intel-glow); }
+        }
+                .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
         .ultima-copiada { border-color: var(--laser-intel) !important; background: rgba(0, 217, 255, 0.12) !important; box-shadow: 0 0 8px var(--intel-glow); }
 
         /* BOTÓN TÁCTICO DE SALIDA CON BISEL */
@@ -284,11 +328,70 @@
         .btn-exit:active { background: rgba(255, 74, 74, 0.12); }
 
         footer { text-align: center; padding-top: 10px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+
+        /* TELEMETRÍA PERIMETRAL AJUSTADA AL DINÁMICO DEL MENÚ MÓVIL */
+        .hud-frame-telemetry {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100dvh; 
+            pointer-events: none;
+            z-index: 3; 
+            box-sizing: border-box;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 8px;
+            color: rgba(0, 217, 255, 0.25); 
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hud-row { display: flex; justify-content: space-between; width: 100%; }
+
+        .hud-bracket {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 1px solid rgba(0, 217, 255, 0.12);
+        }
+        .h-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .h-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .h-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .h-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .hud-crosshair {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            width: 30px; height: 30px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        .hud-crosshair::before, .hud-crosshair::after { content: ''; position: absolute; background-color: var(--laser-intel); }
+        .hud-crosshair::before { top: 14px; left: 0; width: 100%; height: 1px; }
+        .hud-crosshair::after { top: 0; left: 14px; width: 1px; height: 100%; }
+
+        /* BARRAS VERTICALES DE CARGA SATELITAL CONTRA EXTREMOS VACÍOS */
+        .hud-v-bar {
+            position: absolute;
+            top: 35dvh; width: 3px; height: 30dvh; 
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 217, 255, 0.08);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .bar-left { left: 15px; }
+        .bar-right { right: 15px; }
+        .hud-v-bar-fill {
+            width: 100%; height: 65%; 
+            background: var(--laser-intel);
+            box-shadow: 0 0 8px var(--laser-intel);
+        }
     </style>
 </head>
 <body>
 
-    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA EN VEZ DE RADAR) -->
+    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA DE MARCOS) -->
     <div class="telemetry-bg-container">
         <!-- Columna Izquierda Furtiva -->
         <div class="telemetry-column col-left">
@@ -314,6 +417,30 @@
         </div>
     </div>
 
+    <!-- MIRA DE CENTRADO TÁCTICO HUD -->
+    <div class="hud-crosshair"></div>
+
+    <!-- TELEMETRÍA Y MARCAS DIGITALES PERIMETRALES -->
+    <div class="hud-bracket h-tl"></div>
+    <div class="hud-bracket h-tr"></div>
+    <div class="hud-bracket h-bl"></div>
+    <div class="hud-bracket h-br"></div>
+    
+    <!-- BARRAS SATELITALES LATERALES CONTRA MARCOS VACÍOS -->
+    <div class="hud-v-bar bar-left"><div class="hud-v-bar-fill"></div></div>
+    <div class="hud-v-bar bar-right"><div class="hud-v-bar-fill" style="height: 40%;"></div></div>
+
+    <div class="hud-frame-telemetry">
+        <div class="hud-row">
+            <span>SYS_LOC: ACAD_MAINFRAME</span>
+            <span>GRID_SEC: [26-06-22]</span>
+        </div>
+        <div class="hud-row">
+            <span>INTEL_MANDO // ACAD_MODE</span>
+            <span>SECURE_LINK // TRK_ACTV</span>
+        </div>
+    </div>
+
     <div class="mainframe-container">
         <!-- Haz de luz perimetral en cian con vaivén alterno -->
         <div class="laser-border lb-top"></div><div class="laser-border lb-bottom"></div>
@@ -333,8 +460,7 @@
                 <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
             </div>
         </div>
-
-        <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
+                <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
         <div class="contenedor">
             <div class="parrafo" data-original="/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
             <div class="parrafo">/do TASER TASER TASER!! ¡Te he taserizado para tomar el control de la situación.</div>
@@ -379,7 +505,7 @@
             <div class="parrafo">/flobby VIGILIA FINALIZADA.</div>
         </div>
 
-        <!-- Botón Táctico de Retorno Seguro Corregido -->
+        <!-- Botón Táctico de Retorno Seguro -->
         <a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
         <footer>Academia Militar del Ejército | Sistema de macros tácticos.</footer>
     </div>
