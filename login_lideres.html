@@ -2,14 +2,14 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil -->
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[LOGIN LÍDERES]</title>
     <style>
         /* Variables de Sistema del Alto Mando: Oro de Prestigio Moderno y Negro Sigilo */
         :root {
             --stealth-dark: #020407;
-            --glass-core: rgba(10, 16, 26, 0.65); /* Cristal más translúcido y limpio */
+            --glass-core: rgba(10, 16, 26, 0.55); /* Cristal de búnker moderno translúcido */
             --gold-prestige: #dcae3b;
             --gold-glow: rgba(220, 174, 59, 0.18); /* Iluminación ambiental de fibra óptica */
             --laser-cyan: #00d9ff;
@@ -19,10 +19,10 @@
             --grid-line: rgba(220, 174, 59, 0.015);
         }
 
-        /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL ABSOLUTA EN MÓVILES (CERO LAG) */
+        /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL REAL EN MÓVILES (ADAPTABLE A BARRAS DE NAVEGACIÓN) */
         html, body {
             width: 100vw;
-            height: 100vh;
+            height: 100dvh; /* Forzado dinámico contra barras inferiores */
             margin: 0;
             padding: 0;
             overflow: hidden;
@@ -41,96 +41,70 @@
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 40px 40px; /* Rejilla más fina y moderna */
+            background-size: 40px 40px; /* Rejilla fina moderna */
             background-position: center;
 
-            /* Bloqueo estricto de resaltado para comportamiento de App Nativa */
+            /* Bloqueo estricto de resaltado para simular comportamiento de App Nativa */
             -webkit-user-select: none;
             user-select: none;
         }
 
         /* FORZADO DE RENDERIZADO POR GPU PARA VELOCIDAD ESTRICTA DE 60 FPS */
-        .mainframe-container, .form-input, .btn-submit, .radar-sweep, .radar-blip, .alert-box, .hud-v-bar-fill {
+        .mainframe-container, .form-input, .btn-submit, .telemetry-stream-feed, .alert-box, .hud-v-bar-fill, .laser-border {
             -webkit-transform: translate3d(0, 0, 0);
             transform: translate3d(0, 0, 0);
             will-change: transform, opacity;
         }
-        /* CAPA DEL RADAR MILITAR MODERNO EN ORO PRESTIGIO (60 FPS) */
-        .radar-container {
+        /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED (60 FPS) */
+        .telemetry-bg-container {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
+            top: 0; left: 0; width: 100vw; height: 100dvh;
             z-index: 2;
             pointer-events: none;
             overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 0 40px; /* Separado del chasis central */
         }
 
-        /* Chasis Circular del Sonar con Líneas Áureas de Alta Definición */
-        .radar-screen {
-            width: 92vw; height: 92vw;
-            max-width: 440px; max-height: 440px;
-            border-radius: 50%;
-            border: 2px solid rgba(220, 174, 59, 0.25); /* Línea externa reforzada */
-            box-shadow: 0 0 50px rgba(220, 174, 59, 0.08);
-            position: relative;
-            background: 
-                radial-gradient(circle, transparent 30%, rgba(220, 174, 59, 0.06) 31%, transparent 32%, 
-                                transparent 60%, rgba(220, 174, 59, 0.06) 61%, transparent 62%);
+        /* Columnas de Datos Flotantes */
+        .telemetry-column {
+            width: 50px;
+            font-family: monospace;
+            font-size: 8px;
+            color: var(--gold-prestige);
+            opacity: 0.06; /* Intensidad baja y sigilosa estilo código encriptado */
+            line-height: 1.4;
+            letter-spacing: 1px;
+            word-break: break-all;
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
         }
 
-        /* Ejes de Coordenadas Cruzadas Vectoriales */
-        .radar-screen::before, .radar-screen::after {
-            content: '';
-            position: absolute;
-            background-color: rgba(220, 174, 59, 0.15);
+        /* Flujo continuo ascendente forzado por hardware */
+        .telemetry-stream-feed {
+            animation: cascade-up 12s infinite linear;
         }
-        .radar-screen::before { top: 0; left: 50%; width: 1.5px; height: 100%; }
-        .radar-screen::after { top: 50%; left: 0; width: 100%; height: 1.5px; }
+        
+        /* Variaciones asíncronas de tiempo para romper la simetría web */
+        .col-left .telemetry-stream-feed { animation-duration: 14s; }
+        .col-right .telemetry-stream-feed { animation-duration: 10s; animation-delay: -2s; }
 
-        /* Haz de Luz Giratorio de 360 Grados de Fibra Óptica */
-        .radar-sweep {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--gold-prestige) 0deg, rgba(220, 174, 59, 0.25) 12deg, transparent 60deg);
-            animation: radar-spin 4s infinite linear;
-            z-index: 3;
+        @keyframes cascade-up {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(0, -33.33%, 0); }
         }
-
-        @keyframes radar-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* OBJETIVOS MILITARES (BLIPS TÁCTICOS CIAN ALTO CONTRASTE) */
-        .radar-blip {
-            position: absolute;
-            width: 6px; height: 6px;
-            background-color: #fff; /* Blanco núcleo para destellar en pantallas modernas */
-            border-radius: 50%;
-            box-shadow: 0 0 10px var(--laser-cyan), 0 0 20px var(--laser-cyan);
-            z-index: 4;
-            opacity: 0;
-        }
-
-        /* Animaciones asíncronas para simular escaneo en tiempo real */
-        .target-alpha { top: 25%; left: 30%; animation: target-glow 4s infinite ease-in-out; }
-        .target-bravo { top: 65%; left: 75%; animation: target-glow 4s infinite ease-in-out 1.2s; }
-        .target-charlie { top: 15%; left: 68%; animation: target-glow 4s infinite ease-in-out 2.5s; }
-
-        @keyframes target-glow {
-            0%, 100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
-            40%, 60% { opacity: 0.9; transform: scale3d(1.1, 1.1, 1); }
-        }
-                /* CONSOLA CENTRAL CON BISELES ASIMÉTRICOS POLIGONALES (ESTILO STEALTH DE VANGUARDIA) */
+                /* CONSOLA CENTRAL COMPACTA AUTOADAPTABLE AL NAVEGADOR MÓVIL */
         .mainframe-container {
-            background: rgba(7, 13, 22, 0.55); /* Cristal de búnker moderno más translúcido */
+            background: rgba(7, 13, 22, 0.55); 
             border: 1px solid rgba(220, 174, 59, 0.25);
-            padding: 30px 24px;
+            padding: 24px 20px; 
             width: 96vw;          
             max-width: 440px;
-            height: 94vh;         
-            max-height: 94vh; 
+            height: 90dvh;         
+            max-height: 90dvh;     
             box-sizing: border-box;
             
             /* Sombra difusa holográfica estilo fibra óptica */
@@ -146,18 +120,20 @@
             display: flex;
             flex-direction: column;
             justify-content: center; 
-            gap: 14px;              
+            gap: 12px;              
         }
 
-        /* LÁSER PERIMETRAL DE AUTORIDAD A 60 FPS */
+        /* LÁSER PERIMETRAL DE AUTORIDAD EN MODO VAIVÉN / PING-PONG (60 FPS) */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--gold-prestige), transparent);
             z-index: 6;
         }
-        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
-        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
+        /* Añadido 'alternate' para que la barra regrese fluidamente en lugar de desaparecer */
+        .lb-top { top: 0; left: 0; width: 100%; height: 1px; animation: laser-h 4s infinite ease-in-out alternate; }
+        .lb-bottom { bottom: 0; left: 0; width: 100%; height: 1px; animation: laser-h-rev 4s infinite ease-in-out alternate; }
 
+        /* Trayectos optimizados en 3D para rebote limpio en los bordes del chasis */
         @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
         @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
@@ -214,7 +190,7 @@
             text-transform: uppercase;
         }
 
-        /* ELEMENTO SELECTOR Y CAMPO DE TEXTO SIN LAG BAJO ESTRESO */
+        /* ELEMENTO SELECTOR Y CAMPO DE TEXTO SIN LAG BAJO ESTRES */
         .form-input {
             width: 100%;
             padding: 16px;
@@ -312,10 +288,10 @@
         }
         .btn-back:active { color: var(--laser-cyan); }
 
-        /* MICRO-GRÁFICOS DE TELEMETRÍA Y COORDENADAS DIGITALES PERIMETRALES */
+        /* TELEMETRÍA PERIMETRAL AJUSTADA AL DINÁMICO DEL MENÚ MÓVIL */
         .hud-frame-telemetry {
             position: absolute;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100dvh; 
             pointer-events: none;
             z-index: 3; 
             box-sizing: border-box;
@@ -354,10 +330,10 @@
         .hud-crosshair::before { top: 14px; left: 0; width: 100%; height: 1px; }
         .hud-crosshair::after { top: 0; left: 14px; width: 1px; height: 100%; }
 
-        /* BARRAS VERTICALES DE CARGA SATELITAL (LLEVAN LOS LATERALES VACÍOS) */
+        /* BARRAS VERTICALES DE CARGA SATELITAL RECALCULADAS */
         .hud-v-bar {
             position: absolute;
-            top: 35vh; width: 3px; height: 30vh;
+            top: 35dvh; width: 3px; height: 30dvh; 
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(220, 174, 59, 0.08);
             z-index: 3;
@@ -366,7 +342,7 @@
         .bar-left { left: 15px; }
         .bar-right { right: 15px; }
         .hud-v-bar-fill {
-            width: 100%; height: 65%; /* Nivel estático simulando actividad binaria */
+            width: 100%; height: 65%; 
             background: var(--gold-prestige);
             box-shadow: 0 0 8px var(--gold-prestige);
         }
@@ -374,13 +350,19 @@
 </head>
 <body>
 
-    <!-- CAPA DEL RADAR MILITAR MEJORADO EN ORO PRESTIGIO -->
-    <div class="radar-container">
-        <div class="radar-screen">
-            <div class="radar-sweep"></div>
-            <div class="radar-blip target-alpha"></div>
-            <div class="radar-blip target-bravo"></div>
-            <div class="radar-blip target-charlie"></div>
+    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA DE MARCOS) -->
+    <div class="telemetry-bg-container">
+        <!-- Columna Izquierda Furtiva -->
+        <div class="telemetry-column col-left">
+            <div class="telemetry-stream-feed">
+                A4F9B2C8<br>D3E710F5<br>6B8C9D0E<br>1A2F34BC<br>78DE90F1<br>2345ABCD<br>EF678901<br>BCDE2345<br>FFA01234<br>A4F9B2C8<br>D3E710F5<br>6B8C9D0E
+            </div>
+        </div>
+        <!-- Columna Derecha Furtiva -->
+        <div class="telemetry-column col-right">
+            <div class="telemetry-stream-feed">
+                90F12345<br>ABCDEF67<br>8901BCDE<br>2345FFA0<br>1234A4F9<br>B2C8D3E7<br>10F56B8C<br>9D0E1A2F<br>34BC78DE<br>90F12345<br>ABCDEF67<br>8901BCDE
+            </div>
         </div>
     </div>
 
@@ -400,16 +382,16 @@
     <div class="hud-frame-telemetry">
         <div class="hud-row">
             <span>SYS_LOC: MAINFRAME_BUNKER_01</span>
-            <span>GRID_SEC: [22-06-26]</span>
+            <span>GRID_SEC: [26-06-22]</span>
         </div>
         <div class="hud-row">
-            <span>ALT_MANDO // CALIBRATION_MODE</span>
+            <span>ALT_MANDO // VAIVÉN_LÁSER_ON</span>
             <span>SECURE_LINK // TRK_ACTV</span>
         </div>
     </div>
 
     <div class="mainframe-container">
-        <!-- Haz de luz perimetral en oro -->
+        <!-- Haz de luz perimetral en oro con rebote alterno -->
         <div class="laser-border lb-top"></div>
         <div class="laser-border lb-bottom"></div>
 
