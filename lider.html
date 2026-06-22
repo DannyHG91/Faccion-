@@ -2,17 +2,17 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil -->
+    <!-- Forzado de escala estricto para evitar zoom táctil y fijar vista móvil tipo App nativa vertical -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>[ TOKEN LIDER]</title>
+    <title>[ TOKEN LIDER ]</title>
 
     <style>
-        /* Variables Operativas del Alto Mando: Oro de Prestigio Preponderante */
+        /* Variables Operativas del Alto Mando: Oro de Prestigio Preponderante y Negro Sigilo */
         :root {
             --stealth-dark: #020407;
-            --glass-core: rgba(14, 21, 31, 0.75);
+            --glass-core: rgba(7, 13, 22, 0.55); /* Cristal moderno más limpio y translúcido */
             --gold-prestige: #dcae3b;
-            --gold-glow: rgba(220, 174, 59, 0.25);
+            --gold-glow: rgba(220, 174, 59, 0.18); /* Iluminación ambiental de fibra óptica */
             --laser-cyan: #00d9ff;
             --sub-slate: #56687a;
             --pure-light: #f1f5f9;
@@ -20,12 +20,13 @@
             --grid-line: rgba(220, 174, 59, 0.015);
         }
 
+        /* INGENIERÍA DE PANTALLA COMPLETA VERTICAL REAL (ADAPTABLE A BARRAS DE NAVEGACIÓN MÓVIL) */
         html, body {
             width: 100vw;
-            height: 100vh;
+            height: 100dvh; /* Forzado dinámico estricto contra barras inferiores de navegadores móviles */
             margin: 0;
             padding: 0;
-            overflow: hidden; /* Corta desplazamientos fuera de foco */
+            overflow: hidden; 
             background-color: var(--stealth-dark);
         }
 
@@ -41,10 +42,10 @@
             background-image: 
                 linear-gradient(var(--grid-line) 1px, transparent 1px),
                 linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-            background-size: 50px 50px;
+            background-size: 40px 40px; /* Rejilla fina áurea */
             background-position: center;
-            
-            /* Blindaje total contra resaltado de textos al presionar la pantalla o buscar */
+
+            /* Blindaje total contra resaltar textos al presionar la pantalla */
             -webkit-user-select: none;
             -moz-user-select: none;
             -ms-user-select: none;
@@ -52,108 +53,86 @@
         }
 
         /* INGENIERÍA DE HARDWARE EN ANIMACIONES DE ALTA TASA DE REFRESO (60 FPS) */
-        .mainframe-container, .laser-border, .token-display-box, .radar-sweep, .radar-blip {
+        .mainframe-container, .laser-border, .token-display-box, .telemetry-stream-feed, .hud-v-bar-fill {
             -webkit-transform: translate3d(0,0,0);
             transform: translate3d(0,0,0);
             will-change: transform, opacity;
         }
-                /* CAPA DEL RADAR MILITAR MEJORADO DE AVIACIÓN (60 FPS) */
-        .radar-container {
+        /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED ÁUREO (60 FPS) */
+        .telemetry-bg-container {
             position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; justify-content: center; align-items: center;
+            top: 0; left: 0; width: 100vw; height: 100dvh;
             z-index: 2;
             pointer-events: none;
             overflow: hidden;
-        }
-
-        /* Chasis Circular del Sonar con Líneas más Visibles */
-        .radar-screen {
-            width: 92vw; height: 92vw;
-            max-width: 440px; max-height: 440px;
-            border-radius: 50%;
-            border: 2px solid rgba(220, 174, 59, 0.25); /* Línea externa más gruesa */
-            box-shadow: 0 0 50px rgba(220, 174, 59, 0.08);
-            position: relative;
-            background: 
-                radial-gradient(circle, transparent 30%, rgba(220, 174, 59, 0.06) 31%, transparent 32%, 
-                                transparent 60%, rgba(220, 174, 59, 0.06) 61%, transparent 62%);
-        }
-
-        /* Ejes de Coordenadas Cruzadas Reforzados */
-        .radar-screen::before, .radar-screen::after {
-            content: '';
-            position: absolute;
-            background-color: rgba(220, 174, 59, 0.15); /* Más visible */
-        }
-        .radar-screen::before { top: 0; left: 50%; width: 1.5px; height: 100%; }
-        .radar-screen::after { top: 50%; left: 0; width: 100%; height: 1.5px; }
-
-        /* Haz de Luz Giratorio de 360 Grados */
-        .radar-sweep {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--gold-prestige) 0deg, rgba(220, 174, 59, 0.25) 12deg, transparent 60deg);
-            animation: radar-spin 4s infinite linear;
-            z-index: 3;
-        }
-
-        @keyframes radar-spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* OBJETIVOS EN MOVIENTO (BLIPS TÁCTICOS) ATRIBUIDOS A GPU */
-        .radar-blip {
-            position: absolute;
-            width: 6px; height: 6px;
-            background-color: #00ff66; /* Verde militar brillante para contraste */
-            border-radius: 50%;
-            box-shadow: 0 0 10px #00ff66, 0 0 20px #00ff66;
-            z-index: 4;
-            opacity: 0;
-        }
-
-        /* Animaciones asíncronas para simular escaneo en tiempo real */
-        .target-alpha { top: 25%; left: 30%; animation: target-glow 4s infinite ease-in-out; }
-        .target-bravo { top: 65%; left: 75%; animation: target-glow 4s infinite ease-in-out 1.2s; }
-        .target-charlie { top: 15%; left: 68%; animation: target-glow 4s infinite ease-in-out 2.5s; }
-
-        @keyframes target-glow {
-            0%, 100% { opacity: 0; transform: scale3d(0.5, 0.5, 1); }
-            40%, 60% { opacity: 0.9; transform: scale3d(1.1, 1.1, 1); }
-        }
-                /* CONSOLA CENTRAL DEL COMANDANTE EN JEFE (INTERFAZ GIGANTE) */
-        .mainframe-container {
-            background: rgba(7, 13, 22, 0.65); /* Opacidad de cristal para revelar el radar de fondo */
-            border: 1px solid rgba(220, 174, 59, 0.2);
-            padding: 30px 20px;
-            width: 96vw;          /* Ajustado al 96% del ancho del navegador */
-            max-width: 460px;
-            height: 94vh;         /* Estirado al 94% del alto vertical útil */
-            max-height: 94vh;
+            display: flex;
+            justify-content: space-between;
             box-sizing: border-box;
-            backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
-            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.85);
-            position: relative;
-            z-index: 5;
-            border-radius: 4px;
-            overflow: hidden;
+            padding: 0 40px; /* Separación simétrica de la consola central */
+        }
+
+        /* Columnas de Datos Flotantes Furtivas del Alto Mando */
+        .telemetry-column {
+            width: 50px;
+            font-family: monospace;
+            font-size: 8px;
+            color: var(--gold-prestige);
+            opacity: 0.06; /* Intensidad baja de sigilo avanzado */
+            line-height: 1.4;
+            letter-spacing: 1px;
+            word-break: break-all;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            white-space: nowrap;
         }
 
-        /* LÁSER PERIMETRAL DE ORO COMPLEMENTARIO A 60 FPS */
+        /* Flujo continuo ascendente forzado por hardware de GPU */
+        .telemetry-stream-feed {
+            animation: cascade-up 12s infinite linear;
+        }
+        
+        /* Rompimiento de simetría web con variaciones asíncronas de tiempo */
+        .col-left .telemetry-stream-feed { animation-duration: 14s; }
+        .col-right .telemetry-stream-feed { animation-duration: 10s; animation-delay: -2s; }
+
+        @keyframes cascade-up {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(0, -33.33%, 0); }
+        }
+
+        /* CONSOLA CENTRAL DEL COMANDANTE EN JEFE (INTERFAZ COMPACTA) */
+        .mainframe-container {
+            background: rgba(7, 13, 22, 0.55); /* Cristal más limpio y translúcido */
+            border: 1px solid rgba(220, 174, 59, 0.2);
+            padding: 24px 20px;
+            width: 96vw;          /* Ajustado al 96% del ancho útil */
+            max-width: 440px;
+            height: 90dvh;         /* Forzado dinámico para esquivar menús del navegador móvil */
+            max-height: 90dvh;
+            box-sizing: border-box;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.85), 0 0 30px var(--gold-glow);
+            
+            /* CORTE POLIGONAL ASIMÉTRICO MODERNO DE QUINTA GENERACIÓN */
+            clip-path: polygon(0% 0%, 92% 0%, 100% 8%, 100% 100%, 8% 100%, 0% 92%);
+            
+            position: relative;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; /* Alineación compacta centralizada */
+            gap: 12px;              /* Espaciado interno armónico */
+        }
+                /* LÁSER PERIMETRAL DE ORO EN MODO VAIVÉN / PING-PONG (60 FPS) */
         .laser-border {
             position: absolute;
             background: linear-gradient(90deg, transparent, var(--gold-prestige), transparent);
             z-index: 6;
         }
-        .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
-        .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
+        /* Ajuste elástico simétrico a 4s: Las barras rebotan continuamente en forma de vaivén */
+        .lb-top { top: 0; left: 0; width: 100%; height: 1px; animation: laser-h 4s infinite ease-in-out alternate; }
+        .lb-bottom { bottom: 0; left: 0; width: 100%; height: 1px; animation: laser-h-rev 4s infinite ease-in-out alternate; }
 
         @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
         @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
@@ -173,9 +152,9 @@
         /* CABECERA DE ALTO RANGO */
         .header-shield {
             text-align: center;
-            margin-bottom: 20px;
+            margin-bottom: 5px;
             border-bottom: 1px solid rgba(220, 174, 59, 0.15);
-            padding-bottom: 15px;
+            padding-bottom: 12px;
         }
 
         .sys-badge {
@@ -204,23 +183,27 @@
             font-weight: 600;
         }
 
-        /* BOTÓN MODERNO DE GENERACIÓN AMPLIADO */
+        /* BOTÓN MODERNO DE GENERACIÓN CON CORTE GEOMÉTRICO ASIMÉTRICO */
         .btn-generate {
             display: block;
             width: 100%;
-            padding: 20px;
+            padding: 18px;
             background: linear-gradient(135deg, rgba(220, 174, 59, 0.03), rgba(220, 174, 59, 0.08));
             border: 1px solid var(--gold-prestige);
             color: var(--gold-prestige);
-            font-size: 13px;
+            font-size: 12px;
+            font-family: monospace;
             font-weight: 700;
             letter-spacing: 3px;
             text-transform: uppercase;
             cursor: pointer;
             box-sizing: border-box;
-            border-radius: 3px;
-            transition: all 0.2s ease;
+            margin-top: 10px;
             -webkit-tap-highlight-color: transparent;
+            
+            /* Bisel moderno de quinta generación */
+            clip-path: polygon(0% 0%, 94% 0%, 100% 25%, 100% 100%, 6% 100%, 0% 75%);
+            transition: background-color 0.15s linear, box-shadow 0.15s linear;
         }
 
         .btn-generate:active {
@@ -232,16 +215,16 @@
         /* VISUALIZADOR DE CRISTAL CON COPIA RÁPIDA (60 FPS) */
         .token-display-box {
             display: none;
-            margin-top: 20px;
-            padding: 20px;
+            margin-top: 10px;
+            padding: 16px;
             background: rgba(0, 0, 0, 0.5);
             border: 1px solid rgba(220, 174, 59, 0.25);
-            border-radius: 3px;
             text-align: center;
             cursor: pointer;
             position: relative;
-            transition: all 0.15s ease;
-            -webkit-tap-highlight-color: transparent;
+            
+            /* Bisel simétrico inverso táctico */
+            clip-path: polygon(0% 0%, 96% 0%, 100% 20%, 100% 100%, 4% 100%, 0% 80%);
             animation: pane-appear 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
@@ -272,7 +255,6 @@
             letter-spacing: 2px;
         }
 
-        /* Indicador de Portapapeles Flotante */
         .copy-toast {
             font-size: 9px;
             font-family: monospace;
@@ -281,14 +263,13 @@
             margin-top: 6px;
             opacity: 0.8;
             font-weight: bold;
-            transition: all 0.2s ease;
         }
 
         /* BOTÓN DE DESCONEXIÓN TÁCTICA */
         .logout-zone {
-            margin-top: 20px;
+            margin-top: 10px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
-            padding-top: 15px;
+            padding-top: 12px;
         }
 
         .btn-logout {
@@ -297,7 +278,6 @@
             padding: 16px;
             background: rgba(255, 74, 74, 0.02);
             border: 1px dashed rgba(255, 74, 74, 0.3);
-            border-radius: 3px;
             color: var(--alert-red);
             text-align: center;
             text-decoration: none;
@@ -306,8 +286,10 @@
             font-weight: 600;
             letter-spacing: 2px;
             box-sizing: border-box;
-            transition: all 0.2s ease;
-            -webkit-tap-highlight-color: transparent;
+            
+            /* Biselado en diagonal para acoplar la estética general */
+            clip-path: polygon(0% 0%, 96% 0%, 100% 20%, 100% 100%, 4% 100%, 0% 80%);
+            transition: background-color 0.15s linear, border-color 0.15s linear;
         }
 
         .btn-logout:active {
@@ -315,22 +297,111 @@
             border-color: var(--alert-red);
             box-shadow: 0 0 15px rgba(255, 74, 74, 0.15);
         }
+
+        /* TELEMETRÍA PERIMETRAL AJUSTADA AL DINÁMICO DEL MENÚ MÓVIL */
+        .hud-frame-telemetry {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100dvh; 
+            pointer-events: none;
+            z-index: 3; 
+            box-sizing: border-box;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 8px;
+            color: rgba(220, 174, 59, 0.25); 
+            letter-spacing: 1px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hud-row { display: flex; justify-content: space-between; width: 100%; }
+
+        .hud-bracket {
+            position: absolute;
+            width: 20px; height: 20px;
+            border: 1px solid rgba(220, 174, 59, 0.12);
+        }
+        .h-tl { top: 10px; left: 10px; border-right: none; border-bottom: none; }
+        .h-tr { top: 10px; right: 10px; border-left: none; border-bottom: none; }
+        .h-bl { bottom: 10px; left: 10px; border-right: none; border-top: none; }
+        .h-br { bottom: 10px; right: 10px; border-left: none; border-top: none; }
+
+        .hud-crosshair {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate3d(-50%, -50%, 0);
+            width: 30px; height: 30px;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.15;
+        }
+        .hud-crosshair::before, .hud-crosshair::after { content: ''; position: absolute; background-color: var(--gold-prestige); }
+        .hud-crosshair::before { top: 14px; left: 0; width: 100%; height: 1px; }
+        .hud-crosshair::after { top: 0; left: 14px; width: 1px; height: 100%; }
+
+        /* BARRAS VERTICALES DE CARGA SATELITAL */
+        .hud-v-bar {
+            position: absolute;
+            top: 35dvh; width: 3px; height: 30dvh; 
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(220, 174, 59, 0.08);
+            z-index: 3;
+            pointer-events: none;
+        }
+        .bar-left { left: 15px; }
+        .bar-right { right: 15px; }
+        .hud-v-bar-fill {
+            width: 100%; height: 65%; 
+            background: var(--gold-prestige);
+            box-shadow: 0 0 8px var(--gold-prestige);
+        }
     </style>
 </head>
 <body>
 
-    <!-- CAPA DEL RADAR MILITAR DE AVIACIÓN REFORZADO CON BLIPS TÁCTICOS -->
-    <div class="radar-container">
-        <div class="radar-screen">
-            <div class="radar-sweep"></div>
-            <div class="radar-blip target-alpha"></div>
-            <div class="radar-blip target-bravo"></div>
-            <div class="radar-blip target-charlie"></div>
+    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA DE MARCOS EN ORO) -->
+    <div class="telemetry-bg-container">
+        <!-- Columna Izquierda Furtiva -->
+        <div class="telemetry-column col-left">
+            <div class="telemetry-stream-feed">
+                A4F9B2C8<br>D3E710F5<br>6B8C9D0E<br>1A2F34BC<br>78DE90F1<br>2345ABCD<br>EF678901<br>BCDE2345<br>FFA01234<br>A4F9B2C8<br>D3E710F5<br>6B8C9D0E
+            </div>
+        </div>
+        <!-- Columna Derecha Furtiva -->
+        <div class="telemetry-column col-right">
+            <div class="telemetry-stream-feed">
+                90F12345<br>ABCDEF67<br>8901BCDE<br>2345FFA0<br>1234A4F9<br>B2C8D3E7<br>10F56B8C<br>9D0E1A2F<br>34BC78DE<br>90F12345<br>ABCDEF67<br>8901BCDE
+            </div>
+        </div>
+    </div>
+
+    <!-- MIRA DE CENTRADO TÁCTICO HUD -->
+    <div class="hud-crosshair"></div>
+
+    <!-- TELEMETRÍA Y MARCAS DIGITALES PERIMETRALES -->
+    <div class="hud-bracket h-tl"></div>
+    <div class="hud-bracket h-tr"></div>
+    <div class="hud-bracket h-bl"></div>
+    <div class="hud-bracket h-br"></div>
+    
+    <!-- BARRAS SATELITALES LATERALES CONTRA MARCOS VACÍOS -->
+    <div class="hud-v-bar bar-left"><div class="hud-v-bar-fill"></div></div>
+    <div class="hud-v-bar bar-right"><div class="hud-v-bar-fill" style="height: 40%;"></div></div>
+
+    <div class="hud-frame-telemetry">
+        <div class="hud-row">
+            <span>SYS_LOC: MAINFRAME_BUNKER_01</span>
+            <span>GRID_SEC: [26-06-22]</span>
+        </div>
+        <div class="hud-row">
+            <span>ALT_MANDO // TOKEN_GEN_HUB</span>
+            <span>SECURE_LINK // TRK_ACTV</span>
         </div>
     </div>
 
     <div class="mainframe-container">
-        <!-- Haz de luz perimetral en oro -->
+        <!-- Haz de luz perimetral en oro con vaivén alterno -->
         <div class="laser-border lb-top"></div>
         <div class="laser-border lb-bottom"></div>
 
@@ -342,7 +413,7 @@
 
         <!-- Cabecera de Alto Rango -->
         <div class="header-shield">
-            <div class="sys-badge">✦ COMANDO GENERAL DE MESA ✦</div>
+            <div class="sys-badge">★ COMANDO GENERAL DE MESA ★</div>
             <h1>SISTEMA DE CONTROL</h1>
             <div class="faction-title" id="factionDisplay">FACCIÓN: CARGANDO...</div>
         </div>
@@ -362,8 +433,7 @@
             <a href="/logout" class="btn-logout" id="btnDisconnect">[ TERMINAR TRANSMISIÓN / DESCONECTAR ]</a>
         </div>
     </div>
-
-    <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
+        <!-- CONTROLADOR JAVASCRIPT Y MOTOR DE AUDIO DEL ALTO MANDO -->
     <script>
         let audioCtx = null;
 
@@ -419,7 +489,8 @@
             osc.start();
             osc.stop(audioCtx.currentTime + 0.12);
         }
-                // Cargar los datos de la facción del Líder logueado desde la API
+
+        // Cargar los datos de la facción del Líder logueado desde la API
         fetch('/api/info-lider')
             .then(res => res.json())
             .then(data => {
@@ -457,7 +528,7 @@
             if (navigator.clipboard && window.isSecureContext) {
                 return navigator.clipboard.writeText(texto);
             } else {
-                // Soporte de respaldo (Fallback) para navegadores integrados de apps móviles (Discord, etc.)
+                // Soporte de respaldo (Fallback) para navegadores de apps móviles (Discord, etc.)
                 return new Promise((resolve, reject) => {
                     const textArea = document.createElement("textarea");
                     textArea.value = texto;
@@ -477,7 +548,6 @@
 
         // SISTEMA DE COPIA RÁPIDA AL PORTAPAPELES
         document.getElementById('tokenBox').addEventListener('click', () => {
-            // El uso de .trim() remueve cualquier residuo, tabulación o salto de línea fantasma
             const tokenTexto = document.getElementById('tokenTexto').innerText.trim();
             initAudio();
 
@@ -498,7 +568,7 @@
                 .then(() => {
                     const toast = document.getElementById('copyToast');
                     toast.innerText = "✓ COPIADO AL PORTAPAPELES TÁCTICO";
-                    toast.style.color = "#00ff66"; // Cambia temporalmente a verde éxito
+                    toast.style.color = "#00ff66"; // Verde militar éxito
                 })
                 .catch(() => {
                     document.getElementById('copyToast').innerText = "ERROR AL COPIAR EL CÓDIGO";
@@ -506,13 +576,13 @@
                 });
         });
 
-        // SISTEMA DE DESCONEXIÓN CON RETRASO CONTROLADO PARA AUDIO
+               // SISTEMA DE DESCONEXIÓN CON RETRASO CONTROLADO PARA AUDIO
         document.getElementById('btnDisconnect').addEventListener('click', function(e) {
             e.preventDefault();
             const destinationUrl = this.getAttribute('href');
             playDisconnectSound();
 
-            // Retardo controlado para que el navegador de Android/iOS procese la bocina antes de saltar
+            // Retardo controlado para que el navegador procese el audio antes del salto
             setTimeout(() => {
                 window.location.href = destinationUrl;
             }, 120);
