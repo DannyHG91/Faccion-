@@ -13,6 +13,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="manifest" href="manifest.json">
 
+
     <style>
         /* Variables de Sistema de Inteligencia: Cian Zafiro y Negro Sigilo */
         :root {
@@ -387,6 +388,76 @@
             background: var(--laser-intel);
             box-shadow: 0 0 8px var(--laser-intel);
         }
+        
+                /* ======================================================= */
+        /* INGENIERÍA ADAPTATIVA PARA PANTALLA DIVIDIDA / HORIZONTAL*/
+        /* ======================================================= */
+        
+        /* Se activa automáticamente si la ventana flotante o dividida se vuelve más ancha que alta */
+        @media (orientation: landscape) and (max-height: 480px) {
+            
+            /* Ajusta el chasis central para abarcar más ancho y no desbordar el alto */
+            .mainframe-container {
+                width: 98vw;
+                max-width: 640px; /* Se expande horizontalmente */
+                height: 96dvh;
+                max-height: 96dvh;
+                padding: 10px 12px;
+                gap: 6px; /* Compacta el espaciado interno */
+                
+                /* Cambia la arquitectura interna a dos columnas (Lado a Lado) */
+                display: grid;
+                grid-template-columns: 140px 1fr;
+                grid-template-rows: auto 1fr auto;
+                grid-template-areas: 
+                    "header inputs"
+                    "header container"
+                    "footer exit";
+            }
+
+            /* Redirecciona los componentes nativos a sus nuevas celdas de la cuadrícula */
+            .portada-container { grid-area: header; display: flex; align-items: center; }
+            .portada-imagen { max-height: 120px; width: auto; margin: 0 auto; }
+            
+            /* El panel de Nombre y Rango se compacta al máximo en la parte superior derecha */
+            .mainframe-container > div[style*="background"] { 
+                grid-area: inputs; 
+                margin-bottom: 0 !important; 
+                padding: 6px 10px !important;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 10px;
+            }
+            .mainframe-container > div[style*="background"] > div:first-child { display: none; /* Oculta el texto guía para ganar espacio */ }
+            .mainframe-container > div[style*="background"] > div:last-child { flex: 1; }
+            .mainframe-container > div[style*="background"] input { padding: 6px !important; font-size: 10px !important; }
+
+            /* El contenedor con scroll de macros toma todo el carril central derecho */
+            .contenedor { 
+                grid-area: container; 
+                height: 100%;
+                max-height: 100%;
+            }
+            
+            .parrafo { padding: 10px 10px 10px 48px; font-size: 11px; margin: 4px 0; }
+            .parrafo::before { width: 34px; font-size: 9px; }
+            .parrafo::after { left: 17px; }
+
+            /* El botón de salida y el pie de página se alinean en la base */
+            .btn-exit { grid-area: exit; margin-top: 0; padding: 8px; font-size: 10px; }
+            footer { grid-area: footer; border-top: none; padding-top: 0; text-align: left; display: flex; align-items: center; font-size: 8px; }
+        }
+
+        /* Soporte extremo para ventanas flotantes ultra pequeñas (Estilo Widget flotante cuadrado) */
+        @media (max-width: 280px) {
+            h1 { font-size: 14px !important; }
+            .portada-container { display: none; /* Oculta la imagen si la ventana es diminuta */ }
+            .parrafo { font-size: 10px !important; padding-left: 42px; }
+            .parrafo::before { width: 28px; }
+            .parrafo::after { left: 14px; }
+        }
+        
     </style>
 </head>
 <body>
