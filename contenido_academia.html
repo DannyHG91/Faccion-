@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>[ ACADEMIA MILITAR - CENTRO DE INSTRUCCIÓN ]</title>
 
-    <!-- Configuración para comportamiento de App Nativa (PWA) si deciden agregarla a inicio -->
+    <!-- Configuración para comportamiento de App Nativa (PWA) independiente en pantallas móviles -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Academia Militar">
@@ -14,244 +14,297 @@
     <link rel="manifest" href="manifest.json">
 
     <style>
-    :root {
-        --stealth-dark: #020407;             /* Negro absoluto del búnker principal */
-        --glass-core: rgba(10, 16, 26, 0.75); /* Cristal ahumado zafiro de alta tecnología */
-        --laser-intel: #00d9ff;              /* Cian / Azul zafiro de Inteligencia Militar */
-        --intel-glow: rgba(0, 217, 255, 0.25);
-        --cobra-hover: rgba(0, 217, 255, 0.15);/* Brillo de interfaz activa al tacto */
-        --borde-tactico: rgba(0, 217, 255, 0.25);/* Bordes de cristal ligeros */
-        --sub-slate: #56687a;
-        --pure-light: #f1f5f9;
-        --grid-line: rgba(0, 217, 255, 0.015);
-    }
+        /* Variables de Sistema de Inteligencia: Cian Zafiro y Negro Sigilo */
+        :root {
+            --stealth-dark: #020407; /* Negro absoluto del búnker principal */
+            --glass-core: rgba(10, 16, 26, 0.55); /* Cristal ahumado zafiro de alta tecnología */
+            --laser-intel: #00d9ff; /* Cian / Azul zafiro de Inteligencia Militar */
+            --intel-glow: rgba(0, 217, 255, 0.18); /* Iluminación ambiental por fibra óptica */
+            --cobra-hover: rgba(0, 217, 255, 0.15); /* Brillo de interfaz activa al tacto */
+            --borde-tactico: rgba(0, 217, 255, 0.25); /* Bordes de cristal ligeros */
+            --sub-slate: #56687a;
+            --pure-light: #f1f5f9;
+            --grid-line: rgba(0, 217, 255, 0.015);
+        }
 
-    /* INGENIERÍA DE ALTO RENDIMIENTO (CERO EMULACIÓN DE AUDIO - MÁXIMA VELOCIDAD) */
-    html, body {
-        width: 100vw;
-        height: 100vh;
-        margin: 0;
-        padding: 0;
-        overflow: hidden; /* Corta desplazamientos fuera de foco */
-        background-color: var(--stealth-dark);
-    }
+        /* INGENIERÍA DE ALTO RENDIMIENTO (ADAPTABLE A BARRAS DE NAVEGACIÓN MÓVIL) */
+        html, body {
+            width: 100vw;
+            height: 100dvh; /* Forzado dinámico estricto contra barras inferiores de navegadores móviles */
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Corta desplazamientos fuera de foco */
+            background-color: var(--stealth-dark);
+        }
 
-    body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-        color: #fff;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        touch-action: none; /* Inmoviliza el scroll elástico de iOS y tirones de Android */
-        position: relative;
-        -webkit-user-select: none;
-        user-select: none;
-    }
-    
-    /* FORZADO DE RENDIMIENTO POR HARDWARE DE GPU */
-    .system-boot-screen, .mainframe-container, .parrafo, .boot-progress-fill {
-        -webkit-transform: translate3d(0,0,0);
-        transform: translate3d(0,0,0);
-        will-change: transform, opacity;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            touch-action: none; /* Inmoviliza el scroll elástico de iOS y tirones de Android */
+            position: relative;
+            background-image: 
+                linear-gradient(var(--grid-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+            background-size: 40px 40px;
+            background-position: center;
+            -webkit-user-select: none;
+            user-select: none;
+        }
 
-    /* PANTALLA DE CARGA LIVIANA SIN COMPONENTE DE AUDIO */
-    .system-boot-screen {
-        position: fixed;
-        top: 0; left: 0; width: 100vw; height: 100vh;
-        background-color: var(--stealth-dark);
-        z-index: 100;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        transition: opacity 0.3s ease, visibility 0.3s;
-    }
+        /* FORZADO DE RENDIMIENTO POR HARDWARE DE GPU (60 FPS) */
+        .system-boot-screen, .mainframe-container, .parrafo, .boot-progress-fill, .telemetry-stream-feed, .laser-border {
+            -webkit-transform: translate3d(0,0,0);
+            transform: translate3d(0,0,0);
+            will-change: transform, opacity;
+        }
+                /* PANTALLA DE CARGA LIVIANA SIN COMPONENTE DE AUDIO (60 FPS) */
+        .system-boot-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100dvh; /* Adaptación elástica dvh */
+            background-color: var(--stealth-dark);
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.3s ease, visibility 0.3s;
+        }
 
-    .boot-box {
-        width: 86vw;
-        max-width: 360px;
-        background: rgba(10, 16, 26, 0.95); 
-        border: 1px solid rgba(0, 217, 255, 0.25);
-        padding: 25px 20px;
-        position: relative;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        text-align: center;
-    }
+        .boot-box {
+            width: 86vw;
+            max-width: 360px;
+            background: rgba(10, 16, 26, 0.95);
+            border: 1px solid rgba(0, 217, 255, 0.25);
+            padding: 25px 20px;
+            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
 
-    .boot-corner {
-        position: absolute;
-        width: 10px; height: 10px;
-        border: 2px solid var(--laser-intel);
-    }
-    .b-tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-    .b-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-    .b-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-    .b-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+        .boot-corner {
+            position: absolute;
+            width: 10px; height: 10px;
+            border: 2px solid var(--laser-intel);
+        }
+        .b-tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .b-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .b-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .b-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-    .boot-terminal {
-        width: 100%;
-        font-family: monospace;
-        font-size: 11px;
-        color: var(--laser-intel);
-        text-align: left;
-        margin-bottom: 20px;
-        line-height: 1.6;
-        letter-spacing: 1px;
-        height: 125px;
-        overflow: hidden;
-    }
+        .boot-terminal {
+            width: 100%;
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--laser-intel);
+            text-align: left;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            letter-spacing: 1px;
+            height: 125px;
+            overflow: hidden;
+        }
 
-    .boot-meta-status {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-family: monospace;
-        font-size: 10px;
-        color: var(--sub-slate);
-        margin-bottom: 8px;
-    }
+        .boot-meta-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: monospace;
+            font-size: 10px;
+            color: var(--sub-slate);
+            margin-bottom: 8px;
+        }
 
-    .boot-progress-bar {
-        width: 100%;
-        height: 3px;
-        background: rgba(255, 255, 255, 0.02);
-        border: 1px solid rgba(0, 217, 255, 0.15);
-        position: relative;
-        overflow: hidden;
-    }
+        .boot-progress-bar {
+            width: 100%;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(0, 217, 255, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
 
-    .boot-progress-fill {
-        height: 100%;
-        width: 0%;
-        background: linear-gradient(90deg, var(--laser-intel), #fff);
-    }
-    
-    /* Fondo de rejilla digital purgado y estático */
-    .dynamic-bg {
-        position: absolute;
-        top: 0; left: 0; width: 100%; height: 100%;
-        background-image: 
-            linear-gradient(var(--grid-line) 1px, transparent 1px),
-            linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
-        background-size: 50px 50px;
-        background-position: center;
-        z-index: 1;
-    }
+        .boot-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--laser-intel), #fff);
+        }
 
-    /* CONTENEDOR CENTRAL EXPANSIÓN MÁXIMA (INTERFAZ GIGANTE) */
-    .mainframe-container {
-        background: #090e14; 
-        border: 1px solid rgba(0, 217, 255, 0.2);
-        padding: 15px 12px;
-        width: 96vw;
-        max-width: 480px;
-        height: 94vh;
-        max-height: 94vh; 
-        box-sizing: border-box;
-        box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-        position: relative;
-        z-index: 5;
-        border-radius: 4px;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
+        /* CAPA DE DATOS EN CASCADA CIEGA / TELEMETRY FEED CIAN (60 FPS) */
+        .telemetry-bg-container {
+            position: absolute;
+            top: 0; left: 0; width: 100vw; height: 100dvh;
+            z-index: 2;
+            pointer-events: none;
+            overflow: hidden;
+            display: flex;
+            justify-content: space-between;
+            box-sizing: border-box;
+            padding: 0 40px; 
+        }
 
-    .laser-border {
-        position: absolute;
-        background: linear-gradient(90deg, transparent, var(--laser-intel), transparent);
-        z-index: 6;
-    }
-    .lb-top { top: 0; left: -100%; width: 100%; height: 1px; animation: laser-h 4.5s infinite linear; }
-    .lb-bottom { bottom: 0; right: -100%; width: 100%; height: 1px; animation: laser-h-rev 4.5s infinite linear; }
-    
-    @keyframes laser-h { 0% { left: -100%; } 100% { left: 100%; } }
-    @keyframes laser-h-rev { 0% { right: -100%; } 100% { right: 100%; } }
+        .telemetry-column {
+            width: 50px;
+            font-family: monospace;
+            font-size: 8px;
+            color: var(--laser-intel);
+            opacity: 0.06; /* Atenuación furtiva sigilosa */
+            line-height: 1.4;
+            letter-spacing: 1px;
+            word-break: break-all;
+            display: flex;
+            flex-direction: column;
+            white-space: nowrap;
+        }
 
-    .corner-bracket {
-        position: absolute;
-        width: 14px; height: 14px;
-        border: 2px solid rgba(0, 217, 255, 0.3);
-        z-index: 7;
-    }
-    .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
-    .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
-    .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
-    .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-    
-    .portada-container { width: 100%; margin-bottom: 8px; box-sizing: border-box; }
-    .portada-imagen { width: 100%; height: auto; display: block; border: 1px solid var(--laser-intel); border-radius: 2px; }
+        .telemetry-stream-feed {
+            animation: cascade-up 12s infinite linear;
+        }
+        .col-left .telemetry-stream-feed { animation-duration: 14s; }
+        .col-right .telemetry-stream-feed { animation-duration: 10s; animation-delay: -2s; }
 
-    /* SCROLL INTERNO AMPLIADO DE MÁXIMO RENDIMIENTO */
-    .contenedor {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        overflow-y: auto; 
-        -webkit-overflow-scrolling: touch; 
-        flex: 1;
-        margin-bottom: 8px;
-        padding-right: 2px;
-        box-sizing: border-box;
-    }
+        @keyframes cascade-up {
+            0% { transform: translate3d(0, 0, 0); }
+            100% { transform: translate3d(0, -33.33%, 0); }
+        }
+                /* CONTENEDOR CENTRAL EXPANSIÓN MÁXIMA AUTOADAPTABLE */
+        .mainframe-container {
+            background: rgba(7, 13, 22, 0.55);
+            border: 1px solid rgba(0, 217, 255, 0.15);
+            padding: 20px 16px;
+            width: 96vw;
+            max-width: 440px;
+            height: 90dvh;         /* Forzado dinámico contra recortes de barras */
+            max-height: 90dvh;
+            box-sizing: border-box;
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8), 0 0 30px var(--intel-glow);
+            
+            /* CORTE POLIGONAL ASIMÉTRICO MODERNO DE QUINTA GENERACIÓN */
+            clip-path: polygon(0% 0%, 92% 0%, 100% 8%, 100% 100%, 8% 100%, 0% 92%);
+            
+            position: relative;
+            z-index: 5;
+            display: flex;
+            flex-direction: column;
+            justify-content: center; 
+            gap: 10px;              
+        }
 
-    .parrafo {
-        background: rgba(0, 217, 255, 0.04); 
-        border-left: 4px solid var(--laser-intel); 
-        border-top: 1px solid var(--borde-tactico);
-        border-right: 1px solid var(--borde-tactico);
-        border-bottom: 1px solid var(--borde-tactico);
-        padding: 16px 14px;
-        margin: 6px 0;
-        cursor: pointer;
-        font-size: 12px;
-        font-family: monospace;
-        font-weight: 600;
-        letter-spacing: 0.5px;
-        clip-path: polygon(0% 0%, 96% 0%, 100% 15%, 100% 100%, 4% 100%, 0% 85%);
-        box-sizing: border-box;
-        transition: background-color 0.08s linear;
-        -webkit-tap-highlight-color: transparent;
-    }
+        /* LÁSER PERIMETRAL DE INTERCEPCIÓN EN MODO VAIVÉN (60 FPS) */
+        .laser-border {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--laser-intel), transparent);
+            z-index: 6;
+        }
+        /* Las barras rebotan continuamente en forma de vaivén simétrico */
+        .lb-top { top: 0; left: 0; width: 100%; height: 1px; animation: laser-h 4s infinite ease-in-out alternate; }
+        .lb-bottom { bottom: 0; left: 0; width: 100%; height: 1px; animation: laser-h-rev 4s infinite ease-in-out alternate; }
 
-    .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
-    
-    .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+        @keyframes laser-h { 0% { transform: translate3d(-100%, 0, 0); } 100% { transform: translate3d(100%, 0, 0); } }
+        @keyframes laser-h-rev { 0% { transform: translate3d(100%, 0, 0); } 100% { transform: translate3d(-100%, 0, 0); } }
 
-    /* NUEVA GUÍA OPERATIVA PARA EL RECLUTA */
-    .ultima-copiada {
-        border-color: var(--laser-intel) !important;
-        background: rgba(0, 217, 255, 0.12) !important;
-        box-shadow: 0 0 8px var(--intel-glow);
-    }
+        /* Ángulos estructurales de fijación */
+        .corner-bracket {
+            position: absolute;
+            width: 14px; height: 14px;
+            border: 2px solid rgba(0, 217, 255, 0.3);
+            z-index: 7;
+        }
+        .tl { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+        .tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
+        .bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
+        .br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
 
-    .btn-exit {
-        display: block;
-        width: 100%;
-        padding: 12px;
-        margin-top: 8px;
-        background: rgba(255, 74, 74, 0.02);
-        border: 1px dashed rgba(255, 74, 74, 0.25);
-        color: #ff4a4a;
-        text-align: center;
-        text-decoration: none;
-        font-size: 10px;
-        font-family: monospace;
-        font-weight: 600;
-        letter-spacing: 2px;
-        box-sizing: border-box;
-        border-radius: 2px;
-    }
-    
-    footer { text-align: center; padding-top: 10px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
+        .portada-container { width: 100%; box-sizing: border-box; }
+        .portada-imagen { width: 100%; height: auto; display: block; border: 1px solid var(--laser-intel); border-radius: 2px; }
+
+        /* SCROLL INTERNO AMPLIADO DE MÁXIMO RENDIMIENTO */
+        .contenedor {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            flex: 1;
+            margin-bottom: 5px;
+            padding-right: 2px;
+            box-sizing: border-box;
+        }
+
+        /* BLOQUES DE MACROS INTERACTIVOS CON CORTE POLIGONAL ASIMÉTRICO */
+        .parrafo {
+            background: rgba(0, 217, 255, 0.04);
+            border-left: 4px solid var(--laser-intel);
+            border-top: 1px solid var(--borde-tactico);
+            border-right: 1px solid var(--borde-tactico);
+            border-bottom: 1px solid var(--borde-tactico);
+            padding: 16px 14px;
+            margin: 6px 0;
+            cursor: pointer;
+            font-size: 12px;
+            font-family: monospace;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            
+            /* Biselado asimétrico moderno */
+            clip-path: polygon(0% 0%, 96% 0%, 100% 15%, 100% 100%, 4% 100%, 0% 85%);
+            box-sizing: border-box;
+            transition: background-color 0.08s linear;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .parrafo:active { background-color: rgba(0, 217, 255, 0.15); }
+
+        .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
+        .ultima-copiada { border-color: var(--laser-intel) !important; background: rgba(0, 217, 255, 0.12) !important; box-shadow: 0 0 8px var(--intel-glow); }
+
+        /* BOTÓN TÁCTICO DE SALIDA CON BISEL */
+        .btn-exit {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            margin-top: 5px;
+            background: rgba(255, 74, 74, 0.02);
+            border: 1px dashed rgba(255, 74, 74, 0.25);
+            color: #ff4a4a;
+            text-align: center;
+            text-decoration: none;
+            font-size: 11px;
+            font-family: monospace;
+            font-weight: 600;
+            letter-spacing: 2px;
+            box-sizing: border-box;
+            clip-path: polygon(0% 0%, 96% 0%, 100% 20%, 100% 100%, 4% 100%, 0% 80%);
+            transition: background-color 0.15s linear;
+        }
+        .btn-exit:active { background: rgba(255, 74, 74, 0.12); }
+
+        footer { text-align: center; padding-top: 10px; font-size: 9px; color: var(--laser-intel); opacity: 0.6; font-family: monospace; letter-spacing: 1px; border-top: 1px solid rgba(255, 255, 255, 0.04); }
     </style>
 </head>
 <body>
 
-    <!-- Pantalla de carga simplificada automatizada -->
+    <!-- CAPA DE DATOS EN CASCADA CIEGA ASÍNCRONA (TELEMETRÍA EN VEZ DE RADAR) -->
+    <div class="telemetry-bg-container">
+        <!-- Columna Izquierda Furtiva -->
+        <div class="telemetry-column col-left">
+            <div class="telemetry-stream-feed">
+                A4F9B2C8<br>D3E710F5<br>6B8C9D0E<br>1A2F34BC<br>78DE90F1<br>2345ABCD<br>EF678901<br>BCDE2345<br>FFA01234<br>A4F9B2C8<br>D3E710F5<br>6B8C9D0E
+            </div>
+        </div>
+        <!-- Columna Derecha Furtiva -->
+        <div class="telemetry-column col-right">
+            <div class="telemetry-stream-feed">
+                90F12345<br>ABCDEF67<br>8901BCDE<br>2345FFA0<br>1234A4F9<br>B2C8D3E7<br>10F56B8C<br>9D0E1A2F<br>34BC78DE<br>90F12345<br>ABCDEF67<br>8901BCDE
+            </div>
+        </div>
+    </div>
+
+    <!-- PANTALLA DE CARGA SIMPLIFICADA AUTOMATIZADA -->
     <div class="system-boot-screen" id="bootScreen">
         <div class="boot-box" id="bootBox">
             <div class="boot-corner b-tl"></div><div class="boot-corner b-tr"></div><div class="boot-corner b-bl"></div><div class="boot-corner b-br"></div>
@@ -261,23 +314,26 @@
         </div>
     </div>
 
-    <div class="dynamic-bg"></div>
-
     <div class="mainframe-container">
+        <!-- Haz de luz perimetral en cian con vaivén alterno -->
         <div class="laser-border lb-top"></div><div class="laser-border lb-bottom"></div>
+        
+        <!-- Ángulos estructurales fijados -->
+        <div class="corner-bracket tl"></div><div class="corner-bracket tr"></div><div class="corner-bracket bl"></div><div class="corner-bracket br"></div>
+
         <div class="portada-container">
             <img src="academia-portada.jpg" alt="Logotipo" class="portada-imagen">
         </div>
 
-        <!-- PANEL DE IDENTIFICACIÓN OPERATIVA -->
-        <div style="padding: 10px; margin-bottom: 8px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); border-radius: 2px;">
+        <!-- PANEL DE IDENTIFICACIÓN OPERATIVA CON INPUTS MONO-ESTILIZADOS -->
+        <div style="padding: 10px; margin-bottom: 4px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%);">
             <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">DIGITE SU NOMBRE Y RANGO:</div>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
-                <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 8px; color: #fff; font-family: monospace; font-size: 11px; border-radius: 2px; outline: none;" oninput="actualizarMacros()">
+                <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
+                <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
             </div>
         </div>
-        
+
         <!-- CONTENEDOR SEGURO: Evita el desborde y lag visual en móviles -->
         <div class="contenedor">
             <div class="parrafo" data-original="/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!">/me ARMADA MILITAR [NOMBRE] (RANGO ACTUAL) MI MAXIMO RESPETO SR(A)!!</div>
@@ -327,7 +383,7 @@
         <a href="/logout" onclick="sessionStorage.clear();" class="btn-exit" id="btnDisconnect">[ CIERRE DE TERMINAL ]</a>
         <footer>Academia Militar del Ejército | Sistema de macros tácticos.</footer>
     </div>
-    <!-- INGENIERÍA CONTROLADORA DE ACCESO DIRECTO Y PORTAPAPELES -->
+        <!-- INGENIERÍA CONTROLADORA DE ACCESO DIRECTO Y PORTAPAPELES -->
     <script>
         const logs = [
             ">> COMPROBANDO INTEGRIDAD DEL ENLACE... OK",
@@ -347,7 +403,7 @@
             const percentText = document.getElementById("bootPercent");
             const progressFill = document.getElementById("bootProgressFill");
             const bootScreen = document.getElementById("bootScreen");
-            
+
             // Simulación rápida de líneas de terminal cada 300ms
             const logInterval = setInterval(() => {
                 if (logIndex < logs.length) {
@@ -360,9 +416,9 @@
 
             // Incremento lineal del porcentaje en 2 segundos
             let currentPercent = 0;
-            const duration = 2000; 
+            const duration = 2000;
             const stepTime = duration / 100;
-
+            
             const countInterval = setInterval(() => {
                 if (currentPercent < 100) {
                     currentPercent++;
@@ -372,12 +428,14 @@
                     clearInterval(countInterval);
                     // Ocultar pantalla de carga instantáneamente al terminar
                     bootScreen.style.opacity = "0";
-                    bootScreen.style.visibility = "hidden";
+                    setTimeout(() => {
+                        bootScreen.style.visibility = "hidden";
+                    }, 300);
                 }
             }, stepTime);
         }
 
-        // MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO INTEGRAL MÓVIL
+        /* MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO INTEGRAL MÓVIL */
         function actualizarMacros() {
             const nombreIngresado = document.getElementById('inputNombre').value.trim().toUpperCase();
             const rangoIngresado = document.getElementById('inputRango').value.trim().toUpperCase();
@@ -386,7 +444,6 @@
             const rangoFinal = rangoIngresado ? `(${rangoIngresado})` : "(RANGO ACTUAL)";
             
             const macrosDinamicas = document.querySelectorAll('.parrafo[data-original]');
-            
             macrosDinamicas.forEach(p => {
                 let textoBase = p.getAttribute('data-original');
                 let textoProcesado = textoBase
@@ -397,7 +454,7 @@
             });
         }
 
-        // FUNCIÓN TÁCTICA DE COPIADO ULTRA COMPATIBLE (FILTRADO DE RESIDUOS BLINDADO)
+        /* FUNCIÓN TÁCTICA DE COPIADO ULTRA COMPATIBLE (FILTRADO DE RESIDUOS BLINDADO) */
         function forzarCopiadoMovil(texto) {
             if (navigator.clipboard && window.isSecureContext) {
                 return navigator.clipboard.writeText(texto);
@@ -419,36 +476,24 @@
             }
         }
 
-        // VINCULACIÓN ULTRA FLUDA DE EVENTOS CON HISTORIAL RESALTADO DE MEMORIA
+        /* VINCULACIÓN ULTRA FLUDA DE EVENTOS CON HISTORIAL RESALTADO DE MEMORIA */
         const parrafos = document.querySelectorAll('.parrafo');
         parrafos.forEach(p => {
             p.addEventListener('click', () => {
                 // .trim() limpia cualquier espacio o carácter fantasma antes de mandar a OneState
                 const contenidoMacro = p.innerText.trim();
-                
                 forzarCopiadoMovil(contenidoMacro)
                     .then(() => {
                         parrafos.forEach(otro => otro.classList.remove('ultima-copiada'));
                         p.classList.add('copiado');
-                        setTimeout(() => { 
-                            p.classList.remove('copiado'); 
-                            p.className = 'parrafo ultima-copiada'; 
-                        }, 150); 
+                        setTimeout(() => {
+                            p.classList.remove('copiado');
+                            p.className = 'parrafo ultima-copiada';
+                        }, 150);
                     })
                     .catch(err => console.error('Error crítico al copiar macro: ', err));
             });
         });
     </script>
-    
-    <!-- DIRECTIVAS FINALES DE RESPALDO: ACELERACIÓN PURA POR ENTORNO -->
-    <style>
-        .system-boot-screen, .mainframe-container, .boot-box {
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-        }
-        img, a, button, div {
-            -webkit-touch-callout: none;
-        }
-    </style>
 </body>
 </html>
