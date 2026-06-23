@@ -16,15 +16,14 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// Despachador estático inteligente: no guarda caché para evitar bloqueos en cambios de diseño
-app.use(express.static(path.join(__dirname), {
+// DESPACHADOR ESTÁTICO INTELIGENTE (Aponta solo a la carpeta 'public' por seguridad)
+// Nota: Coloca tus archivos HTML, CSS e imágenes dentro de una carpeta llamada 'public'
+app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: 0,
     setHeaders: (res, ruta) => { 
         if (ruta.endsWith('.html')) {
-            // Los archivos HTML se verifican SIEMPRE en el servidor
             res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, private'); 
         } else {
-            // Imágenes o recursos pesados pueden mantener un caché corto
             res.setHeader('Cache-Control', 'public, max-age=3600'); 
         }
     }
@@ -52,7 +51,7 @@ function cargarUsuariosDeArchivo() {
         }
     } catch (error) {
         console.error("Fallo de lectura de disco:", error);
-        return [...lideresPorDefecto]; // Evita romper el servidor devolviendo los líderes en memoria
+        return [...lideresPorDefecto];
     }
 }
 
@@ -64,9 +63,39 @@ function guardarUsuariosEnArchivo(lista) {
     }
 }
 
+// ENRUTAMIENTO DE VISTAS (Apunta a la carpeta raíz o 'public' según tu distribución)
 app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
 
 app.get('/altomando/login', (req, res) => { res.sendFile(path.join(__dirname, 'login_lideres.html')); });
+
+app.get('/:faccion/login', (req, res) => {
+    if (['academia','fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
+        res.sendFile(path.join(__dirname, 'login_facciosos.html'));
+    } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
+});
+
+app.get('/panel-lider', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).send("No autorizado");
+    res.sendFile(path.join(__dirname, 'lider.html'));
+});
+
+// DESPACHADOR DE ARCHIVOS PROTEGIDO CON COMPROBACIÓN EXPLICITA
+app.get('/acceso-facciosos', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.role !== "Miembro" || !req.session.faction) {
+        return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
+    }
+
+    const divisionMiembro = req.session.faction.toLowerCase();
+    const rutaArchivo = path.join(__dirname, `contenido_${divisionMiembro}.html`);
+
+    if (fs.existsSync(rutaArchivo)) {
+        res.sendFile(rutaArchivo);
+    } else {
+        res.status(404).send(`<h1>[ERROR CENTRAL]: El archivo 'contenido_${divisionMiembro}.html' no ha sido cargado.</h1>`);
+    }
+});
+
+// endpoints de LA API
 
 app.post('/api/login-lideres', (req, res) => {
     const { user, pass } = req.body;
@@ -83,50 +112,12 @@ app.post('/api/login-lideres', (req, res) => {
     }
 });
 
-app.get('/:faccion/login', (req, res) => {
-    if (['academia','fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
-        res.sendFile(path.join(__dirname, 'login_facciosos.html'));
-    } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
-});
-
-// VALIDACIÓN MEJORADA CONTRA ERRORES CRÍTICOS
-app.post('/api/login-token', (req, res) => {
-    try {
-        const { token, factionUrl } = req.body;
-        const lista = cargarUsuariosDeArchivo();
-        
-        const tokenValido = lista.find(u => u.token === token && u.role === "Miembro");
-
-        // VALIDACIÓN: Si el token no existe, frena aquí de forma segura
-        if (!tokenValido) {
-            return res.status(401).json({ success: false, message: "El Token de acceso no existe o ya expiró." });
-        }
-
-        // VALIDACIÓN: Comprueba que la división coincida
-        if (!tokenValido.faction || tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
-            return res.status(403).json({ success: false, message: `⚠️ Código inválido para la División ${factionUrl.toUpperCase()}.` });
-        }
-
-        req.session.usuarioLogueado = true;
-        req.session.faction = tokenValido.faction;
-        req.session.role = tokenValido.role;
-
-        res.json({ success: true, redirect: '/acceso-facciosos' });
-    } catch (err) {
-        res.status(500).json({ success: false, message: "Falla temporal en el mainframe militar." });
-    }
-});
-
-app.get('/panel-lider', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).send("No autorizado");
-    res.sendFile(path.join(__dirname, 'lider.html'));
-});
-
 app.get('/api/info-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "No autorizado" });
     res.json({ faction: req.session.faction });
 });
 
+// GENERACIÓN DE TOKEN COMPARTIDO CON MARCA DE TIEMPO
 app.post('/api/generar-token', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "Denegado" });
 
@@ -140,26 +131,54 @@ app.post('/api/generar-token', (req, res) => {
     const tokenGenerado = `${faccionLider.toUpperCase()}-${bloque1}-${bloque2}`;
 
     const lista = cargarUsuariosDeArchivo();
-    lista.push({ token: tokenGenerado, faction: faccionLider, role: "Miembro" });
+    
+    // Almacenamos el token como llave multiusuario con la hora actual en milisegundos
+    lista.push({ 
+        token: tokenGenerado, 
+        faction: faccionLider, 
+        role: "TokenCompartido", 
+        creadoEn: Date.now() 
+    });
+    
     guardarUsuariosEnArchivo(lista);
 
     res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
-// DESPACHADOR DE ARCHIVOS PROTEGIDO CON COMPROBACIÓN EXPLICITA
-app.get('/acceso-facciosos', (req, res) => {
-    if (!req.session.usuarioLogueado || req.session.role !== "Miembro" || !req.session.faction) {
-        return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
-    }
-    
-    const divisionMiembro = req.session.faction.toLowerCase();
-    const rutaArchivo = path.join(__dirname, `contenido_${divisionMiembro}.html`);
+// VALIDACIÓN MULTIUSUARIO CON CONTROL DE EXPIRACIÓN (24 HORAS)
+app.post('/api/login-token', (req, res) => {
+    try {
+        const { token, factionUrl } = req.body;
+        const lista = cargarUsuariosDeArchivo();
 
-    // Comprobamos físicamente si creaste el archivo html antes de mandarlo para evitar pantallas de error
-    if (fs.existsSync(rutaArchivo)) {
-        res.sendFile(rutaArchivo);
-    } else {
-        res.status(404).send(`<h1>[ERROR CENTRAL]: El archivo 'contenido_${divisionMiembro}.html' no ha sido cargado en GitHub por el administrador.</h1>`);
+        // Buscar el token multiusuario válido
+        const tokenValido = lista.find(u => u.token === token && u.role === "TokenCompartido");
+
+        if (!tokenValido) {
+            return res.status(401).json({ success: false, message: "El Token de acceso no existe." });
+        }
+
+        // CONTROL DE EXPIRACIÓN: Comprobamos si ya pasaron 24 horas (en milisegundos)
+        const limite24Horas = 24 * 60 * 60 * 1000;
+        const tiempoTranscurrido = Date.now() - tokenValido.creadoEn;
+
+        if (tiempoTranscurrido > limite24Horas) {
+            return res.status(401).json({ success: false, message: "⚠️ Este token ha expirado (Límite de 24 horas superado)." });
+        }
+
+        // VALIDACIÓN DE FACCIÓN: Comprueba que la división coincida
+        if (!tokenValido.faction || tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
+            return res.status(403).json({ success: false, message: `⚠️ Código inválido para la División ${factionUrl.toUpperCase()}.` });
+        }
+
+        // ASIGNACIÓN DE SESIÓN INDIVIDUAL: Cada navegador obtiene su sesión independiente de "Miembro"
+        req.session.usuarioLogueado = true;
+        req.session.faction = tokenValido.faction;
+        req.session.role = "Miembro";
+
+        res.json({ success: true, redirect: '/acceso-facciosos' });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Falla temporal en el mainframe militar." });
     }
 });
 
