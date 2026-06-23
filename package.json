@@ -4,7 +4,6 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
-    "
   },
   "dependencies": {
     "compression": "^1.7.5",
