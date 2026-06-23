@@ -16,8 +16,7 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
-// DESPACHADOR ESTÁTICO INTELIGENTE (Aponta solo a la carpeta 'public' por seguridad)
-// Nota: Coloca tus archivos HTML, CSS e imágenes dentro de una carpeta llamada 'public'
+// 🟢 DESPACHADOR ESTÁTICO SEGURO: Apunta a la nueva carpeta pública
 app.use(express.static(path.join(__dirname, 'public'), {
     maxAge: 0,
     setHeaders: (res, ruta) => { 
@@ -29,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public'), {
     }
 }));
 
-// Si usas el disco persistente de Render usa: '/opt/render/project/src/datos/usuarios.json'
+// Base de datos local persistente en JSON
 const ARCHIVO_USUARIOS = path.join(__dirname, 'usuarios.json');
 
 const lideresPorDefecto = [
@@ -63,39 +62,46 @@ function guardarUsuariosEnArchivo(lista) {
     }
 }
 
-// ENRUTAMIENTO DE VISTAS (Apunta a la carpeta raíz o 'public' según tu distribución)
-app.get('/', (req, res) => { res.sendFile(path.join(__dirname, 'index.html')); });
+// 🗺️ RUTAS DE VISTAS (Corregidas apuntando a la carpeta /public)
 
-app.get('/altomando/login', (req, res) => { res.sendFile(path.join(__dirname, 'login_lideres.html')); });
+app.get('/', (req, res) => { 
+    res.sendFile(path.join(__dirname, 'public', 'index.html')); 
+});
+
+app.get('/altomando/login', (req, res) => { 
+    res.sendFile(path.join(__dirname, 'public', 'login_lideres.html')); 
+});
 
 app.get('/:faccion/login', (req, res) => {
     if (['academia','fuego', 'agua', 'tierra'].includes(req.params.faccion.toLowerCase())) {
-        res.sendFile(path.join(__dirname, 'login_facciosos.html'));
-    } else { res.status(404).send('<h1>Facción inexistente</h1>'); }
+        res.sendFile(path.join(__dirname, 'public', 'login_facciosos.html'));
+    } else { 
+        res.status(404).send('<h1>Facción inexistente</h1>'); 
+    }
 });
 
 app.get('/panel-lider', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).send("No autorizado");
-    res.sendFile(path.join(__dirname, 'lider.html'));
+    res.sendFile(path.join(__dirname, 'public', 'lider.html'));
 });
 
-// DESPACHADOR DE ARCHIVOS PROTEGIDO CON COMPROBACIÓN EXPLICITA
+// 🔒 ACCESO DE FACCIOSOS (Busca el archivo protegido en la raíz, FUERA de public)
 app.get('/acceso-facciosos', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Miembro" || !req.session.faction) {
         return res.status(403).send("<h1>[ALERTA DE INTRUSO]: Autenticación criptográfica requerida.</h1>");
     }
 
     const divisionMiembro = req.session.faction.toLowerCase();
-    const rutaArchivo = path.join(__dirname, `contenido_${divisionMiembro}.html`);
+    const rutaArchivo = path.join(__dirname, `contenido_${divisionMiembro}.html`); // Se queda en la raíz por seguridad
 
     if (fs.existsSync(rutaArchivo)) {
         res.sendFile(rutaArchivo);
     } else {
-        res.status(404).send(`<h1>[ERROR CENTRAL]: El archivo 'contenido_${divisionMiembro}.html' no ha sido cargado.</h1>`);
+        res.status(404).send(`<h1>[ERROR CENTRAL]: El archivo 'contenido_${divisionMiembro}.html' no se encuentra en el servidor central.</h1>`);
     }
 });
 
-// endpoints de LA API
+// ⚡ ENDPOINTS DE LA API
 
 app.post('/api/login-lideres', (req, res) => {
     const { user, pass } = req.body;
@@ -117,7 +123,7 @@ app.get('/api/info-lider', (req, res) => {
     res.json({ faction: req.session.faction });
 });
 
-// GENERACIÓN DE TOKEN COMPARTIDO CON MARCA DE TIEMPO
+// GENERACIÓN DE TOKEN MULTIUSUARIO CON DURACIÓN DE 24 HORAS
 app.post('/api/generar-token', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.role !== "Lider") return res.status(403).json({ error: "Denegado" });
 
@@ -132,7 +138,7 @@ app.post('/api/generar-token', (req, res) => {
 
     const lista = cargarUsuariosDeArchivo();
     
-    // Almacenamos el token como llave multiusuario con la hora actual en milisegundos
+    // Almacena el token y la fecha de creación exacta en milisegundos
     lista.push({ 
         token: tokenGenerado, 
         faction: faccionLider, 
@@ -145,7 +151,7 @@ app.post('/api/generar-token', (req, res) => {
     res.json({ token: tokenGenerado, faction: faccionLider });
 });
 
-// VALIDACIÓN MULTIUSUARIO CON CONTROL DE EXPIRACIÓN (24 HORAS)
+// LOGUEO POR TOKEN CON EXPIRACIÓN AUTOMÁTICA
 app.post('/api/login-token', (req, res) => {
     try {
         const { token, factionUrl } = req.body;
@@ -158,20 +164,20 @@ app.post('/api/login-token', (req, res) => {
             return res.status(401).json({ success: false, message: "El Token de acceso no existe." });
         }
 
-        // CONTROL DE EXPIRACIÓN: Comprobamos si ya pasaron 24 horas (en milisegundos)
+        // CONTROL DE EXPIRACIÓN: Comprobamos si el token superó las 24 horas de vida
         const limite24Horas = 24 * 60 * 60 * 1000;
         const tiempoTranscurrido = Date.now() - tokenValido.creadoEn;
 
         if (tiempoTranscurrido > limite24Horas) {
-            return res.status(401).json({ success: false, message: "⚠️ Este token ha expirado (Límite de 24 horas superado)." });
+            return res.status(401).json({ success: false, message: "⚠️ Este token ha expirado (Superó el límite de 24hs)." });
         }
 
-        // VALIDACIÓN DE FACCIÓN: Comprueba que la división coincida
+        // VALIDACIÓN: Comprueba que la URL de facción por la que ingresa coincida con el token
         if (!tokenValido.faction || tokenValido.faction.toLowerCase() !== factionUrl.toLowerCase()) {
             return res.status(403).json({ success: false, message: `⚠️ Código inválido para la División ${factionUrl.toUpperCase()}.` });
         }
 
-        // ASIGNACIÓN DE SESIÓN INDIVIDUAL: Cada navegador obtiene su sesión independiente de "Miembro"
+        // El usuario supera el filtro y hereda de forma independiente el rol de acceso
         req.session.usuarioLogueado = true;
         req.session.faction = tokenValido.faction;
         req.session.role = "Miembro";
@@ -186,3 +192,5 @@ app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Servidor militar asegurado en puerto ${PORT}`); });
+
+```
