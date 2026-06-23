@@ -192,5 +192,3 @@ app.get('/logout', (req, res) => { req.session.destroy(); res.redirect('/'); });
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => { console.log(`Servidor militar asegurado en puerto ${PORT}`); });
-
-```
