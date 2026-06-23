@@ -297,9 +297,27 @@
             20% { color: #ffffff; text-shadow: 0 0 8px var(--laser-intel), 0 0 15px var(--laser-intel); } 
             60% { color: var(--laser-intel); text-shadow: 0 0 4px var(--intel-glow); }
         }
-        
+
         .copiado { background-color: var(--laser-intel) !important; border-color: #ffffff !important; color: #000000 !important; font-weight: bold !important; }
         .ultima-copiada { border-color: var(--laser-intel) !important; background: rgba(0, 217, 255, 0.12) !important; box-shadow: 0 0 8px var(--intel-glow); }
+
+        /* RANGO AUTO-ASIGNADO ESTÁTICO DE ALTA VISIBILIDAD */
+        .rango-sistema-fijo {
+            flex: 1;
+            background: rgba(0, 217, 255, 0.05);
+            border: 1px dashed rgba(0, 217, 255, 0.4);
+            padding: 10px;
+            color: var(--laser-intel);
+            font-family: monospace;
+            font-size: 11px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-shadow: 0 0 4px var(--intel-glow);
+        }
 
         /* BOTÓN TÁCTICO DE SALIDA CON BISEL */
         .btn-exit {
@@ -487,10 +505,10 @@
         </div>
 
         <div style="padding: 10px; margin-bottom: 4px; background: rgba(0, 217, 255, 0.02); border: 1px solid rgba(0, 217, 255, 0.15); clip-path: polygon(0% 0%, 95% 0%, 100% 15%, 100% 100%, 5% 100%, 0% 85%); flex-shrink: 0;">
-            <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">DIGITE SU NOMBRE Y RANGO:</div>
+            <div style="font-family: monospace; font-size: 10px; color: var(--laser-intel); margin-bottom: 6px; letter-spacing: 1px;">SISTEMA DE IDENTIFICACIÓN:</div>
             <div style="display: flex; gap: 8px;">
-                <input type="text" id="inputNombre" placeholder="NOMBRE / APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
-                <input type="text" id="inputRango" placeholder="RANGO ACTUAL" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
+                <input type="text" id="inputNombre" placeholder="DIGITE NOMBRE Y APELLIDO" style="flex: 1; background: #020407; border: 1px solid rgba(0, 217, 255, 0.3); padding: 10px; color: #fff; font-family: monospace; font-size: 11px; outline: none; box-sizing: border-box;" oninput="actualizarMacros()">
+                <div class="rango-sistema-fijo">RECLUTA</div>
             </div>
         </div>
 
@@ -553,6 +571,7 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             ejecutarCargaLineal();
+            actualizarMacros(); // Ejecución inicial con campos base
         });
 
         function ejecutarCargaLineal() {
@@ -562,7 +581,6 @@
             const progressFill = document.getElementById("bootProgressFill");
             const bootScreen = document.getElementById("bootScreen");
 
-            // Simulación rápida de líneas de terminal cada 300ms
             const logInterval = setInterval(() => {
                 if (logIndex < logs.length) {
                     terminal.innerHTML += `<br>${logs[logIndex]}`;
@@ -572,7 +590,6 @@
                 }
             }, 300);
 
-            // Incremento lineal del porcentaje en 2 segundos
             let currentPercent = 0;
             const duration = 2000;
             const stepTime = duration / 100;
@@ -584,7 +601,6 @@
                     progressFill.style.width = currentPercent + "%";
                 } else {
                     clearInterval(countInterval);
-                    // Ocultar pantalla de carga instantáneamente al terminar
                     bootScreen.style.opacity = "0";
                     setTimeout(() => {
                         bootScreen.style.visibility = "hidden";
@@ -593,13 +609,15 @@
             }, stepTime);
         }
 
-        /* MOTOR DE PROCESAMIENTO DE CREDENCIALES EN MAYÚSCULAS CON FORMATO INTEGRAL MÓVIL */
+        /* MOTOR DE PROCESAMIENTO MODIFICADO: RANGO FORZADO COMO RECLUTA */
         function actualizarMacros() {
             const nombreIngresado = document.getElementById('inputNombre').value.trim().toUpperCase();
-            const rangoIngresado = document.getElementById('inputRango').value.trim().toUpperCase();
+            
+            // 🔥 CONTROL DE MANDO ASIGNADO EXTRA ESTRICTO
+            const rangoIngresado = "RECLUTA"; 
 
             const nombreFinal = nombreIngresado ? `[${nombreIngresado}]` : "[NOMBRE]";
-            const rangoFinal = rangoIngresado ? `(${rangoIngresado})` : "(RANGO ACTUAL)";
+            const rangoFinal = `(${rangoIngresado})`;
 
             const macrosDinamicas = document.querySelectorAll('.parrafo[data-original]');
             macrosDinamicas.forEach(p => {
