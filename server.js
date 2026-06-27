@@ -9,7 +9,7 @@ const app = express();
 
 // 1. CONEXIÓN A LA BASE DE DATOS EN LA NUBE
 // Cadena limpia y sin caracteres invisibles
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Token:<token>@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Token:token@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
 const client = new MongoClient(MONGO_URI);
 let db, usuariosCollection;
 
