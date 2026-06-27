@@ -48,7 +48,22 @@ app.use(session({
     cookie: { maxAge: 24 * 60 * 60 * 1000 }
 }));
 
+//RUTAS DE LOS ARCHIVOS//
+
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/login_lideres', (req, res) => {
+    // Cambia 'archivo.html' por el nombre real de tu página interna
+    res.sendFile(path.join(__dirname, 'public', 'login_lideres.html')); 
+});
+
+app.get('/login_facciosos', (req, res) => {
+    // Cambia 'archivo.html' por el nombre real de tu página interna
+    res.sendFile(path.join(__dirname, 'public', 'login_facciosos.html')); 
+});
+
+
+
 
 // ⚡ ENDPOINT: GENERAR TOKEN (Se guarda directo en la nube)
 app.post('/api/generar-token', async (req, res) => {
