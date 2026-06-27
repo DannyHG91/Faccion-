@@ -62,7 +62,7 @@
             transform: translate3d(0,0,0);
             will-change: transform, opacity;
         }
-        
+
         /* PANTALLA DE CARGA MILITAR CON ELEMENTOS HUD COMPACTOS */
         .system-boot-screen {
             position: fixed;
@@ -98,7 +98,7 @@
         .b-tr { top: -1px; right: -1px; border-left: none; border-bottom: none; }
         .b-bl { bottom: -1px; left: -1px; border-right: none; border-top: none; }
         .b-br { bottom: -1px; right: -1px; border-left: none; border-top: none; }
-        
+
         .boot-terminal {
             width: 100%;
             font-family: monospace;
@@ -176,7 +176,7 @@
             box-sizing: border-box;
             padding: 0 40px; 
         }
-        
+
         .telemetry-column {
             width: 50px;
             font-family: monospace;
@@ -225,7 +225,7 @@
             flex-direction: column;
             justify-content: flex-start; /* Cambiado a flex-start para dar espacio al scroll si se encoge */
             gap: 12px;              
-            
+
             /* Optimización para Ventana Flotante / Mini-pantallas */
             overflow-y: auto; /* Permite scroll si la ventana flotante es muy baja */
             overflow-x: hidden;
@@ -357,7 +357,37 @@
         .rank-title { display: block; font-size: clamp(10px, 3.5vw, 12px); font-weight: 800; letter-spacing: 3px; text-align: center; }
         .rank-subtitle { display: block; font-size: 8px; color: rgba(220, 174, 59, 0.6); letter-spacing: 1px; font-family: monospace; text-align: center; margin-top: 4px; }
         .btn-lider:active { background: rgba(220, 174, 59, 0.12); box-shadow: 0 0 25px rgba(220, 174, 59, 0.25); transform: scale3d(0.99, 0.99, 1); }
-        
+
+        /* SECCIÓN TÉCNICA PÚBLICA (CENTRO DE INSTRUCCIÓN) */
+        .instruction-zone {
+            margin-bottom: 2px;
+            flex-shrink: 0;
+        }
+
+        .btn-tutoriales {
+            display: block;
+            padding: 10px;
+            background: linear-gradient(135deg, rgba(0, 217, 255, 0.01), rgba(0, 217, 255, 0.05));
+            border: 1px solid rgba(0, 217, 255, 0.4);
+            color: var(--laser-cyan);
+            text-decoration: none;
+            font-family: monospace;
+            font-size: 10px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            text-align: center;
+            text-transform: uppercase;
+            box-shadow: 0 2px 15px rgba(0, 217, 255, 0.02);
+            clip-path: polygon(0% 0%, 96% 0%, 100% 35%, 100% 100%, 4% 100%, 0% 65%);
+            transition: all 0.15s linear;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-tutoriales:active {
+            background: rgba(0, 217, 255, 0.1);
+            box-shadow: 0 0 15px rgba(0, 217, 255, 0.2);
+            transform: scale3d(0.99, 0.99, 1);
+        }
+
         /* DIVISOR TÁCTICO CON BARRA DE PROGRESO DE RED */
         .rank-divider {
             font-size: 9px;
@@ -396,7 +426,6 @@
             gap: 6px;
             flex-grow: 1; /* Ocupa el espacio restante de forma flexible */
         }
-
         /* BOTONES DE LAS DIVISIONES ACCESIBLES CON CORTE POLIGONAL */
         .btn-faction {
             display: flex;
@@ -525,6 +554,10 @@
                 clip-path: none;
                 padding: 12px 10px;
             }
+            .btn-tutoriales {
+                clip-path: none;
+                padding: 8px;
+            }
         }
     </style>
 </head>
@@ -597,7 +630,6 @@
         <div class="corner-bracket tr"></div>
         <div class="corner-bracket bl"></div>
         <div class="corner-bracket br"></div>
-
         <div class="header-shield">
             <div class="live-data-stream">
                 <span>ID SISTEMA // DATA CENTER-MESA</span>
@@ -611,6 +643,13 @@
             <a class="btn-lider" id="btnLiderCommand" href="/altomando/login">
                 <span class="rank-title">★ ALTO MANDO MILITAR ★</span>
                 <span class="rank-subtitle">[ACCESO SOLO PERSONAL AUTORIZADO]</span>
+            </a>
+        </div>
+
+        <!-- NUEVA SECCIÓN DE TUTORIALES PÚBLICOS PARA RECLUTAS -->
+        <div class="instruction-zone">
+            <a class="btn-tutoriales btn-ops" href="/tutoriales">
+                🔰 Centro de Instrucción (Videos) 🔰
             </a>
         </div>
 
@@ -829,6 +868,8 @@
 
         document.body.addEventListener('touchstart', initAudio, {passive: true});
         document.body.addEventListener('click', initAudio);
+        
+        // Selecciona todos los botones tácticos dinámicamente incluyendo el de tutoriales
         document.querySelectorAll('.btn-ops').forEach(btn => { btn.addEventListener('click', playOpsClick); });
         document.getElementById('btnLiderCommand').addEventListener('click', playLiderClick);
     </script>
