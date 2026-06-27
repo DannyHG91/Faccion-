@@ -56,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Entrada principal (index.html se sirve automático, pero lo aseguramos)
 app.get('/logout', (req, res) => {
+    req.session.destroy(); // Limpia la sesión al salir
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
@@ -69,12 +70,42 @@ app.get('/academia/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login_facciosos.html'));
 });
 
-// Panel de control (lider.html) protegido por sesión
+// Panel de control (lider.html) protegido por sesión para Líderes
 app.get('/acceso-facciosos', (req, res) => {
-    if (!req.session.usuarioLogueado) {
-        return res.redirect('/'); // Si no está logueado, lo echa al inicio
+    if (!req.session.usuarioLogueado || req.session.role !== "Lider") {
+        return res.redirect('/'); 
     }
     res.sendFile(path.join(__dirname, 'public', 'lider.html')); 
+});
+
+// --- VISTAS PROTEGIDAS POR TOKEN DE FACCIÓN ---
+
+app.get('/contenido-academia', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'academia') {
+        return res.redirect('/'); 
+    }
+    res.sendFile(path.join(__dirname, 'public', 'contenido_academia.html'));
+});
+
+app.get('/contenido-fuego', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'fuego') {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'contenido_fuego.html'));
+});
+
+app.get('/contenido-agua', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'agua') {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'contenido_agua.html'));
+});
+
+app.get('/contenido-tierra', (req, res) => {
+    if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'tierra') {
+        return res.redirect('/');
+    }
+    res.sendFile(path.join(__dirname, 'public', 'contenido_tierra.html'));
 });
 
 
@@ -168,7 +199,8 @@ app.post('/api/login-token', async (req, res) => {
         req.session.faction = tokenValido.faction;
         req.session.role = "Miembro";
 
-        res.json({ success: true, redirect: '/acceso-facciosos' });
+        // Redirección dinámica según la facción correspondiente
+        res.json({ success: true, redirect: `/contenido-${tokenValido.faction.toLowerCase()}` });
     } catch (err) {
         res.status(500).json({ success: false, message: "Falla en el mainframe de la base de datos." });
     }
