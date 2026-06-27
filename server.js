@@ -57,10 +57,16 @@ app.get('/altomando/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login_lideres.html')); 
 });
 
-app.get('/login_facciosos', (req, res) => {
+app.get('/academia/login', (req, res) => {
     // Cambia 'archivo.html' por el nombre real de tu página interna
     res.sendFile(path.join(__dirname, 'public', 'login_facciosos.html')); 
 });
+
+app.get('/acceso-facciosos', (req, res) => {
+    // Cambia 'archivo.html' por el nombre real de tu página interna
+    res.sendFile(path.join(__dirname, 'public', 'lider.html')); 
+});
+
 
 
 
