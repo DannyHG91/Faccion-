@@ -21,12 +21,13 @@
         }
 
         html, body {
-            width: 100vw;
+            width: 100%;
             height: 100dvh;
             margin: 0;
             padding: 0;
             overflow: hidden; 
             background-color: var(--stealth-dark);
+            box-sizing: border-box;
         }
 
         body {
@@ -56,15 +57,15 @@
             will-change: transform, opacity;
         }
 
-        /* CONSOLA CENTRAL MAINFRAME (Optimizado para ventanas flotantes) */
+        /* CONSOLA CENTRAL MAINFRAME - ADAPTADA PARA VENTANA FLOTANTE */
         .mainframe-container {
             background: var(--glass-core);
             border: 1px solid rgba(0, 217, 255, 0.15);
             padding: 20px 16px;
-            width: 96vw;          
+            width: 100%;          
             max-width: 440px;
-            height: 90dvh;         
-            max-height: 90dvh;
+            height: 100dvh;         
+            max-height: 100dvh;
             box-sizing: border-box;
             backdrop-filter: blur(30px);
             -webkit-backdrop-filter: blur(30px);
@@ -229,16 +230,43 @@
         }
         .hud-row { display: flex; justify-content: space-between; width: 100%; }
 
-        /* RESPONSIVE AGRESIVO PARA ADAPTACIÓN FLOTANTE */
-        @media (max-width: 380px), (max-height: 580px) {
+        /* DETECTAR INTERFAZ EN VENTANA FLOTANTE O DISPOSITIVOS PEQUEÑOS */
+        @media (max-width: 450px), (max-height: 650px) {
             body { background-size: 20px 20px; }
-            .mainframe-container { height: 100dvh; max-height: 100dvh; width: 100vw; padding: 10px 8px; gap: 8px; clip-path: none; border: none; }
-            .telemetry-bg-container, .hud-frame-telemetry, .corner-bracket, .laser-border { display: none !important; }
-            .btn-return { clip-path: none; padding: 10px; font-size: 10px; }
-            h1 { font-size: 14px; margin: 2px 0; }
-            .instruction-video-box { padding: 8px; gap: 6px; }
-            .video-meta { font-size: 8px; }
-            .video-desc { font-size: 9px; line-height: 1.3; }
+            .mainframe-container { 
+                height: 100dvh; 
+                max-height: 100dvh; 
+                width: 100vw; 
+                max-width: 100%;
+                padding: 12px 10px; 
+                gap: 8px; 
+                clip-path: none; 
+                border-left: none;
+                border-right: none;
+            }
+            .telemetry-bg-container, .hud-frame-telemetry, .corner-bracket, .laser-border { 
+                display: none !important; 
+            }
+            .btn-return { 
+                clip-path: none; 
+                padding: 10px; 
+                font-size: 10px;
+            }
+            h1 { 
+                font-size: 14px; 
+                margin: 2px 0; 
+            }
+            .instruction-video-box { 
+                padding: 8px; 
+                gap: 6px; 
+            }
+            .video-meta { 
+                font-size: 9px; 
+            }
+            .video-desc { 
+                font-size: 10px; 
+                line-height: 1.3; 
+            }
         }
     </style>
 </head>
@@ -284,7 +312,7 @@
                 <span>T_DUR: 00:39</span>
             </div>
 
-            <!-- VIDEO CONFIGURADO PARA VENTANA FLOTANTE (Picture-in-Picture nativo) -->
+            <!-- ENLACE DIRECTO DE CLOUDINARY CONFIGURADO CON SOPORTE PICTURE-IN-PICTURE -->
             <video controls preload="metadata" playsinline pip="true" insidepipplayer="true">
                 <source src="https://res.cloudinary.com/drfa7wuzt/video/upload/v1782594115/tutorial_reclutas_jy86sz.mp4" type="video/mp4">
                 SISTEMA NO COMPATIBLE CON REPRODUCCIÓN LOCAL MP4.
@@ -309,8 +337,7 @@
                 audioCtx.resume();
             }
         }
-        
-        // Inicializar audio al interactuar para evitar bloqueos del navegador
+
         document.addEventListener('click', initAudio, { once: true });
         document.addEventListener('touchstart', initAudio, { once: true });
     </script>
