@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
 });
 
 // Ruta para el login de los líderes (Tu pantalla de Alto Mando)
-app.get('/lider/login', (req, res) => {
+app.get('/altomando/login', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'login_lideres.html'));
 });
 
