@@ -55,7 +55,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // =========================================================================
 
 // Entrada principal (index.html se sirve automático, pero lo aseguramos)
-app.get('/', (req, res) => {
+app.get('/logout', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
