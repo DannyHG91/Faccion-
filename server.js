@@ -8,7 +8,7 @@ const { MongoClient } = require('mongodb');
 const app = express();
 
 // 1. CONEXIÓN A LA BASE DE DATOS EN LA NUBE
-const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Token:TU_PASSWORD_AQUI@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Token:token@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
 const client = new MongoClient(MONGO_URI);
 let db, usuariosCollection;
 
