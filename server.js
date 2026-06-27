@@ -78,6 +78,13 @@ app.get('/acceso-facciosos', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'lider.html')); 
 });
 
+// Ruta pública para los tutoriales en video de reclutas
+app.get('/tutoriales', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'tutoriales.html'));
+});
+
+
+
 // --- VISTAS PROTEGIDAS POR TOKEN DE FACCIÓN ---
 
 app.get('/contenido-academia', (req, res) => {
