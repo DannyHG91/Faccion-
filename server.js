@@ -52,7 +52,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/login_lideres', (req, res) => {
+app.get('/altomando/login', (req, res) => {
     // Cambia 'archivo.html' por el nombre real de tu página interna
     res.sendFile(path.join(__dirname, 'public', 'login_lideres.html')); 
 });
