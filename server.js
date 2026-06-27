@@ -84,28 +84,28 @@ app.get('/contenido-academia', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'academia') {
         return res.redirect('/'); 
     }
-    res.sendFile(path.join(__dirname, 'public', 'contenido_academia.html'));
+    res.sendFile(path.join(__dirname,'contenido_academia.html'));
 });
 
 app.get('/contenido-fuego', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'fuego') {
         return res.redirect('/');
     }
-    res.sendFile(path.join(__dirname, 'public', 'contenido_fuego.html'));
+    res.sendFile(path.join(__dirname,'contenido_fuego.html'));
 });
 
 app.get('/contenido-agua', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'agua') {
         return res.redirect('/');
     }
-    res.sendFile(path.join(__dirname, 'public', 'contenido_agua.html'));
+    res.sendFile(path.join(__dirname,'contenido_agua.html'));
 });
 
 app.get('/contenido-tierra', (req, res) => {
     if (!req.session.usuarioLogueado || req.session.faction.toLowerCase() !== 'tierra') {
         return res.redirect('/');
     }
-    res.sendFile(path.join(__dirname, 'public', 'contenido_tierra.html'));
+    res.sendFile(path.join(__dirname,'contenido_tierra.html'));
 });
 
 
