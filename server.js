@@ -1,15 +1,15 @@
-require('dotenv').config();
+require('dotenv').config(); // 'require' corregido a minúsculas
 const express = require('express');
 const session = require('express-session');
 const compression = require('compression');
 const path = require('path');
-const { MongoClient } = require('mongodb'); // Importamos MongoDB
+const { MongoClient } = require('mongodb'); 
 
 const app = express();
 
 // 1. CONEXIÓN A LA BASE DE DATOS EN LA NUBE
-// Guarda tu URI de Mongo en las variables de entorno de Render para protegerla
-const MONGO_URI = process.env.MONGO_URI || "‎mongodb+srv://Token:<db_token>@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
+// Cadena limpia y sin caracteres invisibles
+const MONGO_URI = process.env.MONGO_URI || "mongodb+srv://Token:<token>@faccion-token.zk7e7jg.mongodb.net/?appName=Faccion-token";
 const client = new MongoClient(MONGO_URI);
 let db, usuariosCollection;
 
